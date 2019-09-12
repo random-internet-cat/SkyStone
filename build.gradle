@@ -21,3 +21,5 @@ allprojects {
         jcenter()
     }
 }
+
+ext.ftcDashboardVersion = '0.3.4'
