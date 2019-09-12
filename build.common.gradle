@@ -107,4 +107,12 @@ repositories {
         dirs rootProject.file('libs')
     }
 }
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
 apply from: 'build.release.gradle'
