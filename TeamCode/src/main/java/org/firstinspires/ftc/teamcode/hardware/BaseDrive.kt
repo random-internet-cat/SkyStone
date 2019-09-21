@@ -8,8 +8,6 @@ open class BaseDrive {
     protected val m_backLeft: DcMotor
     protected val m_backRight: DcMotor
 
-    private val DEFAULT_DRIVE_POWER = 0.8
-
     constructor(frontLeft: DcMotor, frontRight: DcMotor, backLeft: DcMotor, backRight: DcMotor) {
         m_frontLeft = frontLeft
         m_frontRight = frontRight
@@ -37,25 +35,33 @@ open class BaseDrive {
         }
     }
 
-    fun driveForward(power: Double = DEFAULT_DRIVE_POWER) {
-        require(0 <= power && power <= 1)
+    fun power(power: Double) {
+        require(-1 <= power && power <= 1)
 
         forEachMotor {
             setPower(power)
         }
     }
+}
 
-    fun driveBackward(power: Double = DEFAULT_DRIVE_POWER) {
-        require(0 <= power && power <= 1)
+inline fun BaseDrive.power(power: Int) {
+    this.power(power.toDouble())
+}
 
-        forEachMotor {
-            setPower(-power)
-        }
-    }
+private val DEFAULT_DRIVE_POWER = 0.8
 
-    fun stop() {
-        forEachMotor {
-            setPower(0.0)
-        }
-    }
+fun BaseDrive.driveForward(power: Double = DEFAULT_DRIVE_POWER) {
+    require(0 <= power && power <= 1)
+
+    this.power(power)
+}
+
+fun BaseDrive.driveBackward(power: Double = DEFAULT_DRIVE_POWER) {
+    require(0 <= power && power <= 1)
+
+    this.power(-power)
+}
+
+fun BaseDrive.stop() {
+    this.power(0)
 }
