@@ -77,6 +77,7 @@ import com.qualcomm.ftccommon.LaunchActivityConstantsList;
 import com.qualcomm.ftccommon.LaunchActivityConstantsList.RequestCode;
 import com.qualcomm.ftccommon.ProgrammingModeController;
 import com.qualcomm.ftccommon.Restarter;
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftccommon.configuration.EditParameters;
 import com.qualcomm.ftccommon.configuration.FtcLoadFileActivity;
@@ -105,6 +106,7 @@ import org.firstinspires.ftc.ftccommon.internal.FtcRobotControllerWatchdogServic
 import org.firstinspires.ftc.ftccommon.internal.ProgramAndManageActivity;
 import org.firstinspires.ftc.onbotjava.OnBotJavaHelperImpl;
 import org.firstinspires.ftc.onbotjava.OnBotJavaProgrammingMode;
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.navigation.MotionDetection;
 import org.firstinspires.ftc.robotcore.internal.hardware.android.AndroidBoard;
 import org.firstinspires.ftc.robotcore.internal.network.DeviceNameManagerFactory;
@@ -404,7 +406,48 @@ public class FtcRobotControllerActivity extends Activity
 
   protected UpdateUI.Callback createUICallback(UpdateUI updateUI) {
     UpdateUI.Callback result = updateUI.new Callback();
-    result.setStateMonitor(new SoundPlayingRobotMonitor());
+    result.setStateMonitor(new SoundPlayingRobotMonitor() {
+      private void playAlarm(Sound sound) {
+        playSound(sound, R.raw.cp_alarm);
+      }
+
+      @Override
+      protected void playConnect() {
+        if (!SoundPlayer.getInstance().isLocalSoundOn())
+        {
+          // If the last sound played is 'running', but that sound was in fact transmitted
+          // to the remote before this 'connect' happened, then (probably) the remote didn't
+          // hear the 'running', so send it out again. This is a pretty reliable but not
+          // perfect heuristic. Fortunately, the failure mode is only that a sound is repeated,
+          // and we can live with that.
+          if (lastSoundPlayed==Sound.Running)
+          {
+            if (runningsInFlight.get() == 0)
+            {
+              RobotLog.vv(SoundPlayer.TAG, "playing running again");
+              playRunning();
+            }
+          }
+        }
+
+        playSound(Sound.Connect, R.raw.cp_gain);
+      }
+
+      @Override
+      protected void playDisconnect() {
+        playSound(Sound.Disconnect, R.raw.cp_alarm);
+      }
+
+      @Override
+      protected void playWarning() {
+        playAlarm(Sound.Warning);
+      }
+
+      @Override
+      protected void playError() {
+        playAlarm(Sound.Error);
+      }
+    });
     return result;
   }
 
