@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.hardware
 import com.qualcomm.robotcore.hardware.DcMotor
 
 open class BaseDrive {
-    private val m_frontLeft: DcMotor
-    private val m_frontRight: DcMotor
-    private val m_backLeft: DcMotor
-    private val m_backRight: DcMotor
+    protected val m_frontLeft: DcMotor
+    protected val m_frontRight: DcMotor
+    protected val m_backLeft: DcMotor
+    protected val m_backRight: DcMotor
 
     private val DEFAULT_DRIVE_POWER = 0.8
 
