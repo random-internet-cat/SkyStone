@@ -17,7 +17,7 @@ open class BaseDrive {
         m_backRight = backRight
     }
 
-    private fun forEachMotor(f: DcMotor.() -> Unit) {
+    protected fun forEachMotor(f: DcMotor.() -> Unit) {
         m_frontLeft.f()
         m_frontRight.f()
         m_backLeft.f()
