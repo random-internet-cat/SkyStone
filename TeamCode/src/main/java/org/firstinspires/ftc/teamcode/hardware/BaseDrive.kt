@@ -52,4 +52,10 @@ open class BaseDrive {
             setPower(-power)
         }
     }
+
+    fun stop() {
+        forEachMotor {
+            setPower(0.0)
+        }
+    }
 }
