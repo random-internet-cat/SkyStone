@@ -72,7 +72,7 @@ operator fun RelativeRadians.plus(angle: AbsoluteRadians) = angle + this
 operator fun AbsoluteRadians.minus(diff: RelativeRadians) = this + (-diff)
 operator fun AbsoluteRadians.minus(other: AbsoluteRadians) = RelativeRadians(this.raw - other.raw)
 
-fun AbsoluteRadians.normalize() = AbsoluteRadians(normalizeWith(this.raw, TWO_PI))
+fun AbsoluteRadians.normalized() = AbsoluteRadians(normalizeWith(this.raw, TWO_PI))
 
 inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
     override fun toRadians(): AbsoluteRadians {
@@ -100,6 +100,6 @@ operator fun RelativeAngle.minus(diff: RelativeAngle) = this.toRadians() - diff.
 operator fun RelativeAngle.times(num: Double) = this.toRadians() * num
 operator fun RelativeAngle.div(num: Double) = this.toRadians() / num
 
-fun AbsoluteAngle.normalize() = this.toRadians().normalize()
+fun AbsoluteAngle.normalized() = this.toRadians().normalized()
 
 fun abs(angle: RelativeAngle) = abs(angle.toRadians())
