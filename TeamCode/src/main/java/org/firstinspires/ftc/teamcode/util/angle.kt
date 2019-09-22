@@ -21,6 +21,11 @@ inline class RelativeRadians(val raw: RawAngle) : RelativeAngle {
 }
 
 operator fun RelativeRadians.compareTo(other: RelativeRadians) = (this.raw).compareTo(other.raw)
+operator fun RelativeRadians.unaryMinus() = RelativeRadians(-this.raw)
+operator fun RelativeRadians.plus(other: RelativeRadians) = RelativeRadians(this.raw + other.raw)
+operator fun RelativeRadians.minus(other: RelativeRadians) = this + (-other)
+operator fun RelativeRadians.times(num: Double) = RelativeDegrees(this.raw * num)
+operator fun RelativeRadians.div(num: Double) = RelativeDegrees(this.raw / num)
 
 inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
     override fun toRadians(): RelativeRadians {
@@ -48,6 +53,10 @@ inline class AbsoluteRadians(val raw: RawAngle) : AbsoluteAngle {
 }
 
 operator fun AbsoluteRadians.compareTo(other: AbsoluteRadians) = (this.raw).compareTo(other.raw)
+operator fun AbsoluteRadians.plus(diff: RelativeRadians) = AbsoluteRadians(this.raw + diff.raw)
+operator fun RelativeRadians.plus(angle: AbsoluteRadians) = angle + this
+operator fun AbsoluteRadians.minus(diff: RelativeRadians) = this + (-diff)
+operator fun AbsoluteRadians.minus(other: AbsoluteRadians) = RelativeRadians(this.raw - other.raw)
 
 inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
     override fun normalize(): AbsoluteAngle {
@@ -70,19 +79,11 @@ fun RelativeAngle.toDegrees() = RelativeDegrees(radToDeg(toRadians().raw))
 
 operator fun RelativeAngle.compareTo(other: RelativeAngle) = (this.toRadians()).compareTo(other.toRadians())
 operator fun AbsoluteAngle.compareTo(other: AbsoluteAngle) = (this.toRadians()).compareTo(other.toRadians())
-
-operator fun AbsoluteAngle.plus(diff: RelativeAngle) = AbsoluteRadians((this.toRadians().raw) + (diff.toRadians().raw))
-
-operator fun RelativeAngle.plus(value: AbsoluteAngle) = value + this
-
-operator fun AbsoluteAngle.minus(diff: RelativeAngle) = AbsoluteRadians((this.toRadians().raw) - (diff.toRadians().raw))
-
-operator fun AbsoluteAngle.minus(other: AbsoluteAngle) = RelativeRadians((this.toRadians().raw) - (other.toRadians().raw))
-
-operator fun RelativeAngle.plus(diff: RelativeAngle) = RelativeRadians(this.toRadians().raw + diff.toRadians().raw)
-
-operator fun RelativeAngle.minus(diff: RelativeAngle) = RelativeRadians(this.toRadians().raw - diff.toRadians().raw)
-
-operator fun RelativeAngle.times(num: Double) = RelativeRadians(this.toRadians().raw * num)
-
-operator fun RelativeAngle.div(num: Double) = RelativeRadians(this.toRadians().raw / num)
+operator fun AbsoluteAngle.plus(diff: RelativeAngle) = this.toRadians() + diff.toRadians()
+operator fun RelativeAngle.plus(value: AbsoluteAngle) = this.toRadians() + value.toRadians()
+operator fun AbsoluteAngle.minus(diff: RelativeAngle) = this.toRadians() - diff.toRadians()
+operator fun AbsoluteAngle.minus(other: AbsoluteAngle) = this.toRadians() - other.toRadians()
+operator fun RelativeAngle.plus(diff: RelativeAngle) = this.toRadians() + diff.toRadians()
+operator fun RelativeAngle.minus(diff: RelativeAngle) = this.toRadians() - diff.toRadians()
+operator fun RelativeAngle.times(num: Double) = this.toRadians() * num
+operator fun RelativeAngle.div(num: Double) = this.toRadians() / num
