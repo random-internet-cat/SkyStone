@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util
 
 import kotlin.math.PI
+import kotlin.math.abs
 
 interface RelativeAngle {
     fun toRadians(): RelativeRadians
@@ -26,6 +27,8 @@ operator fun RelativeRadians.plus(other: RelativeRadians) = RelativeRadians(this
 operator fun RelativeRadians.minus(other: RelativeRadians) = this + (-other)
 operator fun RelativeRadians.times(num: Double) = RelativeDegrees(this.raw * num)
 operator fun RelativeRadians.div(num: Double) = RelativeDegrees(this.raw / num)
+
+fun abs(angle: RelativeRadians) = RelativeRadians(abs(angle.raw))
 
 inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
     override fun toRadians(): RelativeRadians {
@@ -87,3 +90,5 @@ operator fun RelativeAngle.plus(diff: RelativeAngle) = this.toRadians() + diff.t
 operator fun RelativeAngle.minus(diff: RelativeAngle) = this.toRadians() - diff.toRadians()
 operator fun RelativeAngle.times(num: Double) = this.toRadians() * num
 operator fun RelativeAngle.div(num: Double) = this.toRadians() / num
+
+fun abs(angle: RelativeAngle) = abs(angle.toRadians())
