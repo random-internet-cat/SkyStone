@@ -4,6 +4,10 @@ import kotlin.math.PI
 import kotlin.math.abs
 
 interface RelativeAngle {
+    companion object {
+        fun zero() = RelativeRadians.zero()
+    }
+
     fun toRadians(): RelativeRadians
 }
 
@@ -16,6 +20,10 @@ private fun degToRad(value: RawAngle): RawAngle = value * (TWO_PI / 360.0)
 
 
 inline class RelativeRadians(val raw: RawAngle) : RelativeAngle {
+    companion object {
+        fun zero() = RelativeRadians(0)
+    }
+
     override fun toRadians(): RelativeRadians {
         return this
     }
@@ -37,6 +45,10 @@ inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
 }
 
 interface AbsoluteAngle {
+    companion object {
+        fun zero() = AbsoluteRadians.zero()
+    }
+
     fun toRadians(): AbsoluteRadians
 }
 
@@ -45,6 +57,10 @@ private fun normalizeWith(value: RawAngle, modulo: RawAngle): RawAngle {
 }
 
 inline class AbsoluteRadians(val raw: RawAngle) : AbsoluteAngle {
+    companion object {
+        fun zero() = AbsoluteRadians(0)
+    }
+
     override fun toRadians(): AbsoluteRadians {
         return this
     }
