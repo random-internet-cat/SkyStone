@@ -20,6 +20,8 @@ inline class RelativeRadians(val raw: RawAngle) : RelativeAngle {
     }
 }
 
+operator fun RelativeRadians.compareTo(other: RelativeRadians) = (this.raw).compareTo(other.raw)
+
 inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
     override fun toRadians(): RelativeRadians {
         return RelativeRadians(degToRad(raw))
@@ -45,6 +47,8 @@ inline class AbsoluteRadians(val raw: RawAngle) : AbsoluteAngle {
     }
 }
 
+operator fun AbsoluteRadians.compareTo(other: AbsoluteRadians) = (this.raw).compareTo(other.raw)
+
 inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
     override fun normalize(): AbsoluteAngle {
         return AbsoluteDegrees(normalizeWith(raw, 360.0))
@@ -63,6 +67,9 @@ fun RelativeDegrees(raw: Int) = RelativeDegrees(raw.toDouble())
 
 fun AbsoluteAngle.toDegrees() = AbsoluteDegrees(radToDeg(toRadians().raw))
 fun RelativeAngle.toDegrees() = RelativeDegrees(radToDeg(toRadians().raw))
+
+operator fun RelativeAngle.compareTo(other: RelativeAngle) = (this.toRadians()).compareTo(other.toRadians())
+operator fun AbsoluteAngle.compareTo(other: AbsoluteAngle) = (this.toRadians()).compareTo(other.toRadians())
 
 operator fun AbsoluteAngle.plus(diff: RelativeAngle) = AbsoluteRadians((this.toRadians().raw) + (diff.toRadians().raw))
 
