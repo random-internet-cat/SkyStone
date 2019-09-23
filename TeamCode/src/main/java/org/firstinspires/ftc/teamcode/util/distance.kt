@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.util
 
+import kotlin.math.abs
+import kotlin.math.absoluteValue
+
 interface Distance {
     fun toMeters(): Meters
 }
@@ -30,6 +33,9 @@ inline operator fun Meters.times(num: Int) = this * (num.toDouble())
 inline operator fun Meters.div(other: Meters) = (this.raw) / (other.raw)
 inline operator fun Meters.div(other: Double) = Meters(this.raw / other)
 inline operator fun Meters.div(other: Int) = this / (other.toDouble())
+
+val Meters.absoluteValue get() = Meters(raw.absoluteValue)
+fun abs(value: Meters) = Meters(abs(value.raw))
 
 inline class Millimeters(val raw: RawDistance) : Distance {
     override fun toMeters(): Meters {
@@ -72,3 +78,6 @@ operator fun Distance.times(other: Int) = this.toMeters() * other
 operator fun Distance.div(other: Distance) = this.toMeters() / other.toMeters()
 operator fun Distance.div(other: Double) = this.toMeters() / other
 operator fun Distance.div(other: Int) = this.toMeters() / other
+
+val Distance.absoluteValue get() = this.toMeters().absoluteValue
+fun abs(value: Distance) = abs(value.toMeters())
