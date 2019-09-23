@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.util
 
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.tan
 
 interface RelativeAngle {
     companion object {
@@ -74,6 +77,13 @@ inline operator fun AbsoluteRadians.minus(other: AbsoluteRadians) = RelativeRadi
 
 fun AbsoluteRadians.normalized() = AbsoluteRadians(normalizeWith(this.raw, TWO_PI))
 
+inline fun sin(angle: AbsoluteRadians) = sin(angle.raw)
+inline fun cos(angle: AbsoluteRadians) = cos(angle.raw)
+inline fun tan(angle: AbsoluteRadians) = tan(angle.raw)
+inline fun cot(angle: AbsoluteRadians) = 1 / tan(angle.raw)
+inline fun sec(angle: AbsoluteRadians) = 1 / cos(angle.raw)
+inline fun csc(angle: AbsoluteRadians) = 1 / sin(angle.raw)
+
 inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
     override fun toRadians(): AbsoluteRadians {
         return AbsoluteRadians(degToRad(raw))
@@ -103,3 +113,10 @@ operator fun RelativeAngle.div(num: Double) = this.toRadians() / num
 fun AbsoluteAngle.normalized() = this.toRadians().normalized()
 
 fun abs(angle: RelativeAngle) = abs(angle.toRadians())
+
+fun sin(angle: AbsoluteAngle) = sin(angle.toRadians())
+fun cos(angle: AbsoluteAngle) = cos(angle.toRadians())
+fun tan(angle: AbsoluteAngle) = tan(angle.toRadians())
+fun cot(angle: AbsoluteAngle) = cot(angle.toRadians())
+fun sec(angle: AbsoluteAngle) = sec(angle.toRadians())
+fun csc(angle: AbsoluteAngle) = sec(angle.toRadians())
