@@ -21,15 +21,15 @@ inline class Meters(val raw: RawDistance) : Distance {
     }
 }
 
-operator fun Meters.compareTo(other: Meters) = (this.raw).compareTo(other.raw)
-operator fun Meters.unaryMinus() = Meters(-this.raw)
-operator fun Meters.plus(other: Meters) = Meters(this.raw + other.raw)
-operator fun Meters.minus(other: Meters) = this + (-other)
-operator fun Meters.times(num: Double) = Meters(this.raw * num)
-operator fun Meters.times(num: Int) = this * (num.toDouble())
-operator fun Meters.div(other: Meters) = (this.raw) / (other.raw)
-operator fun Meters.div(other: Double) = Meters(this.raw / other)
-operator fun Meters.div(other: Int) = this / (other.toDouble())
+inline operator fun Meters.compareTo(other: Meters) = (this.raw).compareTo(other.raw)
+inline operator fun Meters.unaryMinus() = Meters(-this.raw)
+inline operator fun Meters.plus(other: Meters) = Meters(this.raw + other.raw)
+inline operator fun Meters.minus(other: Meters) = this + (-other)
+inline operator fun Meters.times(num: Double) = Meters(this.raw * num)
+inline operator fun Meters.times(num: Int) = this * (num.toDouble())
+inline operator fun Meters.div(other: Meters) = (this.raw) / (other.raw)
+inline operator fun Meters.div(other: Double) = Meters(this.raw / other)
+inline operator fun Meters.div(other: Int) = this / (other.toDouble())
 
 inline class Millimeters(val raw: RawDistance) : Distance {
     override fun toMeters(): Meters {
