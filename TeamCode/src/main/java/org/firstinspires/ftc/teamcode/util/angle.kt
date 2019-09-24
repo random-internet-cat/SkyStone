@@ -39,6 +39,8 @@ inline operator fun RelativeRadians.minus(other: RelativeRadians) = this + (-oth
 inline operator fun RelativeRadians.times(num: Double) = RelativeDegrees(this.raw * num)
 inline operator fun RelativeRadians.div(num: Double) = RelativeDegrees(this.raw / num)
 
+inline operator fun Double.times(angle: RelativeRadians) = angle * this
+
 inline fun abs(angle: RelativeRadians) = RelativeRadians(abs(angle.raw))
 
 inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
@@ -115,6 +117,8 @@ operator fun RelativeAngle.plus(diff: RelativeAngle) = this.toRadians() + diff.t
 operator fun RelativeAngle.minus(diff: RelativeAngle) = this.toRadians() - diff.toRadians()
 operator fun RelativeAngle.times(num: Double) = this.toRadians() * num
 operator fun RelativeAngle.div(num: Double) = this.toRadians() / num
+
+operator fun Double.times(angle: RelativeAngle) = this * angle.toRadians()
 
 fun AbsoluteAngle.normalized() = this.toRadians().normalized()
 

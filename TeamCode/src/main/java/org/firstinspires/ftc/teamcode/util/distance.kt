@@ -36,6 +36,8 @@ inline operator fun Meters.div(other: Meters) = (this.raw) / (other.raw)
 inline operator fun Meters.div(other: Double) = Meters(this.raw / other)
 inline operator fun Meters.div(other: Int) = this / (other.toDouble())
 
+inline operator fun Double.times(meters: Meters) = meters * this
+
 inline val Meters.absoluteValue get() = Meters(raw.absoluteValue)
 inline fun abs(value: Meters) = Meters(abs(value.raw))
 
@@ -80,6 +82,8 @@ operator fun Distance.times(other: Int) = this.toMeters() * other
 operator fun Distance.div(other: Distance) = this.toMeters() / other.toMeters()
 operator fun Distance.div(other: Double) = this.toMeters() / other
 operator fun Distance.div(other: Int) = this.toMeters() / other
+
+operator fun Double.times(distance: Distance) = this * distance.toMeters()
 
 val Distance.absoluteValue get() = this.toMeters().absoluteValue
 fun abs(value: Distance) = abs(value.toMeters())
