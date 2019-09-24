@@ -28,7 +28,7 @@ inline operator fun Double.times(rot: RevolutionsPerSecond) = rot * this
 
 inline class RevolutionsPerMinute(val raw: RawRotationSpeed) : RevolutionSpeed {
     inline override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
-        return RevolutionsPerSecond(raw / 60)
+        return RevolutionsPerSecond(raw / SECONDS_PER_MINUTE)
     }
 }
 
