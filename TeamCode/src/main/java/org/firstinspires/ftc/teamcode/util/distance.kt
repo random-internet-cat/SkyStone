@@ -13,10 +13,10 @@ private fun Number.toRawDistance(): RawDistance = this.toDouble()
 private fun Int.toRawDistance(): RawDistance = this.toDouble()
 private fun Double.toRawDistance(): RawDistance = this.toDouble()
 
-private const val INCHES_PER_FOOT = 12
-private const val FEET_PER_METER = 3.2808399
-private const val MM_PER_METER = 1000
-private const val CM_PER_METER = 100
+const val INCHES_PER_FOOT = 12
+const val FEET_PER_METER = 3.2808399
+const val MM_PER_METER = 1000
+const val CM_PER_METER = 100
 
 inline class Meters(val raw: RawDistance) : Distance {
     override fun toMeters(): Meters {
