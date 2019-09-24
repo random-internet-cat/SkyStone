@@ -40,7 +40,7 @@ inline class Minutes(val raw: RawTime) : Time {
 
 inline fun Minutes(time: Seconds) = Minutes(time.raw / SECONDS_PER_MINUTE)
 inline fun Minutes(time: Minutes) = time
-inline fun Minutes(time: Time) = Minutes(time.toSeconds())
+fun Minutes(time: Time) = Minutes(time.toSeconds())
 
 fun Minutes(raw: Int) = Minutes(raw.toRawTime())
 
