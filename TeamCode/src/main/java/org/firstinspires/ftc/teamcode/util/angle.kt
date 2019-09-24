@@ -54,7 +54,7 @@ inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
 
 inline fun RelativeDegrees(angle: RelativeRadians) = RelativeDegrees(radToDeg(angle.raw))
 inline fun RelativeDegrees(angle: RelativeDegrees) = angle
-inline fun RelativeDegrees(angle: RelativeAngle) = RelativeDegrees(angle.toRadians())
+fun RelativeDegrees(angle: RelativeAngle) = RelativeDegrees(angle.toRadians())
 
 interface AbsoluteAngle {
     companion object {
@@ -104,7 +104,7 @@ inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
 
 inline fun AbsoluteDegrees(angle: AbsoluteRadians) = AbsoluteDegrees(radToDeg(angle.raw))
 inline fun AbsoluteDegrees(angle: AbsoluteDegrees) = angle
-inline fun AbsoluteDegrees(angle: AbsoluteAngle) = AbsoluteDegrees(angle.toRadians())
+fun AbsoluteDegrees(angle: AbsoluteAngle) = AbsoluteDegrees(angle.toRadians())
 
 fun AbsoluteRadians(raw: Float) = AbsoluteRadians(raw.toDouble())
 fun AbsoluteDegrees(raw: Float) = AbsoluteDegrees(raw.toDouble())
