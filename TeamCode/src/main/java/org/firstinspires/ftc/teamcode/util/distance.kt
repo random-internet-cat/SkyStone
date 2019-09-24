@@ -24,6 +24,8 @@ inline class Meters(val raw: RawDistance) : Distance {
     }
 }
 
+fun Meters(raw: Int) = Meters(raw.toRawDistance())
+
 inline operator fun Meters.compareTo(other: Meters) = (this.raw).compareTo(other.raw)
 inline operator fun Meters.unaryMinus() = Meters(-this.raw)
 inline operator fun Meters.plus(other: Meters) = Meters(this.raw + other.raw)
