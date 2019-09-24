@@ -15,6 +15,9 @@ inline class Seconds(val raw: RawTime) : Time {
     }
 }
 
+inline fun Seconds(time: Seconds) = time
+inline fun Seconds(time: Time) = time.toSeconds()
+
 fun Seconds(raw: Int) = Seconds(raw.toRawTime())
 
 inline operator fun Seconds.compareTo(other: Seconds) = (this.raw).compareTo(other.raw)
@@ -34,6 +37,10 @@ inline class Minutes(val raw: RawTime) : Time {
         return Seconds(this.raw / SECONDS_PER_MINUTE)
     }
 }
+
+inline fun Minutes(time: Seconds) = Minutes(time.raw / SECONDS_PER_MINUTE)
+inline fun Minutes(time: Minutes) = time
+inline fun Minutes(time: Time) = Minutes(time.toSeconds())
 
 fun Minutes(raw: Int) = Minutes(raw.toRawTime())
 
