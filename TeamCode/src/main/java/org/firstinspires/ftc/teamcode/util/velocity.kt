@@ -22,6 +22,7 @@ inline operator fun MetersPerSecond.times(time: Seconds) = Meters(this.raw * tim
 inline operator fun MetersPerSecond.times(num: Double) = MetersPerSecond(this.raw * num)
 inline operator fun MetersPerSecond.div(num: Double) = MetersPerSecond(this.raw / num)
 
+inline operator fun Seconds.times(time: MetersPerSecond) = time * this
 inline operator fun Double.times(vel: MetersPerSecond) = vel * this
 
 data class DistancePerSecond(val distance: Distance, val time: Seconds) : Velocity {
@@ -48,4 +49,5 @@ operator fun Velocity.times(time: Time) = this.toMetersPerSecond() * time.toSeco
 operator fun Velocity.times(num: Double) = this.toMetersPerSecond() * num
 operator fun Velocity.div(num: Double) = this.toMetersPerSecond() / num
 
+operator fun Time.times(vel: Velocity) = this.toSeconds() * vel.toMetersPerSecond()
 operator fun Double.times(vel: Velocity) = this * vel.toMetersPerSecond()
