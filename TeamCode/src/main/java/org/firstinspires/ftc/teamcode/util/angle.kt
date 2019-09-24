@@ -90,8 +90,14 @@ inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
     }
 }
 
+fun AbsoluteRadians(raw: Float) = AbsoluteRadians(raw.toDouble())
+fun AbsoluteDegrees(raw: Float) = AbsoluteDegrees(raw.toDouble())
+
 fun AbsoluteRadians(raw: Int) = AbsoluteRadians(raw.toDouble())
 fun AbsoluteDegrees(raw: Int) = AbsoluteDegrees(raw.toDouble())
+
+fun RelativeRadians(raw: Float) = RelativeRadians(raw.toDouble())
+fun RelativeDegrees(raw: Float) = RelativeDegrees(raw.toDouble())
 
 fun RelativeRadians(raw: Int) = RelativeRadians(raw.toDouble())
 fun RelativeDegrees(raw: Int) = RelativeDegrees(raw.toDouble())
