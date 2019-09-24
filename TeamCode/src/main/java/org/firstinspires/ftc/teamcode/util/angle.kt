@@ -14,7 +14,7 @@ interface RelativeAngle {
     fun toRadians(): RelativeRadians
 }
 
-typealias RawAngle = Double
+private typealias RawAngle = Double
 
 private const val TWO_PI = 2 * PI
 
