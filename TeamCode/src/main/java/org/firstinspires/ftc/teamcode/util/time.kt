@@ -27,6 +27,16 @@ inline operator fun Seconds.div(other: Seconds) = this.raw / other.raw
 
 inline operator fun Double.times(seconds: Seconds) = seconds * this
 
+const val SECONDS_PER_MINUTE = 60
+
+inline class Minutes(val raw: RawTime) : Time {
+    inline override fun toSeconds(): Seconds {
+        return Seconds(this.raw / SECONDS_PER_MINUTE)
+    }
+}
+
+fun Minutes(raw: Int) = Minutes(raw.toRawTime())
+
 operator fun Time.compareTo(other: Time) = (this.toSeconds()).compareTo(other.toSeconds())
 operator fun Time.unaryMinus() = -this.toSeconds()
 operator fun Time.plus(other: Time) = this.toSeconds() + other.toSeconds()
