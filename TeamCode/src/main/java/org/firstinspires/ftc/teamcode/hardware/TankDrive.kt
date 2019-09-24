@@ -5,7 +5,11 @@ import kotlin.math.abs
 import kotlin.math.max
 
 class TankDrive : BaseDrive {
-    constructor(frontLeft: DcMotor, frontRight: DcMotor, backLeft: DcMotor, backRight: DcMotor) : super(frontLeft, frontRight, backLeft, backRight)
+    private val m_imu: InternalIMU
+
+    constructor(imu: InternalIMU, frontLeft: DcMotor, frontRight: DcMotor, backLeft: DcMotor, backRight: DcMotor) : super(frontLeft, frontRight, backLeft, backRight) {
+        m_imu = imu
+    }
 
     fun drive(linearPower: Double, turnPower: Double) {
         require(-1 <= linearPower && linearPower <= 1)
