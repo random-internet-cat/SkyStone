@@ -18,8 +18,8 @@ typealias RawAngle = Double
 
 private const val TWO_PI = 2 * PI
 
-private fun radToDeg(value: RawAngle): RawAngle = value * (360.0 / TWO_PI)
-private fun degToRad(value: RawAngle): RawAngle = value * (TWO_PI / 360.0)
+fun radToDeg(value: RawAngle): RawAngle = value * (360.0 / TWO_PI)
+fun degToRad(value: RawAngle): RawAngle = value * (TWO_PI / 360.0)
 
 
 inline class RelativeRadians(val raw: RawAngle) : RelativeAngle {
@@ -27,7 +27,7 @@ inline class RelativeRadians(val raw: RawAngle) : RelativeAngle {
         fun zero() = RelativeRadians(0)
     }
 
-    override fun toRadians(): RelativeRadians {
+    inline override fun toRadians(): RelativeRadians {
         return this
     }
 }
@@ -42,7 +42,7 @@ inline operator fun RelativeRadians.div(num: Double) = RelativeDegrees(this.raw 
 inline fun abs(angle: RelativeRadians) = RelativeRadians(abs(angle.raw))
 
 inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
-    override fun toRadians(): RelativeRadians {
+    inline override fun toRadians(): RelativeRadians {
         return RelativeRadians(degToRad(raw))
     }
 }
@@ -64,7 +64,7 @@ inline class AbsoluteRadians(val raw: RawAngle) : AbsoluteAngle {
         fun zero() = AbsoluteRadians(0)
     }
 
-    override fun toRadians(): AbsoluteRadians {
+    inline override fun toRadians(): AbsoluteRadians {
         return this
     }
 }
@@ -85,7 +85,7 @@ inline fun sec(angle: AbsoluteRadians) = 1 / cos(angle.raw)
 inline fun csc(angle: AbsoluteRadians) = 1 / sin(angle.raw)
 
 inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
-    override fun toRadians(): AbsoluteRadians {
+    inline override fun toRadians(): AbsoluteRadians {
         return AbsoluteRadians(degToRad(raw))
     }
 }
