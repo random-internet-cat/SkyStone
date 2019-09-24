@@ -22,6 +22,16 @@ open class BaseDrive {
         m_backRight.f()
     }
 
+    protected fun forEachLeftMotor(f: DcMotor.() -> Unit) {
+        m_frontLeft.f()
+        m_backLeft.f()
+    }
+
+    protected fun forEachRightMotor(f: DcMotor.() -> Unit) {
+        m_frontRight.f()
+        m_backRight.f()
+    }
+
     fun enableEncoders() {
         forEachMotor {
             setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
@@ -39,6 +49,22 @@ open class BaseDrive {
         require(-1 <= power && power <= 1)
 
         forEachMotor {
+            setPower(power)
+        }
+    }
+
+    fun leftPower(power: Double) {
+        require(-1 <= power && power <= 1)
+
+        forEachLeftMotor {
+            setPower(power)
+        }
+    }
+
+    fun rightPower(power: Double) {
+        require(-1 <= power && power <= 1)
+
+        forEachRightMotor {
             setPower(power)
         }
     }
