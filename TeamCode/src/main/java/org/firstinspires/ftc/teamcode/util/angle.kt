@@ -32,6 +32,9 @@ inline class RelativeRadians(val raw: RawAngle) : RelativeAngle {
     }
 }
 
+inline fun RelativeRadians(angle: RelativeRadians) = angle
+inline fun RelativeRadians(angle: RelativeAngle) = angle.toRadians()
+
 inline operator fun RelativeRadians.compareTo(other: RelativeRadians) = (this.raw).compareTo(other.raw)
 inline operator fun RelativeRadians.unaryMinus() = RelativeRadians(-this.raw)
 inline operator fun RelativeRadians.plus(other: RelativeRadians) = RelativeRadians(this.raw + other.raw)
@@ -48,6 +51,10 @@ inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
         return RelativeRadians(degToRad(raw))
     }
 }
+
+inline fun RelativeDegrees(angle: RelativeRadians) = RelativeDegrees(radToDeg(angle.raw))
+inline fun RelativeDegrees(angle: RelativeDegrees) = angle
+inline fun RelativeDegrees(angle: RelativeAngle) = RelativeDegrees(angle.toRadians())
 
 interface AbsoluteAngle {
     companion object {
@@ -71,6 +78,9 @@ inline class AbsoluteRadians(val raw: RawAngle) : AbsoluteAngle {
     }
 }
 
+inline fun AbsoluteRadians(angle: AbsoluteRadians) = angle
+inline fun AbsoluteRadians(angle: AbsoluteAngle) = angle.toRadians()
+
 inline operator fun AbsoluteRadians.compareTo(other: AbsoluteRadians) = (this.raw).compareTo(other.raw)
 inline operator fun AbsoluteRadians.plus(diff: RelativeRadians) = AbsoluteRadians(this.raw + diff.raw)
 inline operator fun RelativeRadians.plus(angle: AbsoluteRadians) = angle + this
@@ -92,6 +102,10 @@ inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
     }
 }
 
+inline fun AbsoluteDegrees(angle: AbsoluteRadians) = AbsoluteDegrees(radToDeg(angle.raw))
+inline fun AbsoluteDegrees(angle: AbsoluteDegrees) = angle
+inline fun AbsoluteDegrees(angle: AbsoluteAngle) = AbsoluteDegrees(angle.toRadians())
+
 fun AbsoluteRadians(raw: Float) = AbsoluteRadians(raw.toDouble())
 fun AbsoluteDegrees(raw: Float) = AbsoluteDegrees(raw.toDouble())
 
@@ -104,8 +118,8 @@ fun RelativeDegrees(raw: Float) = RelativeDegrees(raw.toDouble())
 fun RelativeRadians(raw: Int) = RelativeRadians(raw.toDouble())
 fun RelativeDegrees(raw: Int) = RelativeDegrees(raw.toDouble())
 
-fun AbsoluteAngle.toDegrees() = AbsoluteDegrees(radToDeg(toRadians().raw))
-fun RelativeAngle.toDegrees() = RelativeDegrees(radToDeg(toRadians().raw))
+fun AbsoluteAngle.toDegrees() = AbsoluteDegrees(this)
+fun RelativeAngle.toDegrees() = RelativeDegrees(this)
 
 operator fun RelativeAngle.compareTo(other: RelativeAngle) = (this.toRadians()).compareTo(other.toRadians())
 operator fun AbsoluteAngle.compareTo(other: AbsoluteAngle) = (this.toRadians()).compareTo(other.toRadians())
