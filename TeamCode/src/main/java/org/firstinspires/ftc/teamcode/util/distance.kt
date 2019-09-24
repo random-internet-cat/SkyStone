@@ -15,6 +15,7 @@ private fun Double.toRawDistance(): RawDistance = this.toDouble()
 
 const val INCHES_PER_FOOT = 12
 const val FEET_PER_METER = 3.2808399
+const val INCHES_PER_METER = INCHES_PER_FOOT * FEET_PER_METER
 const val MM_PER_METER = 1000
 const val CM_PER_METER = 100
 
@@ -67,7 +68,7 @@ fun Feet(raw: Int) = Feet(raw.toRawDistance())
 
 inline class Inches(val raw: RawDistance) : Distance {
     override fun toMeters(): Meters {
-        return Meters(raw / (INCHES_PER_FOOT * FEET_PER_METER))
+        return Meters(raw / INCHES_PER_METER)
     }
 }
 
