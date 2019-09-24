@@ -12,6 +12,9 @@ inline class MetersPerSecond(val raw: RawVelocity) : Velocity {
     }
 }
 
+inline fun MetersPerSecond(vel: MetersPerSecond) = vel
+inline fun MetersPerSecond(vel: Velocity) = vel.toMetersPerSecond()
+
 inline operator fun Meters.div(time: Seconds) = MetersPerSecond(this.raw / time.raw)
 
 inline operator fun MetersPerSecond.compareTo(other: MetersPerSecond) = (this.raw).compareTo(other.raw)

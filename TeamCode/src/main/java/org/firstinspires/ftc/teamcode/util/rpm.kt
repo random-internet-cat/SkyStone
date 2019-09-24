@@ -12,6 +12,9 @@ inline class RevolutionsPerSecond(val raw: RawRotationSpeed) : RevolutionSpeed {
     }
 }
 
+inline fun RevolutionsPerSecond(rot: RevolutionsPerSecond) = rot
+inline fun RevolutionsPerSecond(rot: RevolutionSpeed) = rot.toRevolutionsPerSecond()
+
 inline operator fun Revolutions.div(seconds: Seconds) = RevolutionsPerSecond(this.raw / seconds.raw)
 
 inline operator fun RevolutionsPerSecond.compareTo(other: RevolutionsPerSecond) = (this.raw).compareTo(other.raw)
@@ -31,6 +34,10 @@ inline class RevolutionsPerMinute(val raw: RawRotationSpeed) : RevolutionSpeed {
         return RevolutionsPerSecond(raw / SECONDS_PER_MINUTE)
     }
 }
+
+inline fun RevolutionsPerMinute(rot: RevolutionsPerSecond) = RevolutionsPerMinute(rot.raw * SECONDS_PER_MINUTE)
+inline fun RevolutionsPerMinute(rot: RevolutionsPerMinute) = rot
+inline fun RevolutionsPerMinute(rot: RevolutionSpeed) = rot
 
 inline operator fun Revolutions.div(minutes: Minutes) = RevolutionsPerMinute(this.raw / minutes.raw)
 

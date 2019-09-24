@@ -25,6 +25,9 @@ inline class Meters(val raw: RawDistance) : Distance {
     }
 }
 
+inline fun Meters(distance: Meters) = distance
+inline fun Meters(distance: Distance) = distance.toMeters()
+
 fun Meters(raw: Int) = Meters(raw.toRawDistance())
 
 inline operator fun Meters.compareTo(other: Meters) = (this.raw).compareTo(other.raw)
@@ -48,6 +51,10 @@ inline class Millimeters(val raw: RawDistance) : Distance {
     }
 }
 
+inline fun Millimeters(distance: Meters) = Millimeters(distance.raw / MM_PER_METER)
+inline fun Millimeters(distance: Millimeters) = distance
+inline fun Millimeters(distance: Distance) = Millimeters(distance.toMeters())
+
 fun Millimeters(raw: Int) = Millimeters(raw.toRawDistance())
 
 inline class Centimeters(val raw: RawDistance) : Distance {
@@ -55,6 +62,10 @@ inline class Centimeters(val raw: RawDistance) : Distance {
         return Meters(raw / CM_PER_METER)
     }
 }
+
+inline fun Centimeters(distance: Meters) = Centimeters(distance.raw / CM_PER_METER)
+inline fun Centimeters(distance: Centimeters) = distance
+inline fun Centimeters(distance: Distance) = Centimeters(distance.toMeters())
 
 fun Centimeters(raw: Int) = Centimeters(raw.toRawDistance())
 
@@ -64,6 +75,11 @@ inline class Feet(val raw: RawDistance) : Distance {
     }
 }
 
+inline fun Feet(distance: Meters) = Feet(distance.raw / FEET_PER_METER)
+inline fun Feet(distance: Feet) = distance
+inline fun Feet(distance: Inches) = Feet(distance / INCHES_PER_FOOT)
+inline fun Feet(distance: Distance) = Feet(distance.toMeters())
+
 fun Feet(raw: Int) = Feet(raw.toRawDistance())
 
 inline class Inches(val raw: RawDistance) : Distance {
@@ -71,6 +87,11 @@ inline class Inches(val raw: RawDistance) : Distance {
         return Meters(raw / INCHES_PER_METER)
     }
 }
+
+inline fun Inches(distance: Meters) = Meters(distance.raw / INCHES_PER_METER)
+inline fun Inches(distance: Inches) = distance
+inline fun Inches(distance: Feet) = Inches(distance.raw * INCHES_PER_FOOT)
+inline fun Inches(distance: Distance) = Inches(distance.toMeters())
 
 fun Inches(raw: Int) = Inches(raw.toRawDistance())
 
