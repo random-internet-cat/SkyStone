@@ -3,24 +3,6 @@ package org.firstinspires.ftc.teamcode.hardware
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
 import org.firstinspires.ftc.teamcode.util.*
 
-typealias RRAbsoluteAngle = AbsoluteRadians
-typealias RRRelativeAngle = RelativeRadians
-typealias RRDistance = Meters
-typealias RRTime = Seconds
-typealias RRVelocity = MetersPerSecond
-
-inline fun RRAbsoluteAngle.roadrunner(): RRAbsoluteAngle = this
-fun AbsoluteAngle.roadrunner(): RRAbsoluteAngle = AbsoluteRadians(this)
-
-inline fun RRRelativeAngle.roadrunner(): RRRelativeAngle = this
-fun RelativeAngle.roadrunner(): RRRelativeAngle = RelativeRadians(this)
-
-inline fun RRVelocity.roadrunner(): RRVelocity = this
-fun Velocity.roadrunner(): RRVelocity = MetersPerSecond(this)
-
-inline fun RRDistance.roadrunner(): RRDistance = this
-fun Distance.roadrunner(): RRDistance = Meters(this)
-
 object DriveConstants {
     private val MOTOR_TYPE = YellowJacket5202_0002_0019::class.java
     private val MOTOR_CONFIG = MotorConfigurationType.getMotorType(MOTOR_TYPE)
