@@ -15,21 +15,20 @@ open class BaseDrive {
         m_backRight = backRight
     }
 
+    fun motors() = listOf(m_frontLeft, m_frontRight, m_backLeft, m_backRight)
+    fun leftMotors() = listOf(m_frontLeft, m_backLeft)
+    fun rightMotors() = listOf(m_frontRight, m_backRight)
+
     protected fun forEachMotor(f: DcMotor.() -> Unit) {
-        m_frontLeft.f()
-        m_frontRight.f()
-        m_backLeft.f()
-        m_backRight.f()
+        motors().forEach(f)
     }
 
     protected fun forEachLeftMotor(f: DcMotor.() -> Unit) {
-        m_frontLeft.f()
-        m_backLeft.f()
+        leftMotors().forEach(f)
     }
 
     protected fun forEachRightMotor(f: DcMotor.() -> Unit) {
-        m_frontRight.f()
-        m_backRight.f()
+        rightMotors().forEach(f)
     }
 
     fun enableEncoders() {
