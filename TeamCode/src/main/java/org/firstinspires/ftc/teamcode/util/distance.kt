@@ -7,7 +7,7 @@ interface Distance {
     fun toMeters(): Meters
 }
 
-private typealias RawDistance = Double
+typealias RawDistance = Double
 
 private fun Number.toRawDistance(): RawDistance = this.toDouble()
 private fun Int.toRawDistance(): RawDistance = this.toDouble()

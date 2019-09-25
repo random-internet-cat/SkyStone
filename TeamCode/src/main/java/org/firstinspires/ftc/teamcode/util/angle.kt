@@ -14,7 +14,7 @@ interface RelativeAngle {
     fun toRadians(): RelativeRadians
 }
 
-private typealias RawAngle = Double
+typealias RawAngle = Double
 
 fun radToDeg(value: RawAngle): RawAngle = value * (360.0 / TWO_PI)
 fun degToRad(value: RawAngle): RawAngle = value * (TWO_PI / 360.0)

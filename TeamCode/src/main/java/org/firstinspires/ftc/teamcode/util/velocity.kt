@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.util
 
-private typealias RawVelocity = Double
+typealias RawVelocity = Double
 
 interface Velocity {
     fun toMetersPerSecond(): MetersPerSecond
