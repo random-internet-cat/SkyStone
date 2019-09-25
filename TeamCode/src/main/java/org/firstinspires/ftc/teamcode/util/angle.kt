@@ -16,8 +16,6 @@ interface RelativeAngle {
 
 private typealias RawAngle = Double
 
-private const val TWO_PI = 2 * PI
-
 fun radToDeg(value: RawAngle): RawAngle = value * (360.0 / TWO_PI)
 fun degToRad(value: RawAngle): RawAngle = value * (TWO_PI / 360.0)
 
