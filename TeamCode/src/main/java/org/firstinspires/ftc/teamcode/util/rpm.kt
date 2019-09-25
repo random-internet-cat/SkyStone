@@ -4,7 +4,7 @@ interface RevolutionSpeed {
     fun toRevolutionsPerSecond(): RevolutionsPerSecond
 }
 
-private typealias RawRotationSpeed = Double
+typealias RawRotationSpeed = Double
 
 inline class RevolutionsPerSecond(val raw: RawRotationSpeed) : RevolutionSpeed {
     inline override fun toRevolutionsPerSecond(): RevolutionsPerSecond {

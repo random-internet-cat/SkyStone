@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.util
 
-private typealias RawTime = Double
+typealias RawTime = Double
 
 private fun Number.toRawTime() = this.toDouble()
 private fun Int.toRawTime() = this.toDouble()

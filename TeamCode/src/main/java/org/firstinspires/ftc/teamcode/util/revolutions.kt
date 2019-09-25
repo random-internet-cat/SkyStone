@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.util
 
-private typealias RawRevolutions = Double
+typealias RawRevolutions = Double
 
 inline class Revolutions(val raw: RawRevolutions)
 
