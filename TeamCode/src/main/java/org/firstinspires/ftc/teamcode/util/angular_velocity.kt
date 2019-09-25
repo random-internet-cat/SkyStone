@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode.util
 
-interface RevolutionSpeed {
+interface AngularVelocity {
     fun toRevolutionsPerSecond(): RevolutionsPerSecond
 }
 
-typealias RawRotationSpeed = Double
+typealias RawAngularVelocity = Double
 
-inline class RevolutionsPerSecond(val raw: RawRotationSpeed) : RevolutionSpeed {
+inline class RevolutionsPerSecond(val raw: RawAngularVelocity) : AngularVelocity {
     inline override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
         return this
     }
 }
 
 inline fun RevolutionsPerSecond(rot: RevolutionsPerSecond) = rot
-fun RevolutionsPerSecond(rot: RevolutionSpeed) = rot.toRevolutionsPerSecond()
+fun RevolutionsPerSecond(rot: AngularVelocity) = rot.toRevolutionsPerSecond()
 
 inline operator fun Revolutions.div(seconds: Seconds) = RevolutionsPerSecond(this.raw / seconds.raw)
 
@@ -29,7 +29,7 @@ inline operator fun RevolutionsPerSecond.div(num: Double) = RevolutionsPerSecond
 inline operator fun Seconds.times(rot: RevolutionsPerSecond) = rot * this
 inline operator fun Double.times(rot: RevolutionsPerSecond) = rot * this
 
-inline class RevolutionsPerMinute(val raw: RawRotationSpeed) : RevolutionSpeed {
+inline class RevolutionsPerMinute(val raw: RawAngularVelocity) : AngularVelocity {
     inline override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
         return RevolutionsPerSecond(raw / SECONDS_PER_MINUTE)
     }
@@ -37,11 +37,11 @@ inline class RevolutionsPerMinute(val raw: RawRotationSpeed) : RevolutionSpeed {
 
 inline fun RevolutionsPerMinute(rot: RevolutionsPerSecond) = RevolutionsPerMinute(rot.raw * SECONDS_PER_MINUTE)
 inline fun RevolutionsPerMinute(rot: RevolutionsPerMinute) = rot
-fun RevolutionsPerMinute(rot: RevolutionSpeed) = rot
+fun RevolutionsPerMinute(rot: AngularVelocity) = rot
 
 inline operator fun Revolutions.div(minutes: Minutes) = RevolutionsPerMinute(this.raw / minutes.raw)
 
-data class RevolutionsPerTime(val revolutions: Revolutions, val time: Time) : RevolutionSpeed {
+data class RevolutionsPerTime(val revolutions: Revolutions, val time: Time) : AngularVelocity {
     inline override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
         return revolutions / time.toSeconds()
     }
@@ -49,7 +49,7 @@ data class RevolutionsPerTime(val revolutions: Revolutions, val time: Time) : Re
 
 operator fun Revolutions.div(time: Time) = RevolutionsPerTime(this, time)
 
-inline class DegreesPerSecond(val raw: RawRevolutionSpeed) : AngularVelocity {
+inline class DegreesPerSecond(val raw: RawAngularVelocity) : AngularVelocity {
     override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
         return RevolutionsPerSecond(raw / 360)
     }
@@ -57,9 +57,9 @@ inline class DegreesPerSecond(val raw: RawRevolutionSpeed) : AngularVelocity {
 
 inline fun DegreesPerSecond(rot: RevolutionsPerSecond) = DegreesPerSecond(rot.raw * 360)
 inline fun DegreesPerSecond(raw: Int) = DegreesPerSecond(raw.toDouble())
-fun DegreesPerSecond(rot: RevolutionSpeed) = DegreesPerSecond(rot.toRevolutionsPerSecond())
+fun DegreesPerSecond(rot: AngularVelocity) = DegreesPerSecond(rot.toRevolutionsPerSecond())
 
-inline class RadiansPerSecond(val raw: RawRevolutionSpeed) : AngularVelocity {
+inline class RadiansPerSecond(val raw: RawAngularVelocity) : AngularVelocity {
     override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
         return RevolutionsPerSecond(raw / TWO_PI)
     }
@@ -67,16 +67,16 @@ inline class RadiansPerSecond(val raw: RawRevolutionSpeed) : AngularVelocity {
 
 inline fun RadiansPerSecond(rot: RevolutionsPerSecond) = RadiansPerSecond(rot.raw * TWO_PI)
 inline fun RadiansPerSecond(raw: Int) = RadiansPerSecond(raw.toDouble())
-fun RadiansPerSecond(rot: RevolutionSpeed) = RadiansPerSecond(rot.toRevolutionsPerSecond())
+fun RadiansPerSecond(rot: AngularVelocity) = RadiansPerSecond(rot.toRevolutionsPerSecond())
 
-operator fun RevolutionSpeed.compareTo(other: RevolutionSpeed) = (this.toRevolutionsPerSecond()).compareTo(other.toRevolutionsPerSecond())
-operator fun RevolutionSpeed.unaryMinus() = -(this.toRevolutionsPerSecond())
-operator fun RevolutionSpeed.plus(other: RevolutionSpeed) = this.toRevolutionsPerSecond() + other.toRevolutionsPerSecond()
-operator fun RevolutionSpeed.minus(other: RevolutionSpeed) = this.toRevolutionsPerSecond() - other.toRevolutionsPerSecond()
-operator fun RevolutionSpeed.times(num: Double) = this.toRevolutionsPerSecond() * num
-operator fun RevolutionSpeed.times(time: Time) = this.toRevolutionsPerSecond() * time.toSeconds()
-operator fun RevolutionSpeed.div(other: RevolutionSpeed) = this.toRevolutionsPerSecond() / other.toRevolutionsPerSecond()
-operator fun RevolutionSpeed.div(num: Double) = this.toRevolutionsPerSecond() / num
+operator fun AngularVelocity.compareTo(other: AngularVelocity) = (this.toRevolutionsPerSecond()).compareTo(other.toRevolutionsPerSecond())
+operator fun AngularVelocity.unaryMinus() = -(this.toRevolutionsPerSecond())
+operator fun AngularVelocity.plus(other: AngularVelocity) = this.toRevolutionsPerSecond() + other.toRevolutionsPerSecond()
+operator fun AngularVelocity.minus(other: AngularVelocity) = this.toRevolutionsPerSecond() - other.toRevolutionsPerSecond()
+operator fun AngularVelocity.times(num: Double) = this.toRevolutionsPerSecond() * num
+operator fun AngularVelocity.times(time: Time) = this.toRevolutionsPerSecond() * time.toSeconds()
+operator fun AngularVelocity.div(other: AngularVelocity) = this.toRevolutionsPerSecond() / other.toRevolutionsPerSecond()
+operator fun AngularVelocity.div(num: Double) = this.toRevolutionsPerSecond() / num
 
-operator fun Time.times(rot: RevolutionSpeed) = this.toSeconds() * rot.toRevolutionsPerSecond()
-operator fun Double.times(rot: RevolutionSpeed) = this * rot.toRevolutionsPerSecond()
+operator fun Time.times(rot: AngularVelocity) = this.toSeconds() * rot.toRevolutionsPerSecond()
+operator fun Double.times(rot: AngularVelocity) = this * rot.toRevolutionsPerSecond()
