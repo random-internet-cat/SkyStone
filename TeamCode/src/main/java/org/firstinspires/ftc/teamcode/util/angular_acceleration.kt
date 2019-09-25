@@ -55,6 +55,16 @@ inline fun RadiansPerSecondSquared(accel: RevolutionsPerSecondSquared) = Radians
 inline fun RadiansPerSecondSquared(accel: RadiansPerSecondSquared) = accel
 fun RadiansPerSecondSquared(accel: AngularAcceleration) = RadiansPerSecondSquared(accel.toRevolutionsPerSecondSquared())
 
+inline class DegreesPerSecondSquared(val raw: RawAngularAcceleration) : AngularAcceleration {
+    inline override fun toRevolutionsPerSecondSquared(): RevolutionsPerSecondSquared {
+        return RevolutionsPerSecondSquared(raw / 360)
+    }
+}
+
+inline fun DegreesPerSecondSquared(accel: RevolutionsPerSecondSquared) = DegreesPerSecondSquared(accel.raw * 360)
+inline fun DegreesPerSecondSquared(accel: DegreesPerSecondSquared) = accel
+fun DegreesPerSecondSquared(accel: AngularAcceleration) = DegreesPerSecondSquared(accel.toRevolutionsPerSecondSquared())
+
 operator fun AngularAcceleration.compareTo(other: AngularAcceleration) = (this.toRevolutionsPerSecondSquared()).compareTo(other.toRevolutionsPerSecondSquared())
 operator fun AngularAcceleration.unaryMinus() = -this.toRevolutionsPerSecondSquared()
 operator fun AngularAcceleration.plus(other: AngularAcceleration) = this.toRevolutionsPerSecondSquared() + other.toRevolutionsPerSecondSquared()
