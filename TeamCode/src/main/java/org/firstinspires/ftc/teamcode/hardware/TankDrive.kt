@@ -24,9 +24,7 @@ class TankDrive : BaseDrive {
             right /= bigger
         }
 
-        m_frontLeft.setPower(left)
-        m_backLeft.setPower(left)
-        m_frontRight.setPower(right)
-        m_backRight.setPower(right)
+        leftPower(left)
+        rightPower(right)
     }
 }
