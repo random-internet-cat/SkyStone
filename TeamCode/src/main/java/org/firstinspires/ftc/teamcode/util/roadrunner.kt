@@ -8,6 +8,7 @@ typealias RRVelocity = MetersPerSecond
 typealias RRAcceleration = MetersPerSecondSquared
 typealias RRJerk = MetersPerSecondCubed
 typealias RRAngularVelocity = RadiansPerSecond
+typealias RRAngularAcceleration = RadiansPerSecondSquared
 
 inline fun RRAbsoluteAngle.roadrunner(): RRAbsoluteAngle = this
 fun AbsoluteAngle.roadrunner(): RRAbsoluteAngle = AbsoluteRadians(this)
@@ -32,3 +33,6 @@ fun Jerk.roadrunner(): RRJerk = MetersPerSecondCubed(this)
 
 inline fun RRAngularVelocity.roadrunner(): RRAngularVelocity = this
 fun AngularVelocity.roadrunner(): RRAngularVelocity = RadiansPerSecond(this)
+
+inline fun RRAngularAcceleration.roadrunner(): RRAngularAcceleration = this
+fun AngularAcceleration.roadrunner(): RRAngularAcceleration = RadiansPerSecondSquared(this)
