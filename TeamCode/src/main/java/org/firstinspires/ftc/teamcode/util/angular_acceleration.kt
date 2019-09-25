@@ -45,6 +45,16 @@ data class AngularVelocityPerTime(val AngularVelocity: AngularVelocity, val time
 
 operator fun AngularVelocity.div(time: Time) = AngularVelocityPerTime(this, time)
 
+inline class RadiansPerSecondSquared(val raw: RawAngularAcceleration) : AngularAcceleration {
+    inline override fun toRevolutionsPerSecondSquared(): RevolutionsPerSecondSquared {
+        return RevolutionsPerSecondSquared(raw / TWO_PI)
+    }
+}
+
+inline fun RadiansPerSecondSquared(accel: RevolutionsPerSecondSquared) = RadiansPerSecondSquared(accel.raw * TWO_PI)
+inline fun RadiansPerSecondSquared(accel: RadiansPerSecondSquared) = accel
+fun RadiansPerSecondSquared(accel: AngularAcceleration) = RadiansPerSecondSquared(accel.toRevolutionsPerSecondSquared())
+
 operator fun AngularAcceleration.compareTo(other: AngularAcceleration) = (this.toRevolutionsPerSecondSquared()).compareTo(other.toRevolutionsPerSecondSquared())
 operator fun AngularAcceleration.unaryMinus() = -this.toRevolutionsPerSecondSquared()
 operator fun AngularAcceleration.plus(other: AngularAcceleration) = this.toRevolutionsPerSecondSquared() + other.toRevolutionsPerSecondSquared()
