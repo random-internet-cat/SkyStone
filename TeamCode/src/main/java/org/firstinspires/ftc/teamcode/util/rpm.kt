@@ -49,6 +49,26 @@ data class RevolutionsPerTime(val revolutions: Revolutions, val time: Time) : Re
 
 operator fun Revolutions.div(time: Time) = RevolutionsPerTime(this, time)
 
+inline class DegreesPerSecond(val raw: RawRevolutionSpeed) : AngularVelocity {
+    override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
+        return RevolutionsPerSecond(raw / 360)
+    }
+}
+
+inline fun DegreesPerSecond(rot: RevolutionsPerSecond) = DegreesPerSecond(rot.raw * 360)
+inline fun DegreesPerSecond(raw: Int) = DegreesPerSecond(raw.toDouble())
+fun DegreesPerSecond(rot: RevolutionSpeed) = DegreesPerSecond(rot.toRevolutionsPerSecond())
+
+inline class RadiansPerSecond(val raw: RawRevolutionSpeed) : AngularVelocity {
+    override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
+        return RevolutionsPerSecond(raw / TWO_PI)
+    }
+}
+
+inline fun RadiansPerSecond(rot: RevolutionsPerSecond) = RadiansPerSecond(rot.raw * TWO_PI)
+inline fun RadiansPerSecond(raw: Int) = RadiansPerSecond(raw.toDouble())
+fun RadiansPerSecond(rot: RevolutionSpeed) = RadiansPerSecond(rot.toRevolutionsPerSecond())
+
 operator fun RevolutionSpeed.compareTo(other: RevolutionSpeed) = (this.toRevolutionsPerSecond()).compareTo(other.toRevolutionsPerSecond())
 operator fun RevolutionSpeed.unaryMinus() = -(this.toRevolutionsPerSecond())
 operator fun RevolutionSpeed.plus(other: RevolutionSpeed) = this.toRevolutionsPerSecond() + other.toRevolutionsPerSecond()
