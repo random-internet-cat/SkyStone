@@ -25,7 +25,7 @@ object DriveConstants {
     public var kA: Double = 0.0
     public var kStatic: Double = 0.0
 
-    fun rpmToVelocity(revolutionSpeed: RevolutionSpeed): RRVelocity {
+    fun rpmToVelocity(revolutionSpeed: AngularVelocity): RRVelocity {
         val revPerSec = RevolutionsPerSecond(revolutionSpeed)
         return MetersPerSecond(Meters(DISTANCE_PER_REVOLUTION).raw * revPerSec.raw).roadrunner()
     }
