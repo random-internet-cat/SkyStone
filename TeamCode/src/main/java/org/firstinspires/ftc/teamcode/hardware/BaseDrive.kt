@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.hardware
 
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 
-open class BaseDrive {
-    protected val m_frontLeft: DcMotor
-    protected val m_frontRight: DcMotor
-    protected val m_backLeft: DcMotor
-    protected val m_backRight: DcMotor
+open class BasicBaseDrive<MotorType : DcMotor> {
+    protected val m_frontLeft: MotorType
+    protected val m_frontRight: MotorType
+    protected val m_backLeft: MotorType
+    protected val m_backRight: MotorType
 
-    constructor(frontLeft: DcMotor, frontRight: DcMotor, backLeft: DcMotor, backRight: DcMotor) {
+    constructor(frontLeft: MotorType, frontRight: MotorType, backLeft: MotorType, backRight: MotorType) {
         m_frontLeft = frontLeft
         m_frontRight = frontRight
         m_backLeft = backLeft
@@ -19,15 +20,15 @@ open class BaseDrive {
     fun leftMotors() = listOf(m_frontLeft, m_backLeft)
     fun rightMotors() = listOf(m_frontRight, m_backRight)
 
-    protected fun forEachMotor(f: DcMotor.() -> Unit) {
+    protected fun forEachMotor(f: MotorType.() -> Unit) {
         motors().forEach(f)
     }
 
-    protected fun forEachLeftMotor(f: DcMotor.() -> Unit) {
+    protected fun forEachLeftMotor(f: MotorType.() -> Unit) {
         leftMotors().forEach(f)
     }
 
-    protected fun forEachRightMotor(f: DcMotor.() -> Unit) {
+    protected fun forEachRightMotor(f: MotorType.() -> Unit) {
         rightMotors().forEach(f)
     }
 
@@ -69,24 +70,27 @@ open class BaseDrive {
     }
 }
 
-inline fun BaseDrive.power(power: Int) {
+inline fun BasicBaseDrive<*>.power(power: Int) {
     this.power(power.toDouble())
 }
 
 private val DEFAULT_DRIVE_POWER = 0.8
 
-fun BaseDrive.driveForward(power: Double = DEFAULT_DRIVE_POWER) {
+fun BasicBaseDrive<*>.driveForward(power: Double = DEFAULT_DRIVE_POWER) {
     require(0 <= power && power <= 1)
 
     this.power(power)
 }
 
-fun BaseDrive.driveBackward(power: Double = DEFAULT_DRIVE_POWER) {
+fun BasicBaseDrive<*>.driveBackward(power: Double = DEFAULT_DRIVE_POWER) {
     require(0 <= power && power <= 1)
 
     this.power(-power)
 }
 
-fun BaseDrive.stop() {
+fun BasicBaseDrive<*>.stop() {
     this.power(0)
 }
+
+typealias BaseDrive = BasicBaseDrive<DcMotor>
+typealias BaseDriveEx = BasicBaseDrive<DcMotorEx>
