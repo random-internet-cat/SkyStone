@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.util.roadrunner
 
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.trajectory.constraints.TankConstraints
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints
 import org.firstinspires.ftc.teamcode.util.units.*
 
 inline fun DriveConstraints(maxVel: RRVelocity, maxAccel: RRAcceleration, maxJerk: RRJerk, maxAngVel: RRAngularVelocity, maxAngAccel: RRAngularAcceleration, maxAngJerk: RRAngularJerk) = DriveConstraints(maxVel.roadrunner().raw, maxAccel.roadrunner().raw, maxJerk.roadrunner().raw, maxAngVel.roadrunner().raw, maxAngAccel.roadrunner().raw, maxAngJerk.roadrunner().raw)
@@ -12,3 +13,6 @@ fun DriveConstraints(maxVel: Velocity, maxAccel: Acceleration, maxAngVel: Angula
 
 fun TankConstraints(baseConstraints: DriveConstraints, trackWidth: RRDistance) = TankConstraints(baseConstraints, trackWidth.roadrunner().raw)
 fun TankConstraints(baseConstraints: DriveConstraints, trackWidth: Distance) = TankConstraints(baseConstraints, trackWidth.roadrunner())
+
+fun MecanumConstraints(baseConstraints: DriveConstraints, trackWidth: RRDistance, wheelBase: RRDistance) = MecanumConstraints(baseConstraints, trackWidth.roadrunner().raw, wheelBase.roadrunner().raw)
+fun MecanumConstraints(baseConstraints: DriveConstraints, trackWidth: Distance, wheelBase: Distance) = MecanumConstraints(baseConstraints, trackWidth.roadrunner(), wheelBase.roadrunner())
