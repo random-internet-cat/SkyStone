@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware.drive
+package org.firstinspires.ftc.teamcode.hardware.drive.tank
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
 import org.firstinspires.ftc.teamcode.util.units.MetersPerSecond
 
 @Config
-object DriveConstants {
+object TankDriveConstants {
     private val MOTOR_TYPE = YellowJacket5202_0002_0019::class.java
     private val MOTOR_CONFIG = MotorConfigurationType.getMotorType(MOTOR_TYPE)
     private val TICKS_PER_REV = MOTOR_CONFIG.ticksPerRev
