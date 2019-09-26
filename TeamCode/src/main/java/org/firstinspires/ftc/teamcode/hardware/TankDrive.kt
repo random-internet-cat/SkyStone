@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.hardware
 
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import kotlin.math.abs
 import kotlin.math.max
 
-class TankDrive : BaseDrive {
+class TankDrive : BaseDriveEx {
     private val m_imu: InternalIMU
 
-    constructor(imu: InternalIMU, frontLeft: DcMotor, frontRight: DcMotor, backLeft: DcMotor, backRight: DcMotor) : super(frontLeft, frontRight, backLeft, backRight) {
+    constructor(imu: InternalIMU, frontLeft: DcMotorEx, frontRight: DcMotorEx, backLeft: DcMotorEx, backRight: DcMotorEx) : super(frontLeft, frontRight, backLeft, backRight) {
         m_imu = imu
     }
 
