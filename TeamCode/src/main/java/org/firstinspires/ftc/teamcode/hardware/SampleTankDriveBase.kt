@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.hardware.DriveConstants.TRACK_WIDTH
 import org.firstinspires.ftc.teamcode.util.roadrunner.DashboardUtil
 import org.firstinspires.ftc.teamcode.util.roadrunner.TankConstraints
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
-import org.firstinspires.ftc.teamcode.util.units.Meters
+import org.firstinspires.ftc.teamcode.util.units.*
 
 /*
  * Base class with shared functionality for sample tank drives. All hardware-specific details are
@@ -86,11 +86,12 @@ abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.road
         return TrajectoryBuilder(poseEstimate, constraints)
     }
 
-    fun turn(angle: Double) {
-        val heading = poseEstimate.heading
+    fun turn(angle: RelativeAngle) {
+        val angle = RelativeRadians(angle)
+        val heading = AbsoluteRadians(poseEstimate.heading)
         turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
-            MotionState(heading, 0.0, 0.0, 0.0),
-            MotionState(heading + angle, 0.0, 0.0, 0.0),
+            MotionState(heading.raw, 0.0, 0.0, 0.0),
+            MotionState((heading + angle).raw, 0.0, 0.0, 0.0),
             constraints.maxAngVel,
             constraints.maxAngAccel,
             constraints.maxAngJerk
@@ -99,7 +100,7 @@ abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.road
         mode = Mode.TURN
     }
 
-    fun turnSync(angle: Double) {
+    fun turnSync(angle: RelativeAngle) {
         turn(angle)
         waitForIdle()
     }
