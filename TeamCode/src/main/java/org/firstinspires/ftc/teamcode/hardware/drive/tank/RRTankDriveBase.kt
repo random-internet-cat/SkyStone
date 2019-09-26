@@ -1,10 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.drive.tank
 
-import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.BASE_CONSTRAINTS
-import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.kA
-import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.kStatic
-import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.kV
-
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
@@ -23,7 +18,6 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
-import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.TRACK_WIDTH
 import org.firstinspires.ftc.teamcode.util.roadrunner.DashboardUtil
 import org.firstinspires.ftc.teamcode.util.roadrunner.TankConstraints
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
@@ -34,8 +28,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
  * handled in subclasses.
  */
 @Config
-abstract class RRTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.roadrunner().raw) {
-
+abstract class RRTankDriveBase : TankDrive {
     private val dashboard: FtcDashboard
     private val clock: NanoClock
 
@@ -47,6 +40,16 @@ abstract class RRTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.roadrunn
 
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
+
+    companion object {
+        var AXIAL_PID = PIDCoefficients(0.0, 0.0, 0.0)
+        var CROSS_TRACK_PID = PIDCoefficients(0.0, 0.0, 0.0)
+        var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
+    }
+
+    constructor(kV: Double, kA: Double, kStatic: Double, trackWidth: Distance, baseConstraints: DriveConstraints) : super(kV, kA, kStatic, trackWidth.roadrunner().raw) {
+        this.constraints = TankConstraints(baseConstraints, trackWidth)
+    }
 
     val lastError: Pose2d
         get() {
@@ -77,7 +80,6 @@ abstract class RRTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.roadrunn
         turnController = PIDFController(HEADING_PID)
         turnController.setInputBounds(0.0, 2 * Math.PI)
 
-        constraints = TankConstraints(BASE_CONSTRAINTS, TRACK_WIDTH)
         follower = TankPIDVAFollower(AXIAL_PID, CROSS_TRACK_PID)
     }
 
@@ -190,10 +192,4 @@ abstract class RRTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.roadrunn
     abstract fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients
 
     abstract fun setPIDCoefficients(runMode: DcMotor.RunMode, coefficients: PIDCoefficients)
-
-    companion object {
-        var AXIAL_PID = PIDCoefficients(0.0, 0.0, 0.0)
-        var CROSS_TRACK_PID = PIDCoefficients(0.0, 0.0, 0.0)
-        var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
-    }
 }
