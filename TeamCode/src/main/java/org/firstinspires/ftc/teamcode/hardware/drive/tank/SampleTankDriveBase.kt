@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.hardware
+package org.firstinspires.ftc.teamcode.hardware.drive.tank
 
-import org.firstinspires.ftc.teamcode.hardware.DriveConstants.BASE_CONSTRAINTS
-import org.firstinspires.ftc.teamcode.hardware.DriveConstants.kA
-import org.firstinspires.ftc.teamcode.hardware.DriveConstants.kStatic
-import org.firstinspires.ftc.teamcode.hardware.DriveConstants.kV
+import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.BASE_CONSTRAINTS
+import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.kA
+import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.kStatic
+import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.kV
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
@@ -23,7 +23,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
-import org.firstinspires.ftc.teamcode.hardware.DriveConstants.TRACK_WIDTH
+import org.firstinspires.ftc.teamcode.hardware.drive.DriveConstants.TRACK_WIDTH
 import org.firstinspires.ftc.teamcode.util.roadrunner.DashboardUtil
 import org.firstinspires.ftc.teamcode.util.roadrunner.TankConstraints
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
@@ -51,9 +51,9 @@ abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.road
     val lastError: Pose2d
         get() {
             when (mode) {
-                SampleTankDriveBase.Mode.FOLLOW_TRAJECTORY -> return follower.lastError
-                SampleTankDriveBase.Mode.TURN -> return Pose2d(0.0, 0.0, turnController.lastError)
-                SampleTankDriveBase.Mode.IDLE -> return Pose2d()
+                Mode.FOLLOW_TRAJECTORY -> return follower.lastError
+                Mode.TURN -> return Pose2d(0.0, 0.0, turnController.lastError)
+                Mode.IDLE -> return Pose2d()
             }
             throw AssertionError()
         }
@@ -134,9 +134,9 @@ abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.road
         packet.put("headingError", lastError.heading)
 
         when (mode) {
-            SampleTankDriveBase.Mode.IDLE -> {
+            Mode.IDLE -> {
             }
-            SampleTankDriveBase.Mode.TURN -> {
+            Mode.TURN -> {
                 val t = clock.seconds() - turnStart
 
                 val targetState = turnProfile!![t]
@@ -155,7 +155,7 @@ abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.road
                     setDriveSignal(DriveSignal())
                 }
             }
-            SampleTankDriveBase.Mode.FOLLOW_TRAJECTORY -> {
+            Mode.FOLLOW_TRAJECTORY -> {
                 setDriveSignal(follower.update(currentPose))
 
                 val trajectory = follower.trajectory
