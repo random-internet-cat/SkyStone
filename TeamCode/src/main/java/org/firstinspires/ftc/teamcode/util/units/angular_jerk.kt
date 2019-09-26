@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.util
+package org.firstinspires.ftc.teamcode.util.units
+
+import org.firstinspires.ftc.teamcode.util.TWO_PI
 
 typealias RawAngularJerk = Double
 

@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.util
+package org.firstinspires.ftc.teamcode.util.units
 
-import kotlin.math.PI
+import org.firstinspires.ftc.teamcode.util.TWO_PI
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin

@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.hardware
 
 import com.acmerobotics.dashboard.config.Config
-import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
 import org.firstinspires.ftc.teamcode.util.*
+import org.firstinspires.ftc.teamcode.util.units.*
+import org.firstinspires.ftc.teamcode.util.units.MetersPerSecond
 
 @Config
 object DriveConstants {
@@ -42,7 +43,8 @@ object DriveConstants {
 
     fun rpmToVelocity(revolutionSpeed: AngularVelocity): RRVelocity {
         val revPerSec = RevolutionsPerSecond(revolutionSpeed)
-        return MetersPerSecond(Meters(DISTANCE_PER_REVOLUTION).raw * revPerSec.raw).roadrunner()
+        return MetersPerSecond(Meters(DISTANCE_PER_REVOLUTION).raw * revPerSec.raw)
+            .roadrunner()
     }
 
     fun encoderTicksToDistance(ticks: Int): RRDistance {
