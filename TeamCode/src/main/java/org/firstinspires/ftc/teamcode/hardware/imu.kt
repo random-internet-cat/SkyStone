@@ -5,7 +5,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation
-import org.firstinspires.ftc.teamcode.util.units.AbsoluteRadians
+import org.firstinspires.ftc.teamcode.util.units.RadiansPoint
 import org.openftc.revextensions2.ExpansionHubEx
 
 private typealias RawIMU = BNO055IMU
@@ -36,7 +36,7 @@ class InternalIMU {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS)
     }
 
-    public fun heading() = AbsoluteRadians(angles.firstAngle)
-    public fun roll() = AbsoluteRadians(angles.secondAngle)
-    public fun pitch() = AbsoluteRadians(angles.thirdAngle)
+    public fun heading() = RadiansPoint(angles.firstAngle)
+    public fun roll() = RadiansPoint(angles.secondAngle)
+    public fun pitch() = RadiansPoint(angles.thirdAngle)
 }
