@@ -6,12 +6,12 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.tan
 
-interface RelativeAngle {
+interface Angle {
     companion object {
-        fun zero() = RelativeRadians.zero()
+        fun zero() = Radians.zero()
     }
 
-    fun toRadians(): RelativeRadians
+    fun toRadians(): Radians
 }
 
 typealias RawAngle = Double
@@ -20,125 +20,125 @@ fun radToDeg(value: RawAngle): RawAngle = value * (360.0 / TWO_PI)
 fun degToRad(value: RawAngle): RawAngle = value * (TWO_PI / 360.0)
 
 
-inline class RelativeRadians(val raw: RawAngle) : RelativeAngle {
+inline class Radians(val raw: RawAngle) : Angle {
     companion object {
-        fun zero() = RelativeRadians(0)
+        fun zero() = Radians(0)
     }
 
-    inline override fun toRadians(): RelativeRadians {
+    inline override fun toRadians(): Radians {
         return this
     }
 }
 
-inline fun RelativeRadians(angle: RelativeRadians) = angle
-inline fun RelativeRadians(angle: RelativeAngle) = angle.toRadians()
+inline fun Radians(angle: Radians) = angle
+inline fun Radians(angle: Angle) = angle.toRadians()
 
-inline operator fun RelativeRadians.compareTo(other: RelativeRadians) = (this.raw).compareTo(other.raw)
-inline operator fun RelativeRadians.unaryMinus() = RelativeRadians(-this.raw)
-inline operator fun RelativeRadians.plus(other: RelativeRadians) = RelativeRadians(this.raw + other.raw)
-inline operator fun RelativeRadians.minus(other: RelativeRadians) = this + (-other)
-inline operator fun RelativeRadians.times(num: Double) = RelativeDegrees(this.raw * num)
-inline operator fun RelativeRadians.div(num: Double) = RelativeDegrees(this.raw / num)
+inline operator fun Radians.compareTo(other: Radians) = (this.raw).compareTo(other.raw)
+inline operator fun Radians.unaryMinus() = Radians(-this.raw)
+inline operator fun Radians.plus(other: Radians) = Radians(this.raw + other.raw)
+inline operator fun Radians.minus(other: Radians) = this + (-other)
+inline operator fun Radians.times(num: Double) = Degrees(this.raw * num)
+inline operator fun Radians.div(num: Double) = Degrees(this.raw / num)
 
-inline operator fun Double.times(angle: RelativeRadians) = angle * this
+inline operator fun Double.times(angle: Radians) = angle * this
 
-inline fun abs(angle: RelativeRadians) = RelativeRadians(abs(angle.raw))
+inline fun abs(angle: Radians) = Radians(abs(angle.raw))
 
-inline class RelativeDegrees(val raw: RawAngle) : RelativeAngle {
-    inline override fun toRadians(): RelativeRadians {
-        return RelativeRadians(degToRad(raw))
+inline class Degrees(val raw: RawAngle) : Angle {
+    inline override fun toRadians(): Radians {
+        return Radians(degToRad(raw))
     }
 }
 
-inline fun RelativeDegrees(angle: RelativeRadians) = RelativeDegrees(radToDeg(angle.raw))
-inline fun RelativeDegrees(angle: RelativeDegrees) = angle
-fun RelativeDegrees(angle: RelativeAngle) = RelativeDegrees(angle.toRadians())
+inline fun Degrees(angle: Radians) = Degrees(radToDeg(angle.raw))
+inline fun Degrees(angle: Degrees) = angle
+fun Degrees(angle: Angle) = Degrees(angle.toRadians())
 
-interface AbsoluteAngle {
+interface AnglePoint {
     companion object {
-        fun zero() = AbsoluteRadians.zero()
+        fun zero() = RadiansPoint.zero()
     }
 
-    fun toRadians(): AbsoluteRadians
+    fun toRadians(): RadiansPoint
 }
 
 private fun normalizeWith(value: RawAngle, modulo: RawAngle): RawAngle {
     return (((value % modulo) + modulo) % modulo)
 }
 
-inline class AbsoluteRadians(val raw: RawAngle) : AbsoluteAngle {
+inline class RadiansPoint(val raw: RawAngle) : AnglePoint {
     companion object {
-        fun zero() = AbsoluteRadians(0)
+        fun zero() = RadiansPoint(0)
     }
 
-    inline override fun toRadians(): AbsoluteRadians {
+    inline override fun toRadians(): RadiansPoint {
         return this
     }
 }
 
-inline fun AbsoluteRadians(angle: AbsoluteRadians) = angle
-inline fun AbsoluteRadians(angle: AbsoluteAngle) = angle.toRadians()
+inline fun RadiansPoint(angle: RadiansPoint) = angle
+inline fun RadiansPoint(angle: AnglePoint) = angle.toRadians()
 
-inline operator fun AbsoluteRadians.compareTo(other: AbsoluteRadians) = (this.raw).compareTo(other.raw)
-inline operator fun AbsoluteRadians.plus(diff: RelativeRadians) = AbsoluteRadians(this.raw + diff.raw)
-inline operator fun RelativeRadians.plus(angle: AbsoluteRadians) = angle + this
-inline operator fun AbsoluteRadians.minus(diff: RelativeRadians) = this + (-diff)
-inline operator fun AbsoluteRadians.minus(other: AbsoluteRadians) = RelativeRadians(this.raw - other.raw)
+inline operator fun RadiansPoint.compareTo(other: RadiansPoint) = (this.raw).compareTo(other.raw)
+inline operator fun RadiansPoint.plus(diff: Radians) = RadiansPoint(this.raw + diff.raw)
+inline operator fun Radians.plus(angle: RadiansPoint) = angle + this
+inline operator fun RadiansPoint.minus(diff: Radians) = this + (-diff)
+inline operator fun RadiansPoint.minus(other: RadiansPoint) = Radians(this.raw - other.raw)
 
-fun AbsoluteRadians.normalized() = AbsoluteRadians(normalizeWith(this.raw, TWO_PI))
+fun RadiansPoint.normalized() = RadiansPoint(normalizeWith(this.raw, TWO_PI))
 
-inline fun sin(angle: AbsoluteRadians) = sin(angle.raw)
-inline fun cos(angle: AbsoluteRadians) = cos(angle.raw)
-inline fun tan(angle: AbsoluteRadians) = tan(angle.raw)
-inline fun cot(angle: AbsoluteRadians) = 1 / tan(angle.raw)
-inline fun sec(angle: AbsoluteRadians) = 1 / cos(angle.raw)
-inline fun csc(angle: AbsoluteRadians) = 1 / sin(angle.raw)
+inline fun sin(angle: RadiansPoint) = sin(angle.raw)
+inline fun cos(angle: RadiansPoint) = cos(angle.raw)
+inline fun tan(angle: RadiansPoint) = tan(angle.raw)
+inline fun cot(angle: RadiansPoint) = 1 / tan(angle.raw)
+inline fun sec(angle: RadiansPoint) = 1 / cos(angle.raw)
+inline fun csc(angle: RadiansPoint) = 1 / sin(angle.raw)
 
-inline class AbsoluteDegrees(val raw: RawAngle) : AbsoluteAngle {
-    inline override fun toRadians(): AbsoluteRadians {
-        return AbsoluteRadians(degToRad(raw))
+inline class DegreesPoint(val raw: RawAngle) : AnglePoint {
+    inline override fun toRadians(): RadiansPoint {
+        return RadiansPoint(degToRad(raw))
     }
 }
 
-inline fun AbsoluteDegrees(angle: AbsoluteRadians) = AbsoluteDegrees(radToDeg(angle.raw))
-inline fun AbsoluteDegrees(angle: AbsoluteDegrees) = angle
-fun AbsoluteDegrees(angle: AbsoluteAngle) = AbsoluteDegrees(angle.toRadians())
+inline fun DegreesPoint(angle: RadiansPoint) = DegreesPoint(radToDeg(angle.raw))
+inline fun DegreesPoint(angle: DegreesPoint) = angle
+fun DegreesPoint(angle: AnglePoint) = DegreesPoint(angle.toRadians())
 
-fun AbsoluteRadians(raw: Float) = AbsoluteRadians(raw.toDouble())
-fun AbsoluteDegrees(raw: Float) = AbsoluteDegrees(raw.toDouble())
+fun RadiansPoint(raw: Float) = RadiansPoint(raw.toDouble())
+fun DegreesPoint(raw: Float) = DegreesPoint(raw.toDouble())
 
-fun AbsoluteRadians(raw: Int) = AbsoluteRadians(raw.toDouble())
-fun AbsoluteDegrees(raw: Int) = AbsoluteDegrees(raw.toDouble())
+fun RadiansPoint(raw: Int) = RadiansPoint(raw.toDouble())
+fun DegreesPoint(raw: Int) = DegreesPoint(raw.toDouble())
 
-fun RelativeRadians(raw: Float) = RelativeRadians(raw.toDouble())
-fun RelativeDegrees(raw: Float) = RelativeDegrees(raw.toDouble())
+fun Radians(raw: Float) = Radians(raw.toDouble())
+fun Degrees(raw: Float) = Degrees(raw.toDouble())
 
-fun RelativeRadians(raw: Int) = RelativeRadians(raw.toDouble())
-fun RelativeDegrees(raw: Int) = RelativeDegrees(raw.toDouble())
+fun Radians(raw: Int) = Radians(raw.toDouble())
+fun Degrees(raw: Int) = Degrees(raw.toDouble())
 
-fun AbsoluteAngle.toDegrees() = AbsoluteDegrees(this)
-fun RelativeAngle.toDegrees() = RelativeDegrees(this)
+fun AnglePoint.toDegrees() = DegreesPoint(this)
+fun Angle.toDegrees() = Degrees(this)
 
-operator fun RelativeAngle.compareTo(other: RelativeAngle) = (this.toRadians()).compareTo(other.toRadians())
-operator fun AbsoluteAngle.compareTo(other: AbsoluteAngle) = (this.toRadians()).compareTo(other.toRadians())
-operator fun AbsoluteAngle.plus(diff: RelativeAngle) = this.toRadians() + diff.toRadians()
-operator fun RelativeAngle.plus(value: AbsoluteAngle) = this.toRadians() + value.toRadians()
-operator fun AbsoluteAngle.minus(diff: RelativeAngle) = this.toRadians() - diff.toRadians()
-operator fun AbsoluteAngle.minus(other: AbsoluteAngle) = this.toRadians() - other.toRadians()
-operator fun RelativeAngle.plus(diff: RelativeAngle) = this.toRadians() + diff.toRadians()
-operator fun RelativeAngle.minus(diff: RelativeAngle) = this.toRadians() - diff.toRadians()
-operator fun RelativeAngle.times(num: Double) = this.toRadians() * num
-operator fun RelativeAngle.div(num: Double) = this.toRadians() / num
+operator fun Angle.compareTo(other: Angle) = (this.toRadians()).compareTo(other.toRadians())
+operator fun AnglePoint.compareTo(other: AnglePoint) = (this.toRadians()).compareTo(other.toRadians())
+operator fun AnglePoint.plus(diff: Angle) = this.toRadians() + diff.toRadians()
+operator fun Angle.plus(value: AnglePoint) = this.toRadians() + value.toRadians()
+operator fun AnglePoint.minus(diff: Angle) = this.toRadians() - diff.toRadians()
+operator fun AnglePoint.minus(other: AnglePoint) = this.toRadians() - other.toRadians()
+operator fun Angle.plus(diff: Angle) = this.toRadians() + diff.toRadians()
+operator fun Angle.minus(diff: Angle) = this.toRadians() - diff.toRadians()
+operator fun Angle.times(num: Double) = this.toRadians() * num
+operator fun Angle.div(num: Double) = this.toRadians() / num
 
-operator fun Double.times(angle: RelativeAngle) = this * angle.toRadians()
+operator fun Double.times(angle: Angle) = this * angle.toRadians()
 
-fun AbsoluteAngle.normalized() = this.toRadians().normalized()
+fun AnglePoint.normalized() = this.toRadians().normalized()
 
-fun abs(angle: RelativeAngle) = abs(angle.toRadians())
+fun abs(angle: Angle) = abs(angle.toRadians())
 
-fun sin(angle: AbsoluteAngle) = sin(angle.toRadians())
-fun cos(angle: AbsoluteAngle) = cos(angle.toRadians())
-fun tan(angle: AbsoluteAngle) = tan(angle.toRadians())
-fun cot(angle: AbsoluteAngle) = cot(angle.toRadians())
-fun sec(angle: AbsoluteAngle) = sec(angle.toRadians())
-fun csc(angle: AbsoluteAngle) = sec(angle.toRadians())
+fun sin(angle: AnglePoint) = sin(angle.toRadians())
+fun cos(angle: AnglePoint) = cos(angle.toRadians())
+fun tan(angle: AnglePoint) = tan(angle.toRadians())
+fun cot(angle: AnglePoint) = cot(angle.toRadians())
+fun sec(angle: AnglePoint) = sec(angle.toRadians())
+fun csc(angle: AnglePoint) = sec(angle.toRadians())

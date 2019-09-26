@@ -21,7 +21,6 @@ import com.acmerobotics.roadrunner.profile.MotionState
 import com.acmerobotics.roadrunner.trajectory.Trajectory
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
-import com.acmerobotics.roadrunner.trajectory.constraints.TankConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.hardware.DriveConstants.TRACK_WIDTH
@@ -86,9 +85,9 @@ abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.road
         return TrajectoryBuilder(poseEstimate, constraints)
     }
 
-    fun turn(angle: RelativeAngle) {
-        val angle = RelativeRadians(angle)
-        val heading = AbsoluteRadians(poseEstimate.heading)
+    fun turn(angle: Angle) {
+        val angle = Radians(angle)
+        val heading = RadiansPoint(poseEstimate.heading)
         turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
             MotionState(heading.raw, 0.0, 0.0, 0.0),
             MotionState((heading + angle).raw, 0.0, 0.0, 0.0),
@@ -100,7 +99,7 @@ abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.road
         mode = Mode.TURN
     }
 
-    fun turnSync(angle: RelativeAngle) {
+    fun turnSync(angle: Angle) {
         turn(angle)
         waitForIdle()
     }
