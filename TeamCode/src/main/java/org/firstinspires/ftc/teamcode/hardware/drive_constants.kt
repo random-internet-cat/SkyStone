@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware
 
 import com.acmerobotics.dashboard.config.Config
+import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
 import org.firstinspires.ftc.teamcode.util.*
 
@@ -35,6 +36,9 @@ object DriveConstants {
 
     @JvmField
     public var kStatic: Double = 0.0
+
+    @JvmField
+    public val BASE_CONSTRAINTS = DriveConstraints(Inches(30) / Seconds(1), Inches(30) / Seconds(1) / Seconds(1), DegreesPerSecond(180), DegreesPerSecondSquared(180.0))
 
     fun rpmToVelocity(revolutionSpeed: AngularVelocity): RRVelocity {
         val revPerSec = RevolutionsPerSecond(revolutionSpeed)
