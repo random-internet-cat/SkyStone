@@ -34,7 +34,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
  * handled in subclasses.
  */
 @Config
-abstract class SampleTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.roadrunner().raw) {
+abstract class RRTankDriveBase : TankDrive(kV, kA, kStatic, TRACK_WIDTH.roadrunner().raw) {
 
     private val dashboard: FtcDashboard
     private val clock: NanoClock
