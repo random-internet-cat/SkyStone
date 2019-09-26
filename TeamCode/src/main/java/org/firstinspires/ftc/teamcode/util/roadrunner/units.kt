@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util
+package org.firstinspires.ftc.teamcode.util.roadrunner
 
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import org.firstinspires.ftc.teamcode.util.units.*
@@ -43,9 +43,3 @@ fun AngularAcceleration.roadrunner(): RRAngularAcceleration = RadiansPerSecondSq
 
 inline fun RRAngularJerk.roadrunner(): RRAngularJerk = this
 fun AngularJerk.roadrunner(): RRAngularJerk = RadiansPerSecondCubed(this)
-
-inline fun DriveConstraints(maxVel: RRVelocity, maxAccel: RRAcceleration, maxJerk: RRJerk, maxAngVel: RRAngularVelocity, maxAngAccel: RRAngularAcceleration, maxAngJerk: RRAngularJerk) = DriveConstraints(maxVel.roadrunner().raw, maxAccel.roadrunner().raw, maxJerk.roadrunner().raw, maxAngVel.roadrunner().raw, maxAngAccel.roadrunner().raw, maxAngJerk.roadrunner().raw)
-fun DriveConstraints(maxVel: Velocity, maxAccel: Acceleration, maxJerk: Jerk, maxAngVel: AngularVelocity, maxAngAccel: AngularAcceleration, maxAngJerk: AngularJerk) = DriveConstraints(maxVel.roadrunner(), maxAccel.roadrunner(), maxJerk.roadrunner(), maxAngVel.roadrunner(), maxAngAccel.roadrunner(), maxAngJerk.roadrunner())
-
-inline fun DriveConstraints(maxVel: RRVelocity, maxAccel: RRAcceleration, maxAngVel: RRAngularVelocity, maxAngAccel: RRAngularAcceleration) = DriveConstraints(maxVel.roadrunner().raw, maxAccel.roadrunner().raw, 0.0, maxAngVel.roadrunner().raw, maxAngAccel.roadrunner().raw, 0.0)
-fun DriveConstraints(maxVel: Velocity, maxAccel: Acceleration, maxAngVel: AngularVelocity, maxAngAccel: AngularAcceleration) = DriveConstraints(maxVel.roadrunner(), maxAccel.roadrunner(), maxAngVel.roadrunner(), maxAngAccel.roadrunner())
