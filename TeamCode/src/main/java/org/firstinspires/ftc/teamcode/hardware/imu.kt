@@ -5,7 +5,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation
-import org.firstinspires.ftc.teamcode.util.AbsoluteRadians
+import org.firstinspires.ftc.teamcode.util.units.AbsoluteRadians
 import org.openftc.revextensions2.ExpansionHubEx
 
 private typealias RawIMU = BNO055IMU
