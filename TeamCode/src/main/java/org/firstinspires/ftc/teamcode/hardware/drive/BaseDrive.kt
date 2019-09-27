@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 
-open class BasicBaseDrive<MotorType : DcMotor> {
+open class BasicBaseDrive<out MotorType : DcMotor> {
     protected val m_frontLeft: MotorType
     protected val m_frontRight: MotorType
     protected val m_backLeft: MotorType
