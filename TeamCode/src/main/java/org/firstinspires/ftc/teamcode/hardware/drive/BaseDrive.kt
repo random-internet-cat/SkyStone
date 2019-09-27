@@ -16,9 +16,9 @@ open class BasicBaseDrive<out MotorType : DcMotor> {
         m_backRight = backRight
     }
 
-    fun motors() = listOf(m_frontLeft, m_frontRight, m_backLeft, m_backRight)
-    fun leftMotors() = listOf(m_frontLeft, m_backLeft)
-    fun rightMotors() = listOf(m_frontRight, m_backRight)
+    protected fun motors() = listOf(m_frontLeft, m_frontRight, m_backLeft, m_backRight)
+    protected fun leftMotors() = listOf(m_frontLeft, m_backLeft)
+    protected fun rightMotors() = listOf(m_frontRight, m_backRight)
 
     protected fun forEachMotor(f: MotorType.() -> Unit) {
         motors().forEach(f)
