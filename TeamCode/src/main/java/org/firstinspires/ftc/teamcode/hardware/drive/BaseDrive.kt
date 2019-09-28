@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import org.firstinspires.ftc.teamcode.util.resetEncoder
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -36,8 +37,7 @@ open class BasicBaseDrive<out MotorType : DcMotor> {
 
     fun enableEncoders() {
         forEachMotor {
-            setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
-            setMode(DcMotor.RunMode.RUN_USING_ENCODER)
+            resetEncoder()
         }
     }
 
