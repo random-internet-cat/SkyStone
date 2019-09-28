@@ -25,23 +25,6 @@ class TankDrive : BaseDriveEx {
         m_imu = imu
     }
 
-    fun arcadeDrive(linearPower: Double, turnPower: Double) {
-        require(-1 <= linearPower && linearPower <= 1)
-        require(-1 <= turnPower && turnPower <= 1)
-
-        var left = linearPower - turnPower
-        var right = linearPower + turnPower
-
-        if (abs(left) > 1.0 || abs(right) > 1.0) {
-            val bigger = max(abs(left), abs(right))
-            left /= bigger
-            right /= bigger
-        }
-
-        leftPower(left)
-        rightPower(right)
-    }
-
     fun roadrunner(): RRTankDriveBase {
         return object : RRTankDriveBase(kV, kA, kStatic, TRACK_WIDTH, BASE_CONSTRAINTS) {
             override fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients {

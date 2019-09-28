@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.hardware.drive
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import kotlin.math.abs
+import kotlin.math.max
 
 open class BasicBaseDrive<out MotorType : DcMotor> {
     protected val m_frontLeft: MotorType
@@ -90,6 +92,23 @@ fun BasicBaseDrive<*>.driveBackward(power: Double = DEFAULT_DRIVE_POWER) {
 
 fun BasicBaseDrive<*>.stop() {
     this.power(0)
+}
+
+fun BasicBaseDrive<*>.arcadeDrive(linearPower: Double, turnPower: Double) {
+    require(-1 <= linearPower && linearPower <= 1)
+    require(-1 <= turnPower && turnPower <= 1)
+
+    var left = linearPower - turnPower
+    var right = linearPower + turnPower
+
+    if (abs(left) > 1.0 || abs(right) > 1.0) {
+        val bigger = max(abs(left), abs(right))
+        left /= bigger
+        right /= bigger
+    }
+
+    leftPower(left)
+    rightPower(right)
 }
 
 typealias BaseDrive = BasicBaseDrive<DcMotor>
