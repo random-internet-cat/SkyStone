@@ -25,7 +25,7 @@ class TankDrive : BaseDriveEx {
         m_imu = imu
     }
 
-    fun drive(linearPower: Double, turnPower: Double) {
+    fun arcadeDrive(linearPower: Double, turnPower: Double) {
         require(-1 <= linearPower && linearPower <= 1)
         require(-1 <= turnPower && turnPower <= 1)
 
