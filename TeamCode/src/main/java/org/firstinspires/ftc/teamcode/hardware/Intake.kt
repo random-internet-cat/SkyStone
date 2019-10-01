@@ -3,27 +3,37 @@ package org.firstinspires.ftc.teamcode.hardware
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 class Intake {
-    private val m_motor: DcMotorSimple
+    private val m_motors: List<DcMotorSimple>
 
     private val DEFAULT_POWER = 1.0
 
-    constructor(intake: DcMotorSimple) {
-        m_motor = intake
+    constructor(vararg motors: DcMotorSimple) {
+        m_motors = motors.toList()
     }
 
+    private fun forEachMotor(f: DcMotorSimple.() -> Unit) {
+        m_motors.forEach(f)
+    }
+
+    private fun power(value: Double) {
+        forEachMotor { setPower(value) }
+    }
+
+    private fun power(value: Int) = power(value.toDouble())
+
     fun stop() {
-        m_motor.setPower(0.0)
+        power(0)
     }
 
     fun intake(power: Double = DEFAULT_POWER) {
         require(0 <= power && power <= 1)
 
-        m_motor.setPower(power)
+        power(power)
     }
 
     fun outtake(power: Double = DEFAULT_POWER) {
         require(0 <= power && power <= 1)
 
-        m_motor.setPower(-power)
+        power(-power)
     }
 }
