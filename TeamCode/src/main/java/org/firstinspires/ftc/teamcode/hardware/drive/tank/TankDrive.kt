@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kV
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kA
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kStatic
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.TRACK_WIDTH
+import org.firstinspires.ftc.teamcode.util.setPID
 
 class TankDrive : BaseDriveEx {
     private val m_imu: InternalIMU
@@ -32,10 +33,9 @@ class TankDrive : BaseDriveEx {
             }
 
             override fun setPIDCoefficients(runMode: DcMotor.RunMode, coefficients: PIDCoefficients) {
-                val pidf = PIDFCoefficients(coefficients.kP, coefficients.kI, coefficients.kD, 1.0)
 
                 forEachMotor {
-                    this.setPIDFCoefficients(runMode, pidf)
+                    this.setPID(runMode, coefficients)
                 }
             }
 
