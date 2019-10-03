@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.util
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
@@ -17,4 +18,8 @@ fun DcMotorEx.setAllPID(p: Double, i: Double, d: Double) {
 fun DcMotorEx.setPID(runmode: DcMotor.RunMode, p: Double, i: Double, d: Double) {
     val f = getPIDFCoefficients(runmode).f
     setPIDFCoefficients(runmode, PIDFCoefficients(p, i, d, f))
+}
+
+fun DcMotorEx.setPID(runmode: DcMotor.RunMode, pid: PIDCoefficients) {
+    setPID(runmode, pid.kP, pid.kI, pid.kD)
 }
