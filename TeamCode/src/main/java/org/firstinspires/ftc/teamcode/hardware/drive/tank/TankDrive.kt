@@ -39,7 +39,10 @@ class TankDrive : BaseDriveEx {
                 }
             }
 
-            override val rawExternalHeading: Double get() = m_imu.heading().toRadians().raw
+            override val rawExternalHeading: Double get() {
+                imu.update()
+                return imu.heading().toRadians().raw
+            }
 
             private fun positionOf(motor: DcMotor) = TankDriveConstants.encoderTicksToDistance(motor.currentPosition).roadrunner()
             private fun positionOf(motorList: Iterable<DcMotor>) = Meters(motorList.map { positionOf(it).toMeters().raw }.average()).roadrunner()
