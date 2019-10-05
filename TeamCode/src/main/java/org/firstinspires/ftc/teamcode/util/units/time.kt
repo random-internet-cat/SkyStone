@@ -6,10 +6,18 @@ private fun Number.toRawTime() = this.toDouble()
 private fun Int.toRawTime() = this.toDouble()
 
 interface Time {
+    companion object {
+        fun zero() = Seconds.zero()
+    }
+
     fun toSeconds(): Seconds
 }
 
 inline class Seconds(val raw: RawTime) : Time {
+    companion object {
+        fun zero() = Seconds(0.0)
+    }
+
     inline override fun toSeconds(): Seconds {
         return this
     }
