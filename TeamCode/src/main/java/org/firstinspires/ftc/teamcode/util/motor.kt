@@ -18,3 +18,11 @@ fun DcMotorEx.setPID(runmode: DcMotor.RunMode, p: Double, i: Double, d: Double) 
 fun DcMotorEx.setPID(runmode: DcMotor.RunMode, pid: PIDCoefficients) {
     setPID(runmode, pid.kP, pid.kI, pid.kD)
 }
+
+fun requireValidPower(power: Double) {
+    require(-1 <= power && power <= 1)
+}
+
+fun requirePositivePower(power: Double) {
+    require(0 <= power && power <= 1)
+}
