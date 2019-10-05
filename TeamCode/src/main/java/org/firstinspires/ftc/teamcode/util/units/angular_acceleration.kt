@@ -5,10 +5,18 @@ import org.firstinspires.ftc.teamcode.util.TWO_PI
 typealias RawAngularAcceleration = Double
 
 interface AngularAcceleration {
+    companion object {
+        fun zero() = RevolutionsPerSecondSquared.zero()
+    }
+
     fun toRevolutionsPerSecondSquared(): RevolutionsPerSecondSquared
 }
 
 inline class RevolutionsPerSecondSquared(val raw: RawAngularAcceleration) : AngularAcceleration {
+    companion object {
+        fun zero() = RevolutionsPerSecondSquared(0.0)
+    }
+
     inline override fun toRevolutionsPerSecondSquared(): RevolutionsPerSecondSquared {
         return this
     }
