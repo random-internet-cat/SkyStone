@@ -18,10 +18,8 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
+import org.firstinspires.ftc.teamcode.util.roadrunner.*
 
-import org.firstinspires.ftc.teamcode.util.roadrunner.DashboardUtil
-import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumConstraints
-import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.*
 
 /*
@@ -37,7 +35,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
 
     private val turnController: PIDFController
     private var turnProfile: MotionProfile? = null
-    private var turnStart: Double = 0.0
+    private var turnStart: Time = Time.zero()
 
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower = HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID)
@@ -66,6 +64,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
     val isBusy: Boolean
         get() = mode != Mode.IDLE
 
+    private fun currentTime() = Seconds(clock.seconds())
 
     enum class Mode {
         IDLE,
@@ -88,7 +87,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
             constraints.maxAngAccel,
             constraints.maxAngJerk
         )
-        turnStart = clock.seconds()
+        turnStart = currentTime()
         mode = Mode.TURN
     }
 
@@ -133,7 +132,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
             }
 
             Mode.TURN -> {
-                val t = clock.seconds() - turnStart
+                val t = currentTime() - turnStart
 
                 val targetState = turnProfile!![t]
                 val targetOmega = targetState.v
@@ -146,7 +145,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
                     0.0, 0.0, targetAlpha
                 )))
 
-                if (t >= turnProfile!!.duration()) {
+                if (t >= RRTime(turnProfile!!.duration())) {
                     mode = Mode.IDLE
                     setDriveSignal(DriveSignal())
                 }

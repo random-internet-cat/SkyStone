@@ -18,9 +18,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
-import org.firstinspires.ftc.teamcode.util.roadrunner.DashboardUtil
-import org.firstinspires.ftc.teamcode.util.roadrunner.TankConstraints
-import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
+import org.firstinspires.ftc.teamcode.util.roadrunner.*
 import org.firstinspires.ftc.teamcode.util.units.*
 
 /*
@@ -36,7 +34,7 @@ abstract class RRTankDriveBase : TankDrive {
 
     private val turnController: PIDFController
     private var turnProfile: MotionProfile? = null
-    private var turnStart: Double = 0.toDouble()
+    private var turnStart: Time = Time.zero()
 
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
@@ -64,6 +62,7 @@ abstract class RRTankDriveBase : TankDrive {
     val isBusy: Boolean
         get() = mode != Mode.IDLE
 
+    private fun currentTime() = Seconds(clock.seconds())
 
     enum class Mode {
         IDLE,
@@ -97,7 +96,7 @@ abstract class RRTankDriveBase : TankDrive {
             constraints.maxAngAccel,
             constraints.maxAngJerk
         )
-        turnStart = clock.seconds()
+        turnStart = currentTime()
         mode = Mode.TURN
     }
 
@@ -139,7 +138,7 @@ abstract class RRTankDriveBase : TankDrive {
             Mode.IDLE -> {
             }
             Mode.TURN -> {
-                val t = clock.seconds() - turnStart
+                val t = currentTime() - turnStart
 
                 val targetState = turnProfile!![t]
                 val targetOmega = targetState.v
@@ -152,7 +151,7 @@ abstract class RRTankDriveBase : TankDrive {
                     0.0, 0.0, targetAlpha
                 )))
 
-                if (t >= turnProfile!!.duration()) {
+                if (t >= RRTime(turnProfile!!.duration())) {
                     mode = Mode.IDLE
                     setDriveSignal(DriveSignal())
                 }
