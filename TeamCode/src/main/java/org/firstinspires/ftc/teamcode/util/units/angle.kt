@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.util.units
 
 import org.firstinspires.ftc.teamcode.util.TWO_PI
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.tan
+import org.firstinspires.ftc.teamcode.util.units.min
+import kotlin.math.*
 
 interface Angle {
     companion object {
@@ -87,6 +85,9 @@ inline operator fun RadiansPoint.minus(other: RadiansPoint) = Radians(this.raw -
 
 fun RadiansPoint.normalized() = RadiansPoint(normalizeWith(this.raw, TWO_PI))
 
+inline fun min(first: RadiansPoint, second: RadiansPoint) = RadiansPoint(min(first.raw, second.raw))
+inline fun max(first: RadiansPoint, second: RadiansPoint) = RadiansPoint(max(first.raw, second.raw))
+
 inline fun sin(angle: RadiansPoint) = sin(angle.raw)
 inline fun cos(angle: RadiansPoint) = cos(angle.raw)
 inline fun tan(angle: RadiansPoint) = tan(angle.raw)
@@ -131,6 +132,9 @@ operator fun Angle.times(num: Double) = this.toRadians() * num
 operator fun Angle.div(num: Double) = this.toRadians() / num
 
 operator fun Double.times(angle: Angle) = this * angle.toRadians()
+
+fun min(first: AnglePoint, second: AnglePoint) = min(first.toRadians(), second.toRadians())
+fun max(first: AnglePoint, second: AnglePoint) = max(first.toRadians(), second.toRadians())
 
 fun AnglePoint.normalized() = this.toRadians().normalized()
 
