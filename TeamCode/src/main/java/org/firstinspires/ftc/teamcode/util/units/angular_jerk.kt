@@ -5,10 +5,18 @@ import org.firstinspires.ftc.teamcode.util.TWO_PI
 typealias RawAngularJerk = Double
 
 interface AngularJerk {
+    companion object {
+        fun zero() = RevolutionsPerSecondCubed.zero()
+    }
+
     fun toRevolutionsPerSecondCubed(): RevolutionsPerSecondCubed
 }
 
 inline class RevolutionsPerSecondCubed(val raw: RawAngularJerk) : AngularJerk {
+    companion object {
+        fun zero() = RevolutionsPerSecondCubed(0.0)
+    }
+
     inline override fun toRevolutionsPerSecondCubed(): RevolutionsPerSecondCubed {
         return this
     }
