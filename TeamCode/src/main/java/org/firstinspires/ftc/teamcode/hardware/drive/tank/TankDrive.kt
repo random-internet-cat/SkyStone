@@ -3,14 +3,11 @@ package org.firstinspires.ftc.teamcode.hardware.drive.tank
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
-import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import org.firstinspires.ftc.teamcode.hardware.drive.BaseDriveEx
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.BASE_CONSTRAINTS
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.Meters
-import kotlin.math.abs
-import kotlin.math.max
 
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kV
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kA
@@ -19,13 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.TRA
 import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.firstinspires.ftc.teamcode.util.setPID
 
-class TankDrive : BaseDriveEx {
-    private val m_imu: InternalIMU
-
-    constructor(imu: InternalIMU, frontLeft: DcMotorEx, frontRight: DcMotorEx, backLeft: DcMotorEx, backRight: DcMotorEx) : super(frontLeft, frontRight, backLeft, backRight) {
-        m_imu = imu
-    }
-
+class TankDrive(private val imu: InternalIMU, frontLeft: DcMotorEx, frontRight: DcMotorEx, backLeft: DcMotorEx, backRight: DcMotorEx) : BaseDriveEx(frontLeft, frontRight, backLeft, backRight) {
     fun roadrunner(): RRTankDriveBase {
         return object : RRTankDriveBase(kV, kA, kStatic, TRACK_WIDTH, BASE_CONSTRAINTS) {
             override fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients {
