@@ -3,12 +3,20 @@ package org.firstinspires.ftc.teamcode.util.units
 import org.firstinspires.ftc.teamcode.util.TWO_PI
 
 interface AngularVelocity {
+    companion object {
+        fun zero() = RevolutionsPerSecond.zero()
+    }
+
     fun toRevolutionsPerSecond(): RevolutionsPerSecond
 }
 
 typealias RawAngularVelocity = Double
 
 inline class RevolutionsPerSecond(val raw: RawAngularVelocity) : AngularVelocity {
+    companion object {
+        fun zero() = RevolutionsPerSecond(0.0)
+    }
+
     inline override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
         return this
     }
