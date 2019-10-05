@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.hardware.drive
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import org.firstinspires.ftc.teamcode.util.requirePositivePower
+import org.firstinspires.ftc.teamcode.util.requireValidPower
 import org.firstinspires.ftc.teamcode.util.resetEncoder
 import kotlin.math.abs
 import kotlin.math.max
@@ -79,13 +81,13 @@ inline fun BasicBaseDrive<*>.power(power: Int) {
 private val DEFAULT_DRIVE_POWER = 0.8
 
 fun BasicBaseDrive<*>.driveForward(power: Double = DEFAULT_DRIVE_POWER) {
-    require(0 <= power && power <= 1)
+    requirePositivePower(power)
 
     this.power(power)
 }
 
 fun BasicBaseDrive<*>.driveBackward(power: Double = DEFAULT_DRIVE_POWER) {
-    require(0 <= power && power <= 1)
+    requirePositivePower(power)
 
     this.power(-power)
 }
@@ -95,8 +97,8 @@ fun BasicBaseDrive<*>.stop() {
 }
 
 fun BasicBaseDrive<*>.arcadeDrive(linearPower: Double, turnPower: Double) {
-    require(-1 <= linearPower && linearPower <= 1)
-    require(-1 <= turnPower && turnPower <= 1)
+    requireValidPower(linearPower)
+    requireValidPower(turnPower)
 
     var left = linearPower - turnPower
     var right = linearPower + turnPower
