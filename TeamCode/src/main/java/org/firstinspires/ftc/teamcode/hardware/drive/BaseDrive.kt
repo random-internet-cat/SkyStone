@@ -101,5 +101,16 @@ fun BasicBaseDrive<*>.arcadeDrive(linearPower: Double, turnPower: Double) {
     rightPower(right)
 }
 
+
+fun BasicBaseDrive<*>.cheesyDrive(linearPower: Double, turnPower: Double, turnInPlace: Boolean) {
+    requireValidPower(linearPower)
+    requireValidPower(turnPower)
+
+    val adjustedLinearPower = if (turnInPlace) 0.0 else linearPower
+    val adjustedTurnPower = if (turnInPlace) turnPower else (linearPower * turnPower)
+
+    arcadeDrive(adjustedLinearPower, adjustedTurnPower)
+}
+
 typealias BaseDrive = BasicBaseDrive<DcMotor>
 typealias BaseDriveEx = BasicBaseDrive<DcMotorEx>
