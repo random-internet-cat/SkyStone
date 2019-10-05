@@ -8,22 +8,10 @@ import org.firstinspires.ftc.teamcode.util.resetEncoder
 import kotlin.math.abs
 import kotlin.math.max
 
-open class BasicBaseDrive<out MotorType : DcMotor> {
-    protected val m_frontLeft: MotorType
-    protected val m_frontRight: MotorType
-    protected val m_backLeft: MotorType
-    protected val m_backRight: MotorType
-
-    constructor(frontLeft: MotorType, frontRight: MotorType, backLeft: MotorType, backRight: MotorType) {
-        m_frontLeft = frontLeft
-        m_frontRight = frontRight
-        m_backLeft = backLeft
-        m_backRight = backRight
-    }
-
-    protected fun motors() = listOf(m_frontLeft, m_frontRight, m_backLeft, m_backRight)
-    protected fun leftMotors() = listOf(m_frontLeft, m_backLeft)
-    protected fun rightMotors() = listOf(m_frontRight, m_backRight)
+open class BasicBaseDrive<out MotorType : DcMotor>(protected val frontLeft: MotorType, protected val frontRight: MotorType, protected val backLeft: MotorType, protected val backRight: MotorType) {
+    protected fun motors() = listOf(frontLeft, frontRight, backLeft, backRight)
+    protected fun leftMotors() = listOf(frontLeft, backLeft)
+    protected fun rightMotors() = listOf(frontRight, backRight)
 
     protected fun forEachMotor(f: MotorType.() -> Unit) {
         motors().forEach(f)
