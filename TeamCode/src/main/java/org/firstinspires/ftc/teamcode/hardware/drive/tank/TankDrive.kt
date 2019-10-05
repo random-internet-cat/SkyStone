@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
-import org.firstinspires.ftc.teamcode.hardware.InternalIMU
 import org.firstinspires.ftc.teamcode.hardware.drive.BaseDriveEx
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.BASE_CONSTRAINTS
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
@@ -17,6 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kV
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kA
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.kStatic
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.TRACK_WIDTH
+import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.firstinspires.ftc.teamcode.util.setPID
 
 class TankDrive : BaseDriveEx {

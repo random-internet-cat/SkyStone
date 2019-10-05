@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware
+package org.firstinspires.ftc.teamcode.hardware.imu
 
 import com.qualcomm.hardware.bosch.BNO055IMU
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
