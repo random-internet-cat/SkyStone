@@ -34,14 +34,7 @@ object TankDriveConstants {
     public val WHEEL_CIRCUMFERENCE: RRDistance get() = (WHEEL_RADIUS * TWO_PI).roadrunner()
     public val DISTANCE_PER_REVOLUTION: RRDistance get() = (WHEEL_CIRCUMFERENCE * GEAR_RATIO).roadrunner()
 
-    @JvmField
-    public var kV: Double = 1 / (rpmToVelocity(MAX_RPM).roadrunner().raw)
-
-    @JvmField
-    public var kA: Double = 0.0
-
-    @JvmField
-    public var kStatic: Double = 0.0
+    public val FEEDFORWARD = DcMotorFeedforward(kV = 1 / (rpmToVelocity(MAX_RPM).roadrunner().raw), kA = 0.0, kStatic = 0.0)
 
     @JvmField
     public val BASE_CONSTRAINTS = DriveConstraints(Inches(30) / Seconds(1), Inches(30) / Seconds(1) / Seconds(1), DegreesPerSecond(180), DegreesPerSecondSquared(180.0))
