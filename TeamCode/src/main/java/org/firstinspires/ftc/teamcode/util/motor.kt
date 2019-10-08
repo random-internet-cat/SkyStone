@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
 
 fun DcMotor.resetEncoder() {
     this.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
@@ -26,3 +27,10 @@ fun requireValidPower(power: Double) {
 fun requirePositivePower(power: Double) {
     require(0 <= power && power <= 1)
 }
+
+data class BasicTypedMotor<MotorType : DcMotor>(val motor: MotorType, val config: MotorConfigurationType) {
+    constructor(motor: MotorType, configType: Class<*>) : this(motor, MotorConfigurationType.getMotorType(configType))
+}
+
+typealias TypedMotor = BasicTypedMotor<DcMotor>
+typealias TypedMotorEx = BasicTypedMotor<DcMotorEx>
