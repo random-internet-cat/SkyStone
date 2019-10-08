@@ -34,3 +34,5 @@ data class BasicTypedMotor<MotorType : DcMotor>(val motor: MotorType, val config
 
 typealias TypedMotor = BasicTypedMotor<DcMotor>
 typealias TypedMotorEx = BasicTypedMotor<DcMotorEx>
+
+data class DcMotorFeedforward(val kV: Double, val kA: Double, val kStatic: Double)

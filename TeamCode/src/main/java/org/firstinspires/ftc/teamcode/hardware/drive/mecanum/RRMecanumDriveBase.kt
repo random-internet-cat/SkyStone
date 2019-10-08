@@ -18,6 +18,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
+import org.firstinspires.ftc.teamcode.util.DcMotorFeedforward
 import org.firstinspires.ftc.teamcode.util.roadrunner.*
 
 import org.firstinspires.ftc.teamcode.util.units.*
@@ -45,7 +46,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
         var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
     }
 
-    constructor(kV: Double, kA: Double, kStatic: Double, trackWidth: Distance, wheelBase: Distance, baseConstraints: DriveConstraints) : super(kV, kA, kStatic, trackWidth.roadrunner().raw, wheelBase.roadrunner().raw) {
+    constructor(feedforward: DcMotorFeedforward, trackWidth: Distance, wheelBase: Distance, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, trackWidth.roadrunner().raw, wheelBase.roadrunner().raw) {
         constraints = MecanumConstraints(baseConstraints, trackWidth, wheelBase)
     }
 
