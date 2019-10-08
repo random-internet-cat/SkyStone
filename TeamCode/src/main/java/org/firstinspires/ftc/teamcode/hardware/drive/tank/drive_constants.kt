@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.RRVelocity
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.*
 import org.firstinspires.ftc.teamcode.util.units.MetersPerSecond
+import com.acmerobotics.roadrunner.control.PIDCoefficients
 
 @Config
 object TankDriveConstants {
@@ -35,6 +36,10 @@ object TankDriveConstants {
     public val DISTANCE_PER_REVOLUTION: RRDistance get() = (WHEEL_CIRCUMFERENCE * GEAR_RATIO).roadrunner()
 
     public val FEEDFORWARD = DcMotorFeedforward(kV = 1 / (rpmToVelocity(MAX_RPM).roadrunner().raw), kA = 0.0, kStatic = 0.0)
+
+    public val AXIAL_PID = PIDCoefficients(0.0, 0.0, .0)
+    public val HEADING_PID = PIDCoefficients(0.0, 0.0, .0)
+    public val CROSS_TRACK_PID = PIDCoefficients(0.0, 0.0, .0)
 
     @JvmField
     public val BASE_CONSTRAINTS = DriveConstraints(Inches(30) / Seconds(1), Inches(30) / Seconds(1) / Seconds(1), DegreesPerSecond(180), DegreesPerSecondSquared(180.0))

@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
  */
 
 data class MecanumDrivetrain(val trackWidth: Distance, val wheelBase: Distance)
+data class MecanumPID(val translationalPID: PIDCoefficients, val headingPID: PIDCoefficients)
 
 @Config
 abstract class RRMecanumDriveBase : MecanumDrive {
@@ -42,19 +43,13 @@ abstract class RRMecanumDriveBase : MecanumDrive {
     private var turnStart: Time = Time.zero()
 
     private val constraints: DriveConstraints
-    private val follower: TrajectoryFollower = HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID)
+    private val follower: TrajectoryFollower
 
-    companion object {
-        var TRANSLATIONAL_PID = PIDCoefficients(0.0, 0.0, 0.0)
-        var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
-    }
-
-    constructor(drivetrain: MecanumDrivetrain, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw, drivetrain.wheelBase.roadrunner().raw) {
+    constructor(drivetrain: MecanumDrivetrain, pid: MecanumPID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw, drivetrain.wheelBase.roadrunner().raw) {
         constraints = MecanumConstraints(baseConstraints, drivetrain.trackWidth, drivetrain.wheelBase)
-    }
+        follower = HolonomicPIDVAFollower(pid.translationalPID, pid.translationalPID, pid.headingPID)
 
-    init {
-        turnController = PIDFController(HEADING_PID)
+        turnController = PIDFController(pid.headingPID)
         turnController.setInputBounds(0.0, 2 * Math.PI)
     }
 

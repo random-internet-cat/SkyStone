@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
  */
 
 data class TankDrivetrain(val trackWidth: Distance)
+data class TankDrivePID(val axialPID: PIDCoefficients, val headingPID: PIDCoefficients, val crossTrackPID: PIDCoefficients)
 
 @Config
 abstract class RRTankDriveBase : TankDrive {
@@ -43,14 +44,12 @@ abstract class RRTankDriveBase : TankDrive {
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
 
-    companion object {
-        var AXIAL_PID = PIDCoefficients(0.0, 0.0, 0.0)
-        var CROSS_TRACK_PID = PIDCoefficients(0.0, 0.0, 0.0)
-        var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
-    }
-
-    constructor(drivetrain: TankDrivetrain, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
+    constructor(drivetrain: TankDrivetrain, pid: TankDrivePID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
         this.constraints = TankConstraints(baseConstraints, drivetrain.trackWidth)
+        this.follower = TankPIDVAFollower(pid.axialPID, pid.crossTrackPID)
+        this.turnController = PIDFController(pid.headingPID)
+
+        turnController.setInputBounds(0.0, 2 * Math.PI)
     }
 
     fun lastError(): Pose2d {
@@ -77,11 +76,6 @@ abstract class RRTankDriveBase : TankDrive {
         clock = NanoClock.system()
 
         mode = Mode.IDLE
-
-        turnController = PIDFController(HEADING_PID)
-        turnController.setInputBounds(0.0, 2 * Math.PI)
-
-        follower = TankPIDVAFollower(AXIAL_PID, CROSS_TRACK_PID)
     }
 
     fun trajectoryBuilder(): TrajectoryBuilder {
