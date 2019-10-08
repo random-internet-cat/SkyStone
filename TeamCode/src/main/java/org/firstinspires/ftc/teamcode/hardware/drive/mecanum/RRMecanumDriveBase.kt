@@ -27,6 +27,9 @@ import org.firstinspires.ftc.teamcode.util.units.*
  * Base class with shared functionality for sample mecanum drives. All hardware-specific details are
  * handled in subclasses.
  */
+
+data class MecanumDrivetrain(val trackWidth: Distance, val wheelBase: Distance)
+
 @Config
 abstract class RRMecanumDriveBase : MecanumDrive {
     private val dashboard: FtcDashboard = FtcDashboard.getInstance()
@@ -46,8 +49,8 @@ abstract class RRMecanumDriveBase : MecanumDrive {
         var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
     }
 
-    constructor(feedforward: DcMotorFeedforward, trackWidth: Distance, wheelBase: Distance, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, trackWidth.roadrunner().raw, wheelBase.roadrunner().raw) {
-        constraints = MecanumConstraints(baseConstraints, trackWidth, wheelBase)
+    constructor(feedforward: DcMotorFeedforward, drivetrain: MecanumDrivetrain, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw, drivetrain.wheelBase.roadrunner().raw) {
+        constraints = MecanumConstraints(baseConstraints, drivetrain.trackWidth, drivetrain.wheelBase)
     }
 
     init {
