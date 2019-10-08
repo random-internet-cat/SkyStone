@@ -32,7 +32,7 @@ data class MecanumDrivetrain(val trackWidth: Distance, val wheelBase: Distance)
 data class MecanumPID(val translationalPID: PIDCoefficients, val headingPID: PIDCoefficients)
 
 @Config
-abstract class RRMecanumDriveBase : MecanumDrive {
+abstract class RRMecanumDriveBase(drivetrain: MecanumDrivetrain, pid: MecanumPID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : MecanumDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw, drivetrain.wheelBase.roadrunner().raw) {
     private val dashboard: FtcDashboard = FtcDashboard.getInstance()
     private val clock: NanoClock = NanoClock.system()
 
@@ -45,11 +45,11 @@ abstract class RRMecanumDriveBase : MecanumDrive {
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
 
-    constructor(drivetrain: MecanumDrivetrain, pid: MecanumPID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw, drivetrain.wheelBase.roadrunner().raw) {
+    init {
         constraints = MecanumConstraints(baseConstraints, drivetrain.trackWidth, drivetrain.wheelBase)
         follower = HolonomicPIDVAFollower(pid.translationalPID, pid.translationalPID, pid.headingPID)
-
         turnController = PIDFController(pid.headingPID)
+
         turnController.setInputBounds(0.0, 2 * Math.PI)
     }
 
