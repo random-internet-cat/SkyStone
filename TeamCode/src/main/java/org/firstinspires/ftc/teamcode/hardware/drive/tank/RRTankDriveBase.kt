@@ -31,7 +31,7 @@ data class TankDrivetrain(val trackWidth: Distance)
 data class TankDrivePID(val axialPID: PIDCoefficients, val headingPID: PIDCoefficients, val crossTrackPID: PIDCoefficients)
 
 @Config
-abstract class RRTankDriveBase : TankDrive {
+abstract class RRTankDriveBase(drivetrain: TankDrivetrain, pid: TankDrivePID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : TankDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
     private val dashboard = FtcDashboard.getInstance()
     private val clock = NanoClock.system()
 
@@ -44,7 +44,7 @@ abstract class RRTankDriveBase : TankDrive {
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
 
-    constructor(drivetrain: TankDrivetrain, pid: TankDrivePID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
+    init {
         this.constraints = TankConstraints(baseConstraints, drivetrain.trackWidth)
         this.follower = TankPIDVAFollower(pid.axialPID, pid.crossTrackPID)
         this.turnController = PIDFController(pid.headingPID)
