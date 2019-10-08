@@ -49,7 +49,7 @@ abstract class RRTankDriveBase : TankDrive {
         var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
     }
 
-    constructor(feedforward: DcMotorFeedforward, drivetrain: TankDrivetrain, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
+    constructor(drivetrain: TankDrivetrain, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
         this.constraints = TankConstraints(baseConstraints, drivetrain.trackWidth)
     }
 
