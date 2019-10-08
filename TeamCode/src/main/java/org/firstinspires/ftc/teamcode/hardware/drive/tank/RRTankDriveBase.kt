@@ -53,18 +53,16 @@ abstract class RRTankDriveBase : TankDrive {
         this.constraints = TankConstraints(baseConstraints, drivetrain.trackWidth)
     }
 
-    val lastError: Pose2d
-        get() {
-            when (mode) {
-                Mode.FOLLOW_TRAJECTORY -> return follower.lastError
-                Mode.TURN -> return Pose2d(0.0, 0.0, turnController.lastError)
-                Mode.IDLE -> return Pose2d()
-            }
-            throw AssertionError()
+    fun lastError(): Pose2d {
+        when (mode) {
+            Mode.FOLLOW_TRAJECTORY -> return follower.lastError
+            Mode.TURN -> return Pose2d(0.0, 0.0, turnController.lastError)
+            Mode.IDLE -> return Pose2d()
         }
+        throw AssertionError()
+    }
 
-    val isBusy: Boolean
-        get() = mode != Mode.IDLE
+    fun isBusy(): Boolean = mode != Mode.IDLE
 
     private fun currentTime() = Seconds(clock.seconds())
 
@@ -123,7 +121,7 @@ abstract class RRTankDriveBase : TankDrive {
         updatePoseEstimate()
 
         val currentPose = poseEstimate
-        val lastError = lastError
+        val lastError = lastError()
 
         val packet = TelemetryPacket()
         val fieldOverlay = packet.fieldOverlay()
@@ -187,7 +185,7 @@ abstract class RRTankDriveBase : TankDrive {
     }
 
     fun waitForIdle() {
-        while (!Thread.currentThread().isInterrupted && isBusy) {
+        while (!Thread.currentThread().isInterrupted && isBusy()) {
             update()
         }
     }
