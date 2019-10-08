@@ -26,6 +26,9 @@ import org.firstinspires.ftc.teamcode.util.units.*
  * Base class with shared functionality for sample tank drives. All hardware-specific details are
  * handled in subclasses.
  */
+
+data class TankDrivetrain(val trackWidth: Distance)
+
 @Config
 abstract class RRTankDriveBase : TankDrive {
     private val dashboard: FtcDashboard
@@ -46,8 +49,8 @@ abstract class RRTankDriveBase : TankDrive {
         var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
     }
 
-    constructor(feedforward: DcMotorFeedforward, trackWidth: Distance, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, trackWidth.roadrunner().raw) {
-        this.constraints = TankConstraints(baseConstraints, trackWidth)
+    constructor(feedforward: DcMotorFeedforward, drivetrain: TankDrivetrain, baseConstraints: DriveConstraints) : super(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
+        this.constraints = TankConstraints(baseConstraints, drivetrain.trackWidth)
     }
 
     val lastError: Pose2d

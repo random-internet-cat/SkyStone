@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.util.setPID
 
 class TankDrive(private val imu: InternalIMU, frontLeft: DcMotorEx, frontRight: DcMotorEx, backLeft: DcMotorEx, backRight: DcMotorEx) : BaseDriveEx(frontLeft, frontRight, backLeft, backRight) {
     private val roadrunnerValue by lazy {
-        object : RRTankDriveBase(FEEDFORWARD, TRACK_WIDTH, BASE_CONSTRAINTS) {
+        object : RRTankDriveBase(FEEDFORWARD, TankDrivetrain(trackWidth = TRACK_WIDTH), BASE_CONSTRAINTS) {
             override fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients {
                 return PIDCoefficients(motors()[0].getPIDFCoefficients(runMode))
             }
