@@ -32,10 +32,10 @@ data class TankDrivePID(val axialPID: PIDCoefficients, val headingPID: PIDCoeffi
 
 @Config
 abstract class RRTankDriveBase : TankDrive {
-    private val dashboard: FtcDashboard
-    private val clock: NanoClock
+    private val dashboard = FtcDashboard.getInstance()
+    private val clock = NanoClock.system()
 
-    private var mode: Mode? = null
+    private var mode: Mode = Mode.IDLE
 
     private val turnController: PIDFController
     private var turnProfile: MotionProfile? = null
@@ -69,13 +69,6 @@ abstract class RRTankDriveBase : TankDrive {
         IDLE,
         TURN,
         FOLLOW_TRAJECTORY
-    }
-
-    init {
-        dashboard = FtcDashboard.getInstance()
-        clock = NanoClock.system()
-
-        mode = Mode.IDLE
     }
 
     fun trajectoryBuilder(): TrajectoryBuilder {
