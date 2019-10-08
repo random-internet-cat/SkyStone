@@ -58,15 +58,13 @@ abstract class RRMecanumDriveBase : MecanumDrive {
         turnController.setInputBounds(0.0, 2 * Math.PI)
     }
 
-    val lastError: Pose2d
-        get() = when (mode) {
-            Mode.FOLLOW_TRAJECTORY -> follower.lastError
-            Mode.TURN -> Pose2d(0.0, 0.0, turnController.lastError)
-            Mode.IDLE -> Pose2d()
-        }
+    fun lastError(): Pose2d = when (mode) {
+        Mode.FOLLOW_TRAJECTORY -> follower.lastError
+        Mode.TURN -> Pose2d(0.0, 0.0, turnController.lastError)
+        Mode.IDLE -> Pose2d()
+    }
 
-    val isBusy: Boolean
-        get() = mode != Mode.IDLE
+    fun isBusy(): Boolean = mode != Mode.IDLE
 
     private fun currentTime() = Seconds(clock.seconds())
 
@@ -114,7 +112,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
         updatePoseEstimate()
 
         val currentPose = poseEstimate
-        val lastError = lastError
+        val lastError = lastError()
 
         val packet = TelemetryPacket()
         val fieldOverlay = packet.fieldOverlay()
@@ -182,7 +180,7 @@ abstract class RRMecanumDriveBase : MecanumDrive {
     }
 
     fun waitForIdle() {
-        while (!Thread.currentThread().isInterrupted && isBusy) {
+        while (!Thread.currentThread().isInterrupted && isBusy()) {
             update()
         }
     }
