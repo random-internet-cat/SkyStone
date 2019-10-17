@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
+import org.firstinspires.ftc.teamcode.util.units.EncoderPosition
+import org.firstinspires.ftc.teamcode.util.units.EncoderTicks
+import org.firstinspires.ftc.teamcode.util.units.Radians
+import org.firstinspires.ftc.teamcode.util.units.RadiansPoint
 
 fun DcMotor.resetEncoder() {
     this.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
@@ -28,8 +32,13 @@ fun requirePositivePower(power: Double) {
     require(0 <= power && power <= 1)
 }
 
-data class BasicTypedMotor<MotorType : DcMotor>(val motor: MotorType, val config: MotorConfigurationType) {
-    constructor(motor: MotorType, configType: Class<*>) : this(motor, MotorConfigurationType.getMotorType(configType))
+data class MotorConfiguration(val rawConfig: MotorConfigurationType, val externalGearing: Double)
+
+fun MotorConfiguration.encoderToAngle(ticks: EncoderTicks) = Radians(TWO_PI * externalGearing * ticks.raw / rawConfig.ticksPerRev)
+fun MotorConfiguration.encoderToAngle(ticks: EncoderPosition) = RadiansPoint(encoderToAngle(EncoderTicks(ticks.raw)).raw)
+
+data class BasicTypedMotor<MotorType : DcMotor>(val motor: MotorType, val config: MotorConfiguration) {
+    constructor(motor: MotorType, configType: Class<*>, externalGearing: Double) : this(motor, MotorConfiguration(MotorConfigurationType.getMotorType(configType), externalGearing))
 }
 
 typealias TypedMotor = BasicTypedMotor<DcMotor>
