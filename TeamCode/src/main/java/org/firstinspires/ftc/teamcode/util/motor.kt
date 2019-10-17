@@ -44,4 +44,17 @@ data class BasicTypedMotor<MotorType : DcMotor>(val motor: MotorType, val config
 typealias TypedMotor = BasicTypedMotor<DcMotor>
 typealias TypedMotorEx = BasicTypedMotor<DcMotorEx>
 
+fun BasicTypedMotor<*>.encoderPosition() = EncoderPosition(motor.currentPosition)
+fun BasicTypedMotor<*>.anglePosition() = config.encoderToAngle(encoderPosition())
+
+fun BasicTypedMotor<*>.getPower() = motor.getPower()
+fun BasicTypedMotor<*>.setPower(power: Double) = motor.setPower(power)
+fun BasicTypedMotor<*>.setPower(power: Int) = setPower(power.toDouble())
+
+fun BasicTypedMotor<*>.getMode() = motor.getMode()
+fun BasicTypedMotor<*>.setMode(mode: DcMotor.RunMode) = motor.setMode(mode)
+
+fun BasicTypedMotor<*>.getZeroPowerBehavior() = motor.getZeroPowerBehavior()
+fun BasicTypedMotor<*>.setZeroPowerBehavior(behavior: DcMotor.ZeroPowerBehavior) = motor.setZeroPowerBehavior(behavior)
+
 data class DcMotorFeedforward(val kV: Double, val kA: Double, val kStatic: Double)
