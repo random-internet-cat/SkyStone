@@ -32,7 +32,11 @@ fun requirePositivePower(power: Double) {
     require(0 <= power && power <= 1)
 }
 
-data class MotorConfiguration(val rawConfig: MotorConfigurationType, val externalGearing: Double)
+data class MotorConfiguration(val rawConfig: MotorConfigurationType, val externalGearing: Double) {
+    init {
+        require(rawConfig != MotorConfigurationType.getUnspecifiedMotorType())
+    }
+}
 
 fun MotorConfiguration.encoderToAngle(ticks: EncoderTicks) = Radians(TWO_PI * externalGearing * ticks.raw / rawConfig.ticksPerRev)
 fun MotorConfiguration.encoderToAngle(ticks: EncoderPosition) = RadiansPoint(encoderToAngle(EncoderTicks(ticks.raw)).raw)
