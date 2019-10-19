@@ -2,7 +2,11 @@ package org.firstinspires.ftc.teamcode.util.units
 
 typealias RawRevolutions = Double
 
-inline class Revolutions(val raw: RawRevolutions)
+inline class Revolutions(val raw: RawRevolutions) {
+    companion object {
+        fun zero() = Revolutions(0.0)
+    }
+}
 
 inline operator fun Revolutions.compareTo(other: Revolutions) = (this.raw).compareTo(other.raw)
 inline operator fun Revolutions.unaryMinus() = Revolutions(-this.raw)

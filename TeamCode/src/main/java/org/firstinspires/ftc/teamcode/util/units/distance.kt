@@ -4,6 +4,10 @@ import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 interface Distance {
+    companion object {
+        fun zero() = Meters.zero()
+    }
+
     fun toMeters(): Meters
 }
 
@@ -20,6 +24,10 @@ const val MM_PER_METER = 1000
 const val CM_PER_METER = 100
 
 inline class Meters(val raw: RawDistance) : Distance {
+    companion object {
+        fun zero() = Meters(0.0)
+    }
+
     inline override fun toMeters(): Meters {
         return this
     }
