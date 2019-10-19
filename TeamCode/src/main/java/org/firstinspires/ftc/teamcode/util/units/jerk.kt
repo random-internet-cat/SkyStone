@@ -3,10 +3,18 @@ package org.firstinspires.ftc.teamcode.util.units
 typealias RawJerk = Double
 
 interface Jerk {
+    companion object {
+        fun zero() = MetersPerSecondCubed.zero()
+    }
+
     fun toMetersPerSecondCubed(): MetersPerSecondCubed
 }
 
 inline class MetersPerSecondCubed(val raw: RawJerk) : Jerk {
+    companion object {
+        fun zero() = MetersPerSecondCubed(0.0)
+    }
+
     inline override fun toMetersPerSecondCubed(): MetersPerSecondCubed {
         return this
     }

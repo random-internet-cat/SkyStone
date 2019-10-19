@@ -3,10 +3,18 @@ package org.firstinspires.ftc.teamcode.util.units
 typealias RawVelocity = Double
 
 interface Velocity {
+    companion object {
+        fun zero() = MetersPerSecond.zero()
+    }
+
     fun toMetersPerSecond(): MetersPerSecond
 }
 
 inline class MetersPerSecond(val raw: RawVelocity) : Velocity {
+    companion object {
+        fun zero() = MetersPerSecond(0.0)
+    }
+
     inline override fun toMetersPerSecond(): MetersPerSecond {
         return this
     }
