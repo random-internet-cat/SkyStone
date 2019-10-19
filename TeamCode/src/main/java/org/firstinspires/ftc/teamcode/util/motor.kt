@@ -63,4 +63,6 @@ fun BasicTypedMotor<*>.setMode(mode: DcMotor.RunMode) = motor.setMode(mode)
 fun BasicTypedMotor<*>.getZeroPowerBehavior() = motor.getZeroPowerBehavior()
 fun BasicTypedMotor<*>.setZeroPowerBehavior(behavior: DcMotor.ZeroPowerBehavior) = motor.setZeroPowerBehavior(behavior)
 
-data class DcMotorFeedforward(val kV: Double, val kA: Double, val kStatic: Double)
+data class DcMotorFeedforward(val kV: Double, val kA: Double, val kStatic: Double) {
+    constructor() : this(0.0, 0.0, 0.0)
+}
