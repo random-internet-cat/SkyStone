@@ -42,6 +42,8 @@ fun MotorConfiguration.encoderToAngle(ticks: EncoderTicks) = Radians(TWO_PI * ex
 fun MotorConfiguration.encoderToAngle(ticks: EncoderPosition) = RadiansPoint(encoderToAngle(EncoderTicks(ticks.raw)).raw)
 
 data class BasicTypedMotor<MotorType : DcMotor>(val motor: MotorType, val config: MotorConfiguration) {
+    constructor(motor: MotorType, externalGearing: Double) : this(motor, MotorConfiguration(motor.motorType, externalGearing))
+
     constructor(motor: MotorType, configType: Class<*>, externalGearing: Double) : this(motor, MotorConfiguration(MotorConfigurationType.getMotorType(configType), externalGearing))
 }
 
