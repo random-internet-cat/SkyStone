@@ -63,6 +63,12 @@ fun BasicTypedMotor<*>.setMode(mode: DcMotor.RunMode) = motor.setMode(mode)
 fun BasicTypedMotor<*>.getZeroPowerBehavior() = motor.getZeroPowerBehavior()
 fun BasicTypedMotor<*>.setZeroPowerBehavior(behavior: DcMotor.ZeroPowerBehavior) = motor.setZeroPowerBehavior(behavior)
 
+fun BasicTypedMotor<*>.resetEncoder() = motor.resetEncoder()
+
+fun BasicTypedMotor<*>.getTargetPosition(): EncoderPosition = EncoderPosition(motor.getTargetPosition())
+fun BasicTypedMotor<*>.setTargetPosition(value: Int) = motor.setTargetPosition(value)
+fun BasicTypedMotor<*>.setTargetPosition(value: EncoderPosition) = setTargetPosition(value.raw)
+
 data class DcMotorFeedforward(val kV: Double, val kA: Double, val kStatic: Double) {
     constructor() : this(0.0, 0.0, 0.0)
 }
