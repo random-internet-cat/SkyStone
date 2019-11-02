@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.intake.Intake
 import org.firstinspires.ftc.teamcode.hardware.arm.PrototypeArm
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.MecanumDrive
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrive
+import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrivetrain
 import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.firstinspires.ftc.teamcode.util.*
 
@@ -29,7 +30,7 @@ private object PrototypeHardwareProvider {
         backLeft.direction = DcMotorSimple.Direction.REVERSE
         backRight.direction = DcMotorSimple.Direction.REVERSE
 
-        val drive = TankDrive(imu, frontLeft, frontRight, backLeft, backRight)
+        val drive = TankDrive(imu, TankDrivetrain(frontLeft, frontRight, backLeft, backRight))
         drive.disableEncoders()
         return drive
     }
