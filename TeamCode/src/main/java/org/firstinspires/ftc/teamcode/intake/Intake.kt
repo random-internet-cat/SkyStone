@@ -36,4 +36,6 @@ class Intake {
 
         power(-power)
     }
+
+    inline fun update() {}
 }
