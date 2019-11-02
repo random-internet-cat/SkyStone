@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.hardware.provider
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.teamcode.hardware.PrototypeDrive
 import org.firstinspires.ftc.teamcode.hardware.PrototypeHardware
+import org.firstinspires.ftc.teamcode.hardware.PrototypeIntake
 import org.firstinspires.ftc.teamcode.intake.Intake
 import org.firstinspires.ftc.teamcode.hardware.arm.PrototypeArm
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.MecanumDrive
@@ -17,7 +19,7 @@ private object PrototypeHardwareProvider {
         return InternalIMU.makeOptimized(hub)
     }
 
-    fun makeDrive(hardwareMap: HardwareMap): TankDrive {
+    fun makeDrive(hardwareMap: HardwareMap): PrototypeDrive {
         val imu = makeIMU(hardwareMap)
         val frontLeft = hardwareMap.getMotorEx("front_left")
         val frontRight = hardwareMap.getMotorEx("front_right")
@@ -32,7 +34,7 @@ private object PrototypeHardwareProvider {
         return drive
     }
 
-    fun makeIntake(hardwareMap: HardwareMap): Intake {
+    fun makeIntake(hardwareMap: HardwareMap): PrototypeIntake {
         val firstMotor = hardwareMap.getMotor("intake")
         firstMotor.direction = DcMotorSimple.Direction.REVERSE
 
@@ -50,7 +52,7 @@ private object PrototypeHardwareProvider {
     fun makeArmWrist(hardwareMap: HardwareMap) = PrototypeArm.Wrist(hardwareMap.getServo("wrist"))
     fun makeArmClamp(hardwareMap: HardwareMap) = PrototypeArm.Clamp(hardwareMap.getServo("clamp"))
 
-    fun makeArm(hardwareMap: HardwareMap) = PrototypeArm(makeArmRotator(hardwareMap), makeArmWrist(hardwareMap), makeArmClamp(hardwareMap))
+    fun makeArm(hardwareMap: HardwareMap): PrototypeArm = PrototypeArm(makeArmRotator(hardwareMap), makeArmWrist(hardwareMap), makeArmClamp(hardwareMap))
 }
 
 fun makePrototypeHardware(hardwareMap: HardwareMap) = PrototypeHardware(
