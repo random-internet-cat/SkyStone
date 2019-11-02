@@ -20,8 +20,8 @@ private object PrototypeHardwareProvider {
         val backLeft = hardwareMap.getMotorEx("back_left")
         val backRight = hardwareMap.getMotorEx("back_right")
 
-        backLeft.direction = DcMotorSimple.Direction.REVERSE
-        backRight.direction = DcMotorSimple.Direction.REVERSE
+        backLeft.setReversed()
+        backRight.setReversed()
 
         val drive = TankDrive(imu, TankDrivetrain(frontLeft, frontRight, backLeft, backRight))
         drive.disableEncoders()
@@ -30,7 +30,7 @@ private object PrototypeHardwareProvider {
 
     fun makeIntake(hardwareMap: HardwareMap): PrototypeIntake {
         val firstMotor = hardwareMap.getMotor("intake")
-        firstMotor.direction = DcMotorSimple.Direction.REVERSE
+        firstMotor.setReversed()
 
         val secondMotor = hardwareMap.getMotor("intake2")
 
