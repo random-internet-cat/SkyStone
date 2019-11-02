@@ -15,6 +15,8 @@ fun DcMotor.resetEncoder() {
     this.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
 }
 
+fun DcMotor.encoderPosition() = EncoderPosition(currentPosition)
+
 fun DcMotorEx.setPID(runmode: DcMotor.RunMode, p: Double, i: Double, d: Double) {
     val f = getPIDFCoefficients(runmode).f
     setPIDFCoefficients(runmode, FtcPIDFCoefficients(p, i, d, f))
@@ -50,7 +52,7 @@ data class BasicTypedMotor<MotorType : DcMotor>(val motor: MotorType, val config
 typealias TypedMotor = BasicTypedMotor<DcMotor>
 typealias TypedMotorEx = BasicTypedMotor<DcMotorEx>
 
-fun BasicTypedMotor<*>.encoderPosition() = EncoderPosition(motor.currentPosition)
+fun BasicTypedMotor<*>.encoderPosition() = motor.encoderPosition()
 fun BasicTypedMotor<*>.anglePosition() = config.encoderToAngle(encoderPosition())
 
 fun BasicTypedMotor<*>.getPower() = motor.getPower()
