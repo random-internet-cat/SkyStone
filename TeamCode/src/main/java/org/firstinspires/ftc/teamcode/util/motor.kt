@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.util
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
 import org.firstinspires.ftc.teamcode.util.roadrunner.FtcPIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
@@ -13,6 +14,10 @@ import org.firstinspires.ftc.teamcode.util.units.RadiansPoint
 fun DcMotor.resetEncoder() {
     this.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
     this.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
+}
+
+fun DcMotor.setReversed() {
+    this.setDirection(DcMotorSimple.Direction.REVERSE)
 }
 
 fun DcMotor.encoderPosition() = EncoderPosition(currentPosition)
