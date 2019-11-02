@@ -27,11 +27,11 @@ import org.firstinspires.ftc.teamcode.util.units.*
  * handled in subclasses.
  */
 
-data class MecanumDrivetrain(val trackWidth: Distance, val wheelBase: Distance)
+data class MecanumDrivetrainConfig(val trackWidth: Distance, val wheelBase: Distance)
 data class MecanumPID(val translationalPID: PIDCoefficients, val headingPID: PIDCoefficients)
 
 @Config
-abstract class RRMecanumDriveBase(drivetrain: MecanumDrivetrain, pid: MecanumPID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : MecanumDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw, drivetrain.wheelBase.roadrunner().raw) {
+abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid: MecanumPID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : MecanumDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrainConfig.trackWidth.roadrunner().raw, drivetrainConfig.wheelBase.roadrunner().raw) {
     private val dashboard: FtcDashboard = FtcDashboard.getInstance()
     private val clock: NanoClock = NanoClock.system()
 
@@ -45,7 +45,7 @@ abstract class RRMecanumDriveBase(drivetrain: MecanumDrivetrain, pid: MecanumPID
     private val follower: TrajectoryFollower
 
     init {
-        constraints = MecanumConstraints(baseConstraints, drivetrain.trackWidth, drivetrain.wheelBase)
+        constraints = MecanumConstraints(baseConstraints, drivetrainConfig.trackWidth, drivetrainConfig.wheelBase)
         follower = HolonomicPIDVAFollower(RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.headingPID))
         turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
 

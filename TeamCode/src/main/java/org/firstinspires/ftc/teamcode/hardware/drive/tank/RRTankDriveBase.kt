@@ -26,11 +26,11 @@ import org.firstinspires.ftc.teamcode.util.units.*
  * handled in subclasses.
  */
 
-data class TankDrivetrain(val trackWidth: Distance)
+data class TankDrivetrainConfig(val trackWidth: Distance)
 data class TankDrivePID(val axialPID: PIDCoefficients, val headingPID: PIDCoefficients, val crossTrackPID: PIDCoefficients)
 
 @Config
-abstract class RRTankDriveBase(drivetrain: TankDrivetrain, pid: TankDrivePID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : TankDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrain.trackWidth.roadrunner().raw) {
+abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: TankDrivePID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : TankDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrainConfig.trackWidth.roadrunner().raw) {
     private val dashboard = FtcDashboard.getInstance()
     private val clock = NanoClock.system()
 
@@ -44,7 +44,7 @@ abstract class RRTankDriveBase(drivetrain: TankDrivetrain, pid: TankDrivePID, fe
     private val follower: TrajectoryFollower
 
     init {
-        this.constraints = TankConstraints(baseConstraints, drivetrain.trackWidth)
+        this.constraints = TankConstraints(baseConstraints, drivetrainConfig.trackWidth)
         this.follower = TankPIDVAFollower(RRPIDCoefficients(pid.axialPID), RRPIDCoefficients(pid.crossTrackPID))
         this.turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
 
