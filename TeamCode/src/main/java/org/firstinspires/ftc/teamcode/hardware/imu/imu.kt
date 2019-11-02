@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.hardware.imu
 
 import com.qualcomm.hardware.bosch.BNO055IMU
+import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation
+import org.firstinspires.ftc.teamcode.util.getHub
 import org.firstinspires.ftc.teamcode.util.units.RadiansPoint
 import org.openftc.revextensions2.ExpansionHubEx
 
@@ -40,3 +42,9 @@ class InternalIMU {
     public fun roll() = RadiansPoint(angles.secondAngle)
     public fun pitch() = RadiansPoint(angles.thirdAngle)
 }
+
+fun makeIMU(hub: ExpansionHubEx): InternalIMU {
+    return InternalIMU.makeOptimized(hub)
+}
+
+fun makeIMU(hardwareMap: HardwareMap) = makeIMU(hardwareMap.getHub())
