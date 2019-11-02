@@ -50,4 +50,6 @@ class TankDrive(private val imu: InternalIMU, frontLeft: DcMotorEx, frontRight: 
     }
 
     fun roadrunner() = roadrunnerValue
+
+    fun update() = roadrunner().update()
 }
