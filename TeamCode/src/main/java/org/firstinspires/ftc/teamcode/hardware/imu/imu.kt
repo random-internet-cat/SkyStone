@@ -12,17 +12,10 @@ import org.openftc.revextensions2.ExpansionHubEx
 
 private typealias RawIMU = BNO055IMU
 
-class InternalIMU {
-    companion object {
-        fun makeOptimized(hub: ExpansionHubEx) = InternalIMU(LynxOptimizedI2cFactory.createLynxEmbeddedImu(hub.standardModule, 0))
-    }
-
-    private val imu: RawIMU
+class InternalIMU(private val imu: RawIMU) {
     private var angles: Orientation
 
-    public constructor(rawIMU: RawIMU) {
-        imu = rawIMU
-
+    init {
         val parameters = BNO055IMU.Parameters()
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC
@@ -42,9 +35,3 @@ class InternalIMU {
     public fun roll() = RadiansPoint(angles.secondAngle)
     public fun pitch() = RadiansPoint(angles.thirdAngle)
 }
-
-fun makeIMU(hub: ExpansionHubEx): InternalIMU {
-    return InternalIMU.makeOptimized(hub)
-}
-
-fun makeIMU(hardwareMap: HardwareMap) = makeIMU(hardwareMap.getHub())

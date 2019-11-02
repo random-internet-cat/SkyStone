@@ -10,13 +10,11 @@ import org.firstinspires.ftc.teamcode.intake.Intake
 import org.firstinspires.ftc.teamcode.hardware.arm.PrototypeArm
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrive
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrivetrain
-import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
-import org.firstinspires.ftc.teamcode.hardware.imu.makeIMU
 import org.firstinspires.ftc.teamcode.util.*
 
 private object PrototypeHardwareProvider {
     fun makeDrive(hardwareMap: HardwareMap): PrototypeDrive {
-        val imu = makeIMU(hardwareMap)
+        val imu = hardwareMap.getIMU()
         val frontLeft = hardwareMap.getMotorEx("front_left")
         val frontRight = hardwareMap.getMotorEx("front_right")
         val backLeft = hardwareMap.getMotorEx("back_left")
