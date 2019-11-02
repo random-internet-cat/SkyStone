@@ -4,13 +4,9 @@ import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
 import org.firstinspires.ftc.teamcode.hardware.drive.motors.YellowJacket5202_0002_0019
 import org.firstinspires.ftc.teamcode.util.*
-import org.firstinspires.ftc.teamcode.util.roadrunner.DriveConstraints
-import org.firstinspires.ftc.teamcode.util.roadrunner.RRDistance
-import org.firstinspires.ftc.teamcode.util.roadrunner.RRVelocity
-import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
+import org.firstinspires.ftc.teamcode.util.roadrunner.*
 import org.firstinspires.ftc.teamcode.util.units.*
 import org.firstinspires.ftc.teamcode.util.units.MetersPerSecond
-import com.acmerobotics.roadrunner.control.PIDCoefficients
 
 @Config
 object TankDriveConstants {

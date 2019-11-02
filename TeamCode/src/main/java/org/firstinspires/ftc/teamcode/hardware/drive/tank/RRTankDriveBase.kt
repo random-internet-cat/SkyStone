@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.hardware.drive.tank
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
-import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
 import com.acmerobotics.roadrunner.drive.DriveSignal
 import com.acmerobotics.roadrunner.drive.TankDrive
@@ -46,8 +45,8 @@ abstract class RRTankDriveBase(drivetrain: TankDrivetrain, pid: TankDrivePID, fe
 
     init {
         this.constraints = TankConstraints(baseConstraints, drivetrain.trackWidth)
-        this.follower = TankPIDVAFollower(pid.axialPID, pid.crossTrackPID)
-        this.turnController = PIDFController(pid.headingPID)
+        this.follower = TankPIDVAFollower(RRPIDCoefficients(pid.axialPID), RRPIDCoefficients(pid.crossTrackPID))
+        this.turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
 
         turnController.setInputBounds(0.0, 2 * Math.PI)
     }
