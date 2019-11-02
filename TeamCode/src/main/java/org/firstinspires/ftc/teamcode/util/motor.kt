@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.util
 
-import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
-import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
+import org.firstinspires.ftc.teamcode.util.roadrunner.FtcPIDFCoefficients
+import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 import org.firstinspires.ftc.teamcode.util.units.EncoderPosition
 import org.firstinspires.ftc.teamcode.util.units.EncoderTicks
 import org.firstinspires.ftc.teamcode.util.units.Radians
@@ -17,7 +17,7 @@ fun DcMotor.resetEncoder() {
 
 fun DcMotorEx.setPID(runmode: DcMotor.RunMode, p: Double, i: Double, d: Double) {
     val f = getPIDFCoefficients(runmode).f
-    setPIDFCoefficients(runmode, PIDFCoefficients(p, i, d, f))
+    setPIDFCoefficients(runmode, FtcPIDFCoefficients(p, i, d, f))
 }
 
 fun DcMotorEx.setPID(runmode: DcMotor.RunMode, pid: PIDCoefficients) {

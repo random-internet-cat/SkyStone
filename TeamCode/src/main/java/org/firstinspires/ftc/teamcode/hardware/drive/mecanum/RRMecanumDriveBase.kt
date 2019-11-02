@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.drive.mecanum
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
-import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.control.PIDFController
 import com.acmerobotics.roadrunner.drive.DriveSignal
 import com.acmerobotics.roadrunner.drive.MecanumDrive
@@ -47,8 +46,8 @@ abstract class RRMecanumDriveBase(drivetrain: MecanumDrivetrain, pid: MecanumPID
 
     init {
         constraints = MecanumConstraints(baseConstraints, drivetrain.trackWidth, drivetrain.wheelBase)
-        follower = HolonomicPIDVAFollower(pid.translationalPID, pid.translationalPID, pid.headingPID)
-        turnController = PIDFController(pid.headingPID)
+        follower = HolonomicPIDVAFollower(RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.headingPID))
+        turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
 
         turnController.setInputBounds(0.0, 2 * Math.PI)
     }
