@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive.tank
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.hardware.drive.BaseDriveEx
+import org.firstinspires.ftc.teamcode.hardware.drive.FourWheelDrivetrainEx
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.AXIAL_PID
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.BASE_CONSTRAINTS
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.CROSS_TRACK_PID
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.TRA
 import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.firstinspires.ftc.teamcode.util.setPID
 
-class TankDrive(private val imu: InternalIMU, frontLeft: DcMotorEx, frontRight: DcMotorEx, backLeft: DcMotorEx, backRight: DcMotorEx) : BaseDriveEx(frontLeft, frontRight, backLeft, backRight) {
+class TankDrive(private val imu: InternalIMU, frontLeft: DcMotorEx, frontRight: DcMotorEx, backLeft: DcMotorEx, backRight: DcMotorEx) : BaseDriveEx(FourWheelDrivetrainEx(frontLeft, frontRight, backLeft, backRight)) {
     private val roadrunnerValue by lazy {
         object : RRTankDriveBase(TankDrivetrain(trackWidth = TRACK_WIDTH), TankDrivePID(axialPID = AXIAL_PID, headingPID = HEADING_PID, crossTrackPID = CROSS_TRACK_PID), FEEDFORWARD, BASE_CONSTRAINTS) {
             override fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients {
