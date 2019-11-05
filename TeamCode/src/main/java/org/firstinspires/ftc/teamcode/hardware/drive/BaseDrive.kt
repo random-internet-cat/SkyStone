@@ -18,7 +18,7 @@ fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.rightMotors() = li
 typealias FourWheelDrivetrain = BasicFourWheelDrivetrain<DcMotor>
 typealias FourWheelDrivetrainEx = BasicFourWheelDrivetrain<DcMotorEx>
 
-open class BasicBaseDrive<out MotorType : DcMotor>(protected val drivetrain: BasicFourWheelDrivetrain<MotorType>) {
+open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWheelDrivetrain<MotorType>) {
     protected fun motors() = drivetrain.motors()
     protected fun leftMotors() = drivetrain.leftMotors()
     protected fun rightMotors() = drivetrain.rightMotors()
