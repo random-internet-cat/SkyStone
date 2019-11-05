@@ -15,6 +15,12 @@ fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.motors() = listOf(
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.leftMotors() = listOf(frontLeft, backLeft)
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.rightMotors() = listOf(frontRight, backRight)
 
+fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachMotor(f: MotorType.() -> Unit) = motors().forEach(f)
+fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachLeftMotor(f: MotorType.() -> Unit) = leftMotors().forEach(f)
+fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachRightMotor(f: MotorType.() -> Unit) = rightMotors().forEach(f)
+
+fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.enableEncoders() = forEachMotor { resetEncoder() }
+fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.disableEncoders() = forEachMotor { disableEncoder() }
 
 typealias FourWheelDrivetrain = BasicFourWheelDrivetrain<DcMotor>
 typealias FourWheelDrivetrainEx = BasicFourWheelDrivetrain<DcMotorEx>
@@ -24,29 +30,12 @@ open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWhee
     protected fun leftMotors() = drivetrain.leftMotors()
     protected fun rightMotors() = drivetrain.rightMotors()
 
-    protected fun forEachMotor(f: MotorType.() -> Unit) {
-        motors().forEach(f)
-    }
+    protected fun forEachMotor(f: MotorType.() -> Unit) = drivetrain.forEachMotor(f)
+    protected fun forEachLeftMotor(f: MotorType.() -> Unit) = drivetrain.forEachLeftMotor(f)
+    protected fun forEachRightMotor(f: MotorType.() -> Unit) = drivetrain.forEachRightMotor(f)
 
-    protected fun forEachLeftMotor(f: MotorType.() -> Unit) {
-        leftMotors().forEach(f)
-    }
-
-    protected fun forEachRightMotor(f: MotorType.() -> Unit) {
-        rightMotors().forEach(f)
-    }
-
-    fun enableEncoders() {
-        forEachMotor {
-            resetEncoder()
-        }
-    }
-
-    fun disableEncoders() {
-        forEachMotor {
-            disableEncoder()
-        }
-    }
+    fun enableEncoders() = drivetrain.enableEncoders()
+    fun disableEncoders() = drivetrain.disableEncoders()
 
     fun power(power: Double) {
         require(-1 <= power && power <= 1)
