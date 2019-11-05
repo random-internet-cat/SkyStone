@@ -16,6 +16,10 @@ fun DcMotor.resetEncoder() {
     this.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
 }
 
+fun DcMotor.disableEncoder() {
+    this.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
+}
+
 fun DcMotor.setReversed() {
     this.setDirection(DcMotorSimple.Direction.REVERSE)
 }

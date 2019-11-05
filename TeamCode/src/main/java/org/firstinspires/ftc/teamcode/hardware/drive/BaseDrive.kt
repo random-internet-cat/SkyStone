@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import org.firstinspires.ftc.teamcode.util.disableEncoder
 import org.firstinspires.ftc.teamcode.util.requirePositivePower
 import org.firstinspires.ftc.teamcode.util.requireValidPower
 import org.firstinspires.ftc.teamcode.util.resetEncoder
@@ -43,7 +44,7 @@ open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWhee
 
     fun disableEncoders() {
         forEachMotor {
-            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
+            disableEncoder()
         }
     }
 
