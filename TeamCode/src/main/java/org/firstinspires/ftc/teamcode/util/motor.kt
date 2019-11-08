@@ -35,6 +35,9 @@ fun DcMotorEx.setPID(runmode: DcMotor.RunMode, pid: PIDCoefficients) {
     setPID(runmode, pid.kP, pid.kI, pid.kD)
 }
 
+fun DcMotor.brakeOnZeroPower() = setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE)
+fun DcMotor.floatOnZeroPower() = setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT)
+
 fun requireValidPower(power: Double) {
     require(-1 <= power && power <= 1)
 }
@@ -73,6 +76,9 @@ fun BasicTypedMotor<*>.setMode(mode: DcMotor.RunMode) = motor.setMode(mode)
 
 fun BasicTypedMotor<*>.getZeroPowerBehavior() = motor.getZeroPowerBehavior()
 fun BasicTypedMotor<*>.setZeroPowerBehavior(behavior: DcMotor.ZeroPowerBehavior) = motor.setZeroPowerBehavior(behavior)
+
+fun BasicTypedMotor<*>.brakeOnZeroPower() = motor.brakeOnZeroPower()
+fun BasicTypedMotor<*>.floatOnZeroPower() = motor.floatOnZeroPower()
 
 fun BasicTypedMotor<*>.resetEncoder() = motor.resetEncoder()
 
