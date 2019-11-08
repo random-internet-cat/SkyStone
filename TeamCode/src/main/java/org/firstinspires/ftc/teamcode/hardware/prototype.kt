@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware
 
 import org.firstinspires.ftc.teamcode.hardware.arm.PrototypeArm
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrive
-import org.firstinspires.ftc.teamcode.intake.Intake
+import org.firstinspires.ftc.teamcode.hardware.intake.Intake
 
 typealias PrototypeIntake = Intake
 typealias PrototypeDrive = TankDrive

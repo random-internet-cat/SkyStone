@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.hardware.provider
 
 import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.teamcode.hardware.PrototypeDrive
 import org.firstinspires.ftc.teamcode.hardware.PrototypeHardware
 import org.firstinspires.ftc.teamcode.hardware.PrototypeIntake
-import org.firstinspires.ftc.teamcode.intake.Intake
+import org.firstinspires.ftc.teamcode.hardware.intake.Intake
 import org.firstinspires.ftc.teamcode.hardware.arm.PrototypeArm
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrive
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrivetrain
