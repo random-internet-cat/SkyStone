@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
-import org.firstinspires.ftc.teamcode.util.disableEncoder
-import org.firstinspires.ftc.teamcode.util.requirePositivePower
-import org.firstinspires.ftc.teamcode.util.requireValidPower
-import org.firstinspires.ftc.teamcode.util.resetEncoder
+import org.firstinspires.ftc.teamcode.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -22,6 +19,9 @@ fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachRightMotor(
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.enableEncoders() = forEachMotor { resetEncoder() }
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.disableEncoders() = forEachMotor { disableEncoder() }
 
+fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.brakeOnZeroPower() = forEachMotor { brakeOnZeroPower() }
+fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.floatOnZeroPower() = forEachMotor { floatOnZeroPower() }
+
 typealias FourWheelDrivetrain = BasicFourWheelDrivetrain<DcMotor>
 typealias FourWheelDrivetrainEx = BasicFourWheelDrivetrain<DcMotorEx>
 
@@ -36,6 +36,9 @@ open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWhee
 
     fun enableEncoders() = drivetrain.enableEncoders()
     fun disableEncoders() = drivetrain.disableEncoders()
+
+    fun brakeOnZeroPower() = drivetrain.brakeOnZeroPower()
+    fun floatOnZeroPower() = drivetrain.floatOnZeroPower()
 
     fun power(power: Double) {
         require(-1 <= power && power <= 1)
