@@ -16,11 +16,11 @@ fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachMotor(f: Mo
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachLeftMotor(f: MotorType.() -> Unit) = leftMotors().forEach(f)
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachRightMotor(f: MotorType.() -> Unit) = rightMotors().forEach(f)
 
-fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.enableEncoders() = forEachMotor { resetEncoder() }
-fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.disableEncoders() = forEachMotor { disableEncoder() }
+fun BasicFourWheelDrivetrain<*>.enableEncoders() = forEachMotor { resetEncoder() }
+fun BasicFourWheelDrivetrain<*>.disableEncoders() = forEachMotor { disableEncoder() }
 
-fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.brakeOnZeroPower() = forEachMotor { brakeOnZeroPower() }
-fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.floatOnZeroPower() = forEachMotor { floatOnZeroPower() }
+fun BasicFourWheelDrivetrain<*>.brakeOnZeroPower() = forEachMotor { brakeOnZeroPower() }
+fun BasicFourWheelDrivetrain<*>.floatOnZeroPower() = forEachMotor { floatOnZeroPower() }
 
 typealias FourWheelDrivetrain = BasicFourWheelDrivetrain<DcMotor>
 typealias FourWheelDrivetrainEx = BasicFourWheelDrivetrain<DcMotorEx>
@@ -34,7 +34,6 @@ open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWhee
     protected fun forEachLeftMotor(f: MotorType.() -> Unit) = drivetrain.forEachLeftMotor(f)
     protected fun forEachRightMotor(f: MotorType.() -> Unit) = drivetrain.forEachRightMotor(f)
 
-    fun enableEncoders() = drivetrain.enableEncoders()
     fun disableEncoders() = drivetrain.disableEncoders()
 
     fun brakeOnZeroPower() = drivetrain.brakeOnZeroPower()
