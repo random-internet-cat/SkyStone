@@ -34,11 +34,6 @@ open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWhee
     protected fun forEachLeftMotor(f: MotorType.() -> Unit) = drivetrain.forEachLeftMotor(f)
     protected fun forEachRightMotor(f: MotorType.() -> Unit) = drivetrain.forEachRightMotor(f)
 
-    fun disableEncoders() = drivetrain.disableEncoders()
-
-    fun brakeOnZeroPower() = drivetrain.brakeOnZeroPower()
-    fun floatOnZeroPower() = drivetrain.floatOnZeroPower()
-
     fun power(power: Double) {
         require(-1 <= power && power <= 1)
 
@@ -63,6 +58,12 @@ open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWhee
         }
     }
 }
+
+fun BasicBaseDrive<*>.enableEncoders() = drivetrain.enableEncoders()
+fun BasicBaseDrive<*>.disableEncoders() = drivetrain.disableEncoders()
+
+fun BasicBaseDrive<*>.brakeOnZeroPower() = drivetrain.brakeOnZeroPower()
+fun BasicBaseDrive<*>.floatOnZeroPower() = drivetrain.floatOnZeroPower()
 
 inline fun BasicBaseDrive<*>.power(power: Int) {
     this.power(power.toDouble())

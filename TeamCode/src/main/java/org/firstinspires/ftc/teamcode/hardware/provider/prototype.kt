@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.hardware.PrototypeHardware
 import org.firstinspires.ftc.teamcode.hardware.PrototypeIntake
 import org.firstinspires.ftc.teamcode.hardware.intake.Intake
 import org.firstinspires.ftc.teamcode.hardware.arm.PrototypeArm
+import org.firstinspires.ftc.teamcode.hardware.drive.disableEncoders
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrive
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrivetrain
 import org.firstinspires.ftc.teamcode.util.*
