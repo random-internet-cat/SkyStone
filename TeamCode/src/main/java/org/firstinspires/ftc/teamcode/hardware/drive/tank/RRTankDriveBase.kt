@@ -44,6 +44,8 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
     private val follower: TrajectoryFollower
 
     init {
+        dashboard.setTelemetryTransmissionInterval(25)
+
         this.constraints = TankConstraints(baseConstraints, drivetrainConfig.trackWidth)
         this.follower = TankPIDVAFollower(RRPIDCoefficients(pid.axialPID), RRPIDCoefficients(pid.crossTrackPID))
         this.turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
