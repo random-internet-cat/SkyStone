@@ -46,7 +46,9 @@ object TankDriveConstants {
             .roadrunner()
     }
 
-    fun encoderTicksToDistance(ticks: Int): RRDistance {
+    fun encoderTicksToDistance(ticks: Double): RRDistance {
         return (DISTANCE_PER_REVOLUTION * ticks / TICKS_PER_REV).roadrunner()
     }
+
+    fun encoderTicksToDistance(ticks: Int) = encoderTicksToDistance(ticks.toDouble())
 }
