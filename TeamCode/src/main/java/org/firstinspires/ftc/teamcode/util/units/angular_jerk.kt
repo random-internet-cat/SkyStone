@@ -22,6 +22,7 @@ inline class RevolutionsPerSecondCubed(val raw: RawAngularJerk) : AngularJerk {
     }
 }
 
+inline fun RevolutionsPerSecondCubed(raw: Int) = RevolutionsPerSecondCubed(raw.toDouble())
 inline fun RevolutionsPerSecondCubed(accel: RevolutionsPerSecondCubed) = accel
 fun RevolutionsPerSecondCubed(accel: AngularJerk) = accel.toRevolutionsPerSecondCubed()
 
@@ -61,6 +62,7 @@ inline class RadiansPerSecondCubed(val raw: RawAngularJerk) : AngularJerk {
     }
 }
 
+inline fun RadiansPerSecondCubed(raw: Int) = RadiansPerSecondCubed(raw.toDouble())
 inline fun RadiansPerSecondCubed(accel: RevolutionsPerSecondCubed) = RadiansPerSecondCubed(accel.raw * TWO_PI)
 inline fun RadiansPerSecondCubed(accel: RadiansPerSecondCubed) = accel
 fun RadiansPerSecondCubed(accel: AngularJerk) = RadiansPerSecondCubed(accel.toRevolutionsPerSecondCubed())
