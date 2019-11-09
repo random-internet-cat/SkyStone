@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.util.*
+import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -21,6 +22,8 @@ fun BasicFourWheelDrivetrain<*>.disableEncoders() = forEachMotor { disableEncode
 
 fun BasicFourWheelDrivetrain<*>.brakeOnZeroPower() = forEachMotor { brakeOnZeroPower() }
 fun BasicFourWheelDrivetrain<*>.floatOnZeroPower() = forEachMotor { floatOnZeroPower() }
+
+fun <MotorType : DcMotorEx> BasicFourWheelDrivetrain<MotorType>.setPID(runMode: DcMotor.RunMode, pid: PIDCoefficients) = forEachMotor { setPID(runMode, pid) }
 
 typealias FourWheelDrivetrain = BasicFourWheelDrivetrain<DcMotor>
 typealias FourWheelDrivetrainEx = BasicFourWheelDrivetrain<DcMotorEx>
@@ -64,6 +67,8 @@ fun BasicBaseDrive<*>.disableEncoders() = drivetrain.disableEncoders()
 
 fun BasicBaseDrive<*>.brakeOnZeroPower() = drivetrain.brakeOnZeroPower()
 fun BasicBaseDrive<*>.floatOnZeroPower() = drivetrain.floatOnZeroPower()
+
+fun <MotorType : DcMotorEx> BasicBaseDrive<MotorType>.setPID(runMode: DcMotor.RunMode, pid: PIDCoefficients) = drivetrain.setPID(runMode, pid)
 
 inline fun BasicBaseDrive<*>.power(power: Int) {
     this.power(power.toDouble())
