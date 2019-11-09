@@ -13,6 +13,7 @@ typealias FtcPIDFCoefficients = _FtcPIDFCoefficients
 typealias FtcPIDCoefficients = _FtcPIDCoefficients
 
 data class PIDCoefficients(val kP: Double, val kI: Double, val kD: Double) {
+    constructor(kP: Int, kI: Int, kD: Int) : this(kP.toDouble(), kI.toDouble(), kD.toDouble())
     constructor(pidf: FtcPIDFCoefficients) : this(pidf.p, pidf.i, pidf.d)
     constructor(pid: RRPIDCoefficients) : this(pid.kP, pid.kI, pid.kD)
 }
