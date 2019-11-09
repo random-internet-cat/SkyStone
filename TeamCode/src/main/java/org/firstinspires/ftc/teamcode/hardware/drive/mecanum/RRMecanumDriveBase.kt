@@ -124,7 +124,6 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
         when (mode) {
             Mode.IDLE -> {
                 // do nothing
-                setDriveSignal(DriveSignal())
             }
 
             Mode.TURN -> {
