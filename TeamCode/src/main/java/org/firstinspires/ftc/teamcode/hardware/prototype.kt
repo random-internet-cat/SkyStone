@@ -7,14 +7,10 @@ import org.firstinspires.ftc.teamcode.hardware.intake.Intake
 typealias PrototypeIntake = Intake
 typealias PrototypeDrive = TankDrive
 
-class PrototypeHardware(private val arm: PrototypeArm, private val intake: PrototypeIntake, private val drive: PrototypeDrive) {
-    fun arm() = arm
-    fun intake() = intake
-    fun drive() = drive
-
+data class PrototypeHardware(val arm: PrototypeArm, val intake: PrototypeIntake, val drive: PrototypeDrive) {
     fun update() {
-        arm().update()
-        intake().update()
-        drive().update()
+        arm.update()
+        intake.update()
+        drive.update()
     }
 }
