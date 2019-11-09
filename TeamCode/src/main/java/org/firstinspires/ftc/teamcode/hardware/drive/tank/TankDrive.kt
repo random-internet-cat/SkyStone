@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.util.units.Meters
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDriveConstants.TRACK_WIDTH
 import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.firstinspires.ftc.teamcode.util.setPID
+import org.firstinspires.ftc.teamcode.util.units.Seconds
+import org.firstinspires.ftc.teamcode.util.units.div
 
 data class TankDrivetrain(val frontLeft: DcMotorEx, val frontRight: DcMotorEx, val backLeft: DcMotorEx, val backRight: DcMotorEx) {
     private val fourWheelValue by lazy {
@@ -52,6 +54,10 @@ class TankDrive(private val imu: InternalIMU, drivetrain: TankDrivetrain) : Base
 
             private fun positionOf(motor: DcMotor) = TankDriveConstants.encoderTicksToDistance(motor.currentPosition).roadrunner()
             private fun positionOf(motorList: Iterable<DcMotor>) = Meters(motorList.map { positionOf(it).toMeters().raw }.average()).roadrunner()
+
+            override fun getWheelVelocities(): List<Double> {
+                return listOf(leftMotors().map { (TankDriveConstants.encoderTicksToDistance(it.getVelocity()) / Seconds(1)).roadrunner().raw }.average())
+            }
 
             override fun getWheelPositions(): List<Double> {
                 return listOf(positionOf(leftMotors()).roadrunner().raw, positionOf(rightMotors()).roadrunner().raw)

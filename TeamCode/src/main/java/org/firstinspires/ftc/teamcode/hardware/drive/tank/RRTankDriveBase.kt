@@ -43,6 +43,9 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
 
+    private var lastWheelPositions: List<Double>? = null
+    private var lastTimestamp: Seconds = Seconds(Time.zero())
+
     init {
         dashboard.setTelemetryTransmissionInterval(25)
 
@@ -180,6 +183,30 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
             update()
         }
     }
+
+    open fun getWheelVelocities(): List<Double> {
+        val positions = getWheelPositions()
+        val currentTimestamp = Seconds(clock.seconds())
+        val lastWheelPositions = lastWheelPositions
+
+        val velocities = mutableListOf<Double>()
+        if (lastWheelPositions != null) {
+            val dt = currentTimestamp - lastTimestamp
+            for (i in positions.indices) {
+                velocities.add((RRDistance(positions[i] - lastWheelPositions[i]) / dt).roadrunner().raw)
+            }
+        } else {
+            for (i in positions.indices) {
+                velocities.add(Velocity.zero().roadrunner().raw)
+            }
+        }
+
+        this.lastTimestamp = currentTimestamp
+        this.lastWheelPositions = positions
+
+        return velocities
+    }
+
 
     abstract fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients
 
