@@ -183,3 +183,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
 
     abstract fun setPIDCoefficients(runMode: DcMotor.RunMode, coefficients: PIDCoefficients)
 }
+
+fun RRMecanumDriveBase.setCurrentPosition(position: PositionVector) {
+    localizer.poseEstimate = Pose2d(position.roadrunner(), externalHeading)
+}
