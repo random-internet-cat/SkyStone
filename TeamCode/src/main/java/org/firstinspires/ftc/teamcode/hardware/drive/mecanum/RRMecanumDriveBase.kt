@@ -45,6 +45,8 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
     private val follower: TrajectoryFollower
 
     init {
+        dashboard.setTelemetryTransmissionInterval(25)
+
         constraints = MecanumConstraints(baseConstraints, drivetrainConfig.trackWidth, drivetrainConfig.wheelBase)
         follower = HolonomicPIDVAFollower(RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.headingPID))
         turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
