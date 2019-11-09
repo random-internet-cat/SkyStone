@@ -132,6 +132,9 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
                 val t = currentTime() - turnStart
 
                 val targetState = turnProfile!![t]
+
+                turnController.targetPosition = targetState.x
+
                 val targetOmega = targetState.v
                 val targetAlpha = targetState.a
                 val correction = turnController.update(currentPose.heading, targetOmega)
