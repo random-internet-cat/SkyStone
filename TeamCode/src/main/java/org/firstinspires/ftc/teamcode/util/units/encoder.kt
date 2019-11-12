@@ -45,3 +45,20 @@ inline operator fun EncoderTicksPerSecond.times(time: Time) = this * time.toSeco
 
 inline operator fun Seconds.times(rate: EncoderTicksPerSecond) = rate * this
 inline operator fun Time.times(rate: EncoderTicksPerSecond) = (this.toSeconds()) * rate
+
+typealias RawEncoderTicksPerRev = Int
+
+inline class EncoderTicksPerRev(val raw: RawEncoderTicksPerSecond)
+
+inline operator fun EncoderTicksPerRev.unaryMinus() = EncoderTicksPerRev(-this.raw)
+inline operator fun EncoderTicksPerRev.plus(other: EncoderTicksPerRev) = EncoderTicksPerRev(this.raw + other.raw)
+inline operator fun EncoderTicksPerRev.minus(other: EncoderTicksPerRev) = EncoderTicksPerRev(this.raw - other.raw)
+inline operator fun EncoderTicksPerRev.times(num: Int) = EncoderTicksPerRev(this.raw * num)
+inline operator fun Int.times(ticks: EncoderTicksPerRev) = EncoderTicksPerRev(this * ticks.raw)
+
+inline operator fun EncoderTicks.div(rev: Revolutions) = EncoderTicksPerRev((this.raw.toDouble() / rev.raw.toDouble().toInt()))
+
+inline operator fun EncoderTicksPerRev.times(rev: Revolutions) = EncoderTicks((this.raw * rev.raw).toInt())
+inline operator fun Revolutions.times(ticks: EncoderTicksPerRev) = ticks * this
+
+inline operator fun EncoderTicks.div(ticksPerRev: EncoderTicksPerRev) = Revolutions(this.raw.toDouble() / ticksPerRev.raw.toDouble())
