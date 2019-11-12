@@ -17,7 +17,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
-import org.firstinspires.ftc.teamcode.util.DcMotorFeedforward
+import org.firstinspires.ftc.teamcode.util.DcMotorCharacterization
 import org.firstinspires.ftc.teamcode.util.roadrunner.*
 
 import org.firstinspires.ftc.teamcode.util.units.*
@@ -31,7 +31,7 @@ data class MecanumDrivetrainConfig(val trackWidth: Distance, val wheelBase: Dist
 data class MecanumPID(val translationalPID: PIDCoefficients, val headingPID: PIDCoefficients)
 
 @Config
-abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid: MecanumPID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : MecanumDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrainConfig.trackWidth.roadrunner().raw, drivetrainConfig.wheelBase.roadrunner().raw) {
+abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid: MecanumPID, characterization: DcMotorCharacterization, baseConstraints: DriveConstraints) : MecanumDrive(characterization.kV, characterization.kA, characterization.kStatic, drivetrainConfig.trackWidth.roadrunner().raw, drivetrainConfig.wheelBase.roadrunner().raw) {
     private val dashboard: FtcDashboard = FtcDashboard.getInstance()
     private val clock: NanoClock = NanoClock.system()
 
