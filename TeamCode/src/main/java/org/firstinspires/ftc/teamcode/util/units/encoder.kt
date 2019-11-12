@@ -39,3 +39,9 @@ inline operator fun Int.times(ticks: EncoderTicksPerSecond) = EncoderTicksPerSec
 
 inline operator fun EncoderTicks.div(time: Seconds) = EncoderTicksPerSecond(this.raw.toDouble() / time.raw)
 inline operator fun EncoderTicks.div(time: Time) = this / (time.toSeconds())
+
+inline operator fun EncoderTicksPerSecond.times(time: Seconds) = EncoderTicks((this.raw * time.raw).toInt())
+inline operator fun EncoderTicksPerSecond.times(time: Time) = this * time.toSeconds()
+
+inline operator fun Seconds.times(rate: EncoderTicksPerSecond) = rate * this
+inline operator fun Time.times(rate: EncoderTicksPerSecond) = (this.toSeconds()) * rate
