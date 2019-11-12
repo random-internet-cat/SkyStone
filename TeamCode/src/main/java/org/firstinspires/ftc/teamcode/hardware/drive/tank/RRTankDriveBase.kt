@@ -17,7 +17,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
-import org.firstinspires.ftc.teamcode.util.DcMotorFeedforward
+import org.firstinspires.ftc.teamcode.util.DcMotorCharacterization
 import org.firstinspires.ftc.teamcode.util.roadrunner.*
 import org.firstinspires.ftc.teamcode.util.units.*
 
@@ -30,7 +30,7 @@ data class TankDrivetrainConfig(val trackWidth: Distance)
 data class TankDrivePID(val axialPID: PIDCoefficients, val headingPID: PIDCoefficients, val crossTrackPID: PIDCoefficients)
 
 @Config
-abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: TankDrivePID, feedforward: DcMotorFeedforward, baseConstraints: DriveConstraints) : TankDrive(feedforward.kV, feedforward.kA, feedforward.kStatic, drivetrainConfig.trackWidth.roadrunner().raw) {
+abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: TankDrivePID, characterization: DcMotorCharacterization, baseConstraints: DriveConstraints) : TankDrive(characterization.kV, characterization.kA, characterization.kStatic, drivetrainConfig.trackWidth.roadrunner().raw) {
     private val dashboard = FtcDashboard.getInstance()
     private val clock = NanoClock.system()
 

@@ -5,7 +5,7 @@ import com.acmerobotics.roadrunner.control.PIDFController
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.PIDFCoefficients as _FtcPIDFCoefficients
 import com.qualcomm.robotcore.hardware.PIDCoefficients as _FtcPIDCoefficients
-import org.firstinspires.ftc.teamcode.util.DcMotorFeedforward
+import org.firstinspires.ftc.teamcode.util.DcMotorCharacterization
 
 // Generate typealiases, so these can be imported instead of raw types everywhere
 typealias RRPIDCoefficients = _RRPIDCoefficients
@@ -27,5 +27,5 @@ data class PIDFCoefficients(val kP: Double, val kI: Double, val kD: Double, val 
 
 fun RRPIDCoefficients(pid: PIDFCoefficients) = RRPIDCoefficients(pid.kP, pid.kI, pid.kD)
 
-fun PIDFController(pid: RRPIDCoefficients, feedforward: DcMotorFeedforward, kF: (Double) -> Double = { 0.0 }, clock: NanoClock = NanoClock.system()) = PIDFController(pid, feedforward.kV, feedforward.kA, feedforward.kStatic, kF, clock)
-fun PIDFController(pid: PIDCoefficients, feedforward: DcMotorFeedforward, kF: (Double) -> Double = { 0.0 }, clock: NanoClock = NanoClock.system()) = PIDFController(RRPIDCoefficients(pid), feedforward.kV, feedforward.kA, feedforward.kStatic, kF, clock)
+fun PIDFController(pid: RRPIDCoefficients, characterization: DcMotorCharacterization, kF: (Double) -> Double = { 0.0 }, clock: NanoClock = NanoClock.system()) = PIDFController(pid, characterization.kV, characterization.kA, characterization.kStatic, kF, clock)
+fun PIDFController(pid: PIDCoefficients, characterization: DcMotorCharacterization, kF: (Double) -> Double = { 0.0 }, clock: NanoClock = NanoClock.system()) = PIDFController(RRPIDCoefficients(pid), characterization.kV, characterization.kA, characterization.kStatic, kF, clock)

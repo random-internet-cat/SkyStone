@@ -31,7 +31,7 @@ object TankDriveConstants {
     public val WHEEL_CIRCUMFERENCE: RRDistance get() = (WHEEL_RADIUS * TWO_PI).roadrunner()
     public val DISTANCE_PER_REVOLUTION: RRDistance get() = (WHEEL_CIRCUMFERENCE * GEAR_RATIO).roadrunner()
 
-    public val FEEDFORWARD = DcMotorFeedforward(kV = 1 / (rpmToVelocity(MAX_RPM).roadrunner().raw), kA = 0.0, kStatic = 0.0)
+    public val FEEDFORWARD = DcMotorCharacterization(kV = 1 / (rpmToVelocity(MAX_RPM).roadrunner().raw), kA = 0.0, kStatic = 0.0)
 
     public val AXIAL_PID = PIDCoefficients(0.0, 0.0, .0)
     public val HEADING_PID = PIDCoefficients(0.0, 0.0, .0)

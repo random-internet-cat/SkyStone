@@ -99,9 +99,9 @@ fun BasicTypedMotor<*>.getTargetPosition(): EncoderPosition = EncoderPosition(mo
 fun BasicTypedMotor<*>.setTargetPosition(value: Int) = motor.setTargetPosition(value)
 fun BasicTypedMotor<*>.setTargetPosition(value: EncoderPosition) = setTargetPosition(value.raw)
 
-data class DcMotorFeedforward(val kV: Double, val kA: Double, val kStatic: Double) {
+data class DcMotorCharacterization(val kV: Double, val kA: Double, val kStatic: Double) {
     companion object {
-        fun forBuiltinPID(kV: Double) = DcMotorFeedforward(kV = kV, kA = 0.0, kStatic = 0.0)
+        fun forBuiltinPID(kV: Double) = DcMotorCharacterization(kV = kV, kA = 0.0, kStatic = 0.0)
     }
 
     constructor() : this(0.0, 0.0, 0.0)
