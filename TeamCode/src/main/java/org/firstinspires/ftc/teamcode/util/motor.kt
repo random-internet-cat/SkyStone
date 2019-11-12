@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
 import org.firstinspires.ftc.teamcode.util.roadrunner.FtcPIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
+import org.firstinspires.ftc.teamcode.util.roadrunner.PIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.units.EncoderPosition
 import org.firstinspires.ftc.teamcode.util.units.EncoderTicks
 import org.firstinspires.ftc.teamcode.util.units.Radians
@@ -33,6 +34,18 @@ fun DcMotorEx.setPID(runmode: DcMotor.RunMode, p: Double, i: Double, d: Double) 
 
 fun DcMotorEx.setPID(runmode: DcMotor.RunMode, pid: PIDCoefficients) {
     setPID(runmode, pid.kP, pid.kI, pid.kD)
+}
+
+fun DcMotorEx.setPIDF(runmode: DcMotor.RunMode, pidf: FtcPIDFCoefficients) {
+    setPIDFCoefficients(runmode, pidf)
+}
+
+fun DcMotorEx.setPIDF(runmode: DcMotor.RunMode, p: Double, i: Double, d: Double, f: Double) {
+    setPIDFCoefficients(runmode, FtcPIDFCoefficients(p, i, d, f))
+}
+
+fun DcMotorEx.setPIDF(runmode: DcMotor.RunMode, pidf: PIDFCoefficients) {
+    setPIDF(runmode, pidf.kP, pidf.kI, pidf.kD, pidf.kF)
 }
 
 fun DcMotor.brakeOnZeroPower() = setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE)
