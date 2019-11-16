@@ -4,12 +4,11 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.teamcode.hardware.PrototypeDrive
 import org.firstinspires.ftc.teamcode.hardware.PrototypeHardware
-import org.firstinspires.ftc.teamcode.hardware.PrototypeIntake
-import org.firstinspires.ftc.teamcode.hardware.intake.Intake
 import org.firstinspires.ftc.teamcode.hardware.arm.PrototypeArm
 import org.firstinspires.ftc.teamcode.hardware.drive.disableEncoders
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrive
 import org.firstinspires.ftc.teamcode.hardware.drive.tank.TankDrivetrain
+import org.firstinspires.ftc.teamcode.hardware.intake.PrototypeIntake
 import org.firstinspires.ftc.teamcode.util.*
 
 private object PrototypeHardwareProvider {
@@ -34,7 +33,7 @@ private object PrototypeHardwareProvider {
 
         val secondMotor = hardwareMap.getMotor("intake2")
 
-        return Intake(firstMotor, secondMotor)
+        return PrototypeIntake(firstMotor, secondMotor)
     }
 
     fun makeArmRotator(hardwareMap: HardwareMap) = PrototypeArm.Rotator(hardwareMap.getMotorEx("arm").also {
