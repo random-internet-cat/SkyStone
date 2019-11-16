@@ -18,7 +18,6 @@ data class ArmMovementConstraints(val maxAngle: RRAnglePoint, val maxVel: RRAngu
 /*
  * Hardware class for a rotary arm (for linearly-actuated mechanisms, see Elevator).
  */
-@Config
 class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val characterization: DcMotorCharacterization, var angleFeedforwardConstant: Double, private val movementConstraints: ArmMovementConstraints) {
     private lateinit var controller: PIDFController
     private val clock = NanoClock.system()
