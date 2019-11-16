@@ -35,6 +35,7 @@ class PrototypeArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
         }
 
         init {
+            motor.disableEncoder()
             motor.resetEncoder()
         }
 
