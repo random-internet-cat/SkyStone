@@ -13,6 +13,10 @@ import org.firstinspires.ftc.teamcode.util.units.*
 
 data class ArmMovementConstraints(val maxAngle: RRAnglePoint, val maxVel: RRAngularVelocity, val maxAccel: RRAngularAcceleration, val maxJerk: RRAngularJerk) {
     constructor(maxAngle: AnglePoint, maxVel: AngularVelocity, maxAccel: AngularAcceleration, maxJerk: AngularJerk) : this(maxAngle.roadrunner(), maxVel.roadrunner(), maxAccel.roadrunner(), maxJerk.roadrunner())
+
+    // No max jerk overloads
+    constructor(maxAngle: RRAnglePoint, maxVel: RRAngularVelocity, maxAccel: RRAngularAcceleration) : this(maxAngle, maxVel, maxAccel, AngularJerk.zero())
+    constructor(maxAngle: AnglePoint, maxVel: AngularVelocity, maxAccel: AngularAcceleration) : this(maxAngle.roadrunner(), maxVel.roadrunner(), maxAccel.roadrunner())
 }
 
 /*
