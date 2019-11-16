@@ -13,12 +13,18 @@ import org.firstinspires.ftc.teamcode.util.units.Radians
 import org.firstinspires.ftc.teamcode.util.units.RadiansPoint
 
 fun DcMotor.resetEncoder() {
+    val oldMode = this.mode
     this.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
-    this.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
+    this.setMode(oldMode)
 }
 
 fun DcMotor.disableEncoder() {
     this.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
+}
+
+fun DcMotor.enableEncoder() {
+    this.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
+    resetEncoder()
 }
 
 fun DcMotor.setReversed() {
@@ -93,6 +99,8 @@ fun BasicTypedMotor<*>.setZeroPowerBehavior(behavior: DcMotor.ZeroPowerBehavior)
 fun BasicTypedMotor<*>.brakeOnZeroPower() = motor.brakeOnZeroPower()
 fun BasicTypedMotor<*>.floatOnZeroPower() = motor.floatOnZeroPower()
 
+fun BasicTypedMotor<*>.enableEncoder() = motor.enableEncoder()
+fun BasicTypedMotor<*>.disableEncoder() = motor.disableEncoder()
 fun BasicTypedMotor<*>.resetEncoder() = motor.resetEncoder()
 
 fun BasicTypedMotor<*>.getTargetPosition(): EncoderPosition = EncoderPosition(motor.getTargetPosition())

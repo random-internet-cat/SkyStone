@@ -17,7 +17,7 @@ fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachMotor(f: Mo
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachLeftMotor(f: MotorType.() -> Unit) = leftMotors().forEach(f)
 fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachRightMotor(f: MotorType.() -> Unit) = rightMotors().forEach(f)
 
-fun BasicFourWheelDrivetrain<*>.enableEncoders() = forEachMotor { resetEncoder() }
+fun BasicFourWheelDrivetrain<*>.enableEncoders() = forEachMotor { enableEncoder() }
 fun BasicFourWheelDrivetrain<*>.disableEncoders() = forEachMotor { disableEncoder() }
 
 fun BasicFourWheelDrivetrain<*>.brakeOnZeroPower() = forEachMotor { brakeOnZeroPower() }
