@@ -34,6 +34,10 @@ class PrototypeArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
             private val STAGE1_ANGLE get() = DegreesPoint(_STAGE1_ANGLE_DEG)
         }
 
+        init {
+            motor.resetEncoder()
+        }
+
         fun moveToCollect() {
             roadrunner().moveToAngle(COLLECT_ANGLE)
         }
