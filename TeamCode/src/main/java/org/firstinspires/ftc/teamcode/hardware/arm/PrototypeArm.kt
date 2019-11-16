@@ -14,7 +14,6 @@ private typealias RotatorPosition = Int
 private typealias WristPosition = Double
 
 class PrototypeArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
-    @Config
     class Rotator(private val motor: TypedMotor) {
         constructor(motor: DcMotor) : this(TypedMotor(motor, externalGearing = 1.0))
 
@@ -75,7 +74,6 @@ class PrototypeArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
         fun currentAngle() = roadrunner().currentAngle()
     }
 
-    @Config
     class Wrist(val servo: Servo) {
         companion object {
             @JvmField
@@ -105,7 +103,6 @@ class PrototypeArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
         }
     }
 
-    @Config
     class Clamp(val servo: Servo) {
         companion object {
             @JvmField
