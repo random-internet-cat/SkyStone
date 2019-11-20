@@ -39,7 +39,7 @@ class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val
         return profile != null && currentTime() - profileStartTime <= RRTime(profile.duration())
     }
 
-    fun targetAngle() = if (isBusy()) RRAnglePoint(profile!!.end().x) else null
+    fun targetAngle() = desiredAngle
     fun currentAngle() = (typedMotor.anglePosition() - angleOffset) + AnglePoint.zero() // This is known to work, since angle at angleOffset is supposed to be 0
 
     fun setPID(newPID: PIDCoefficients) {
