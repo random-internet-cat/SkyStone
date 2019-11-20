@@ -19,10 +19,12 @@ data class ArmMovementConstraints(val maxAngle: RRAnglePoint, val maxVel: RRAngu
     constructor(maxAngle: AnglePoint, maxVel: AngularVelocity, maxAccel: AngularAcceleration) : this(maxAngle.roadrunner(), maxVel.roadrunner(), maxAccel.roadrunner())
 }
 
+data class ArmFeedforward(val angleFeedforward: Double)
+
 /*
  * Hardware class for a rotary arm (for linearly-actuated mechanisms, see Elevator).
  */
-class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val characterization: DcMotorCharacterization, var angleFeedforwardConstant: Double, private val movementConstraints: ArmMovementConstraints) {
+class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val characterization: DcMotorCharacterization, feedforward: ArmFeedforward, private val movementConstraints: ArmMovementConstraints) {
     private lateinit var controller: PIDFController
     private val clock = NanoClock.system()
     private val angleOffset: AnglePoint
@@ -33,6 +35,21 @@ class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val
     private val _pid: RRPIDCoefficients
 
     private fun currentTime() = Seconds(clock.seconds())
+
+    private data class MutableFeedforward(var angleFeedforward: Double)
+
+    private val feedforward = MutableFeedforward(feedforward.angleFeedforward)
+
+    fun setAngleFeedforward(newAngleFeedforward: Double) {
+        this.feedforward.angleFeedforward = newAngleFeedforward
+    }
+
+    fun setFeedforward(newFeedforward: ArmFeedforward) {
+        setAngleFeedforward(newFeedforward.angleFeedforward)
+    }
+
+    fun angleFeedforward() = feedforward.angleFeedforward
+    fun feedforward() = ArmFeedforward(angleFeedforward = feedforward.angleFeedforward)
 
     fun isBusy(): Boolean {
         val profile = profile
@@ -60,7 +77,10 @@ class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val
         angleOffset = typedMotor.anglePosition().toRadians()
 
         _pid = RRPIDCoefficients(pid)
-        controller = PIDFController(_pid, characterization, { raw -> angleFeedforwardConstant * cos(RRAnglePoint(raw)) }, clock)
+        controller = PIDFController(_pid, characterization, { raw ->
+            val angle = RRAnglePoint(raw)
+            feedforward.angleFeedforward * cos(angle)
+        }, clock)
     }
 
     fun moveToAngle(angle: AnglePoint) {

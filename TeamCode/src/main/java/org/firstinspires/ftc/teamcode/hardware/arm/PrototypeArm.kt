@@ -60,7 +60,7 @@ class PrototypeArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
                     kD = 0.0
                 ),
                 DcMotorCharacterization(kV = 0.45620, kA = 0.0, kStatic = 0.20775),
-                0.001,
+                ArmFeedforward(angleFeedforward = 0.001),
                 ArmMovementConstraints(
                     maxAngle = RadiansPoint(TWO_PI),
                     maxVel = RevolutionsPerSecond(1.0),
