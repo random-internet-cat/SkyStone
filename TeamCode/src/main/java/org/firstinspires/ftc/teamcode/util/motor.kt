@@ -54,6 +54,16 @@ fun DcMotorEx.setPIDF(runmode: DcMotor.RunMode, pidf: PIDFCoefficients) {
     setPIDF(runmode, pidf.kP, pidf.kI, pidf.kD, pidf.kF)
 }
 
+fun DcMotorEx.pid(runmode: DcMotor.RunMode): PIDCoefficients {
+    val pidf = getPIDFCoefficients(runmode)
+    return PIDCoefficients(pidf)
+}
+
+fun DcMotorEx.pidf(runmode: DcMotor.RunMode): PIDFCoefficients {
+    val pidf = getPIDFCoefficients(runmode)
+    return PIDFCoefficients(pidf)
+}
+
 fun DcMotor.brakeOnZeroPower() = setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE)
 fun DcMotor.floatOnZeroPower() = setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT)
 
