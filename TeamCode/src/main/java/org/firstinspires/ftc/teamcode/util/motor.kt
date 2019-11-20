@@ -7,10 +7,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.teamcode.util.roadrunner.FtcPIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDFCoefficients
-import org.firstinspires.ftc.teamcode.util.units.EncoderPosition
-import org.firstinspires.ftc.teamcode.util.units.EncoderTicks
-import org.firstinspires.ftc.teamcode.util.units.Radians
-import org.firstinspires.ftc.teamcode.util.units.RadiansPoint
+import org.firstinspires.ftc.teamcode.util.units.*
 
 fun DcMotor.resetEncoder() {
     val oldMode = this.mode
@@ -83,6 +80,11 @@ data class MotorConfiguration(val rawConfig: MotorConfigurationType, val externa
 
 fun MotorConfiguration.encoderToAngle(ticks: EncoderTicks) = Radians(TWO_PI * externalGearing * ticks.raw / rawConfig.ticksPerRev)
 fun MotorConfiguration.encoderToAngle(ticks: EncoderPosition) = RadiansPoint(encoderToAngle(EncoderTicks(ticks.raw)).raw)
+
+fun MotorConfiguration.angleToEncoder(angle: Radians) = EncoderTicks((angle.raw / TWO_PI / externalGearing * rawConfig.ticksPerRev).toInt())
+fun MotorConfiguration.angleToEncoder(angle: Angle) = angleToEncoder(Radians(angle))
+fun MotorConfiguration.angleToEncoder(angle: RadiansPoint) = EncoderPosition(angleToEncoder(Radians(angle.raw)).raw)
+fun MotorConfiguration.angleToEncoder(angle: AnglePoint) = angleToEncoder(RadiansPoint(angle))
 
 data class BasicTypedMotor<out MotorType : DcMotor>(val motor: MotorType, val config: MotorConfiguration) {
     constructor(motor: MotorType, externalGearing: Double) : this(motor, MotorConfiguration(motor.motorType, externalGearing))
