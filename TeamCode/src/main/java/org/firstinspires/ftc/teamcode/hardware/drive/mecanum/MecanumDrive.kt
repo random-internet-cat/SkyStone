@@ -51,7 +51,7 @@ interface MecanumDriveConfig {
 }
 
 fun MecanumDriveConfig.maxVelocity() = wheelAngularVelocityToLinear(maxWheelRPM())
-fun MecanumDriveConfig.maxDriveRPM() = RRAngularVelocity(baseConstraints().maxVel)
+fun MecanumDriveConfig.maxDriveRPM() = RRAngularVelocity(baseConstraints().maxAngVel)
 
 fun MecanumDriveConfig.ticksPerSecond() = EncoderTicksPerSecond(RevolutionsPerSecond(maxWheelRPM()).raw * ticksPerRev().raw)
 
