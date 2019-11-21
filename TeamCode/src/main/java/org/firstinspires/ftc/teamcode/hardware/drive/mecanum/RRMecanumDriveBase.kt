@@ -217,4 +217,5 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
 
 fun RRMecanumDriveBase.setCurrentPosition(position: PositionVector) {
     localizer.poseEstimate = Pose2d(position.roadrunner(), externalHeading)
+    this.updatePoseEstimate()
 }
