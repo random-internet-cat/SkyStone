@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.units
 
+import com.acmerobotics.roadrunner.util.NanoClock
+
 typealias RawTime = Double
 
 private fun Number.toRawTime() = this.toDouble()
@@ -61,3 +63,38 @@ operator fun Duration.div(num: Double) = this.toSeconds() / num
 operator fun Duration.div(other: Duration) = this.toSeconds() / other.toSeconds()
 
 operator fun Double.times(time: Duration) = this * time.toSeconds()
+
+interface TimePoint<Tag> {
+    fun timeSinceEpoch(): Duration
+}
+
+inline class TimeSinceEpoch<Tag>(private val timeSinceEpoch: Duration) : TimePoint<Tag> {
+    override fun timeSinceEpoch(): Duration = timeSinceEpoch
+}
+
+operator fun <Tag> TimePoint<Tag>.minus(other: TimePoint<Tag>) = this.timeSinceEpoch() - other.timeSinceEpoch()
+operator fun <Tag> TimePoint<Tag>.plus(other: Duration) = TimeSinceEpoch<Tag>(this.timeSinceEpoch() + other)
+
+fun <Tag> epochTime() = TimeSinceEpoch<Tag>(Duration.zero())
+
+object SystemTimeTag
+typealias SystemTime = TimePoint<SystemTimeTag>
+
+fun systemTimeEpoch(): SystemTime = epochTime()
+fun currentSystemTime(): SystemTime = TimeSinceEpoch(Seconds(System.nanoTime() / 1e9))
+
+interface Clock<Tag> {
+    fun currentTime(): TimePoint<Tag>
+}
+
+typealias SystemClock = Clock<SystemTimeTag>
+
+object DefaultSystemClock : SystemClock {
+    override fun currentTime(): SystemTime = currentSystemTime()
+}
+
+fun SystemClock.roadrunner(): NanoClock = object : NanoClock() {
+    override fun seconds(): Double {
+        return Seconds(this@roadrunner.currentTime().timeSinceEpoch()).raw
+    }
+}

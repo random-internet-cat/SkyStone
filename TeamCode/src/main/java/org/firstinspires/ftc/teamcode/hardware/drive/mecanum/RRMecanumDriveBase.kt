@@ -33,19 +33,19 @@ data class MecanumPID(val translationalPID: PIDCoefficients, val headingPID: PID
 @Config
 abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid: MecanumPID, characterization: DcMotorCharacterization, baseConstraints: DriveConstraints) : MecanumDrive(characterization.kV, characterization.kA, characterization.kStatic, drivetrainConfig.trackWidth.roadrunner().raw, drivetrainConfig.wheelBase.roadrunner().raw) {
     private val dashboard: FtcDashboard = FtcDashboard.getInstance()
-    private val clock: NanoClock = NanoClock.system()
+    private val clock = DefaultSystemClock
 
     private var mode: Mode = Mode.IDLE
 
     private val turnController: PIDFController
     private var turnProfile: MotionProfile? = null
-    private var turnStart: Duration = Duration.zero()
+    private lateinit var turnStart: SystemTime
 
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
 
     private var lastWheelPositions: List<Double>? = null
-    private var lastTimestamp: Seconds = Seconds(Duration.zero())
+    private lateinit var lastTimestamp: SystemTime
 
     init {
         dashboard.setTelemetryTransmissionInterval(25)
@@ -65,7 +65,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
 
     fun isBusy(): Boolean = mode != Mode.IDLE
 
-    private fun currentTime() = Seconds(clock.seconds())
+    private fun currentTime() = clock.currentTime()
 
     enum class Mode {
         IDLE,
@@ -148,7 +148,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
                     0.0, 0.0, targetAlpha
                 )))
 
-                if (t >= RRTime(turnProfile!!.duration())) {
+                if (t >= RRDuration(turnProfile!!.duration())) {
                     mode = Mode.IDLE
                     setDriveSignal(DriveSignal())
                 }
@@ -189,7 +189,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
     open fun getWheelVelocities(): List<Double> {
         val lastWheelPositions = lastWheelPositions
         val positions = getWheelPositions()
-        val currentTimestamp = Seconds(clock.seconds())
+        val currentTimestamp = currentTime()
 
         val velocities = mutableListOf<Double>()
         if (lastWheelPositions != null) {
