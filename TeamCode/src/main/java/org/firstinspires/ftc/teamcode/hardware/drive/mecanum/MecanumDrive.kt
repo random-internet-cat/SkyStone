@@ -47,6 +47,8 @@ interface MecanumDriveConfig {
     fun maxWheelRPM(): RRAngularVelocity
 
     fun encoderTicksToDistance(ticks: EncoderTicks): RRDistance
+    fun distanceToEncoderTicks(distance: RRDistance): EncoderTicks
+
     fun wheelAngularVelocityToLinear(angular: RRAngularVelocity): RRVelocity
 }
 
