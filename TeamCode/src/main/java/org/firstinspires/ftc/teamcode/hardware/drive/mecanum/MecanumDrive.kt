@@ -32,7 +32,7 @@ data class MecanumDrivetrain(val frontLeft: MecanumDriveMotor, val frontRight: M
 }
 
 interface MecanumDriveConfig {
-    fun getTrackWidth(): RRDistance
+    fun trackWidth(): RRDistance
     fun wheelBase(): RRDistance
 
     fun translationalPID(): PIDCoefficients
@@ -76,7 +76,7 @@ data class MecanumUseHeadingProvider(private val headingProvider: HeadingProvide
 
 class MecanumDrive(private val localizationConfig: MecanumLocalizationConfiguration, val config: MecanumDriveConfig, drivetrain: MecanumDrivetrain) : BaseDriveEx(drivetrain.toFourWheelDrivetrain()) {
     private val roadrunnerValue by lazy {
-        object : RRMecanumDriveBase(MecanumDrivetrainConfig(trackWidth = config.getTrackWidth(), wheelBase = config.wheelBase()), MecanumPID(config.translationalPID(), config.headingPID()), config.characterization(), config.baseConstraints()) {
+        object : RRMecanumDriveBase(MecanumDrivetrainConfig(trackWidth = config.trackWidth(), wheelBase = config.wheelBase()), MecanumPID(config.translationalPID(), config.headingPID()), config.characterization(), config.baseConstraints()) {
             private fun positionOf(motor: TypedMotor) = config.encoderTicksToDistance(motor.encoderPosition())
             private fun velocityOf(motor: DcMotorEx): RRVelocity = (config.encoderTicksToDistance(EncoderTicks(motor.getVelocity().toInt())) / Seconds(1)).roadrunner()
 
