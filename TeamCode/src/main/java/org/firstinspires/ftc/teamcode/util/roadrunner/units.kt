@@ -9,6 +9,7 @@ typealias RRDistance = Meters
 typealias RRVelocity = MetersPerSecond
 typealias RRAcceleration = MetersPerSecondSquared
 typealias RRJerk = MetersPerSecondCubed
+typealias RRDistancePerRev = MetersPerRev
 typealias RRAngularVelocity = RadiansPerSecond
 typealias RRAngularAcceleration = RadiansPerSecondSquared
 typealias RRAngularJerk = RadiansPerSecondCubed
@@ -33,6 +34,9 @@ fun Acceleration.roadrunner(): RRAcceleration = MetersPerSecondSquared(this)
 
 inline fun RRJerk.roadrunner(): RRJerk = this
 fun Jerk.roadrunner(): RRJerk = MetersPerSecondCubed(this)
+
+inline fun RRDistancePerRev.roadrunner(): RRDistancePerRev = this
+fun DistancePerRev.roadrunner(): RRDistancePerRev = MetersPerRev(this)
 
 inline fun RRAngularVelocity.roadrunner(): RRAngularVelocity = this
 fun AngularVelocity.roadrunner(): RRAngularVelocity = RadiansPerSecond(this)
