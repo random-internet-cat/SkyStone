@@ -74,6 +74,7 @@ inline class TimeSinceEpoch<Tag>(private val timeSinceEpoch: Duration) : TimePoi
 
 operator fun <Tag> TimePoint<Tag>.minus(other: TimePoint<Tag>) = this.timeSinceEpoch() - other.timeSinceEpoch()
 operator fun <Tag> TimePoint<Tag>.plus(other: Duration) = TimeSinceEpoch<Tag>(this.timeSinceEpoch() + other)
+operator fun <Tag> TimePoint<Tag>.compareTo(other: TimePoint<Tag>) = (this.timeSinceEpoch()).compareTo(other.timeSinceEpoch())
 
 fun <Tag> epochTime() = TimeSinceEpoch<Tag>(Duration.zero())
 
