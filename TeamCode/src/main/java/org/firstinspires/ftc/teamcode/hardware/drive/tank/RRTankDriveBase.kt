@@ -38,13 +38,13 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
 
     private val turnController: PIDFController
     private var turnProfile: MotionProfile? = null
-    private var turnStart: Time = Time.zero()
+    private var turnStart: Duration = Duration.zero()
 
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
 
     private var lastWheelPositions: List<Double>? = null
-    private var lastTimestamp: Seconds = Seconds(Time.zero())
+    private var lastTimestamp: Seconds = Seconds(Duration.zero())
 
     init {
         dashboard.setTelemetryTransmissionInterval(25)

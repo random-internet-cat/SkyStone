@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.util.roadrunner
 import com.acmerobotics.roadrunner.path.heading.HeadingInterpolator
 import com.acmerobotics.roadrunner.trajectory.BaseTrajectoryBuilder
 import org.firstinspires.ftc.teamcode.util.units.Distance
-import org.firstinspires.ftc.teamcode.util.units.Time
+import org.firstinspires.ftc.teamcode.util.units.Duration
 
 fun BaseTrajectoryBuilder.lineTo(pos: PositionVector) = lineTo(pos.roadrunner())
 fun BaseTrajectoryBuilder.lineTo(pos: PositionVector, interpolator: HeadingInterpolator) = lineTo(pos.roadrunner(), interpolator)
@@ -26,6 +26,6 @@ fun BaseTrajectoryBuilder.splineTo(pos: RobotPosition) = splineTo(pos.roadrunner
 fun BaseTrajectoryBuilder.splineTo(pos: RobotPosition, interpolator: HeadingInterpolator) = splineTo(pos.roadrunner(), interpolator)
 
 fun BaseTrajectoryBuilder.addMarker(time: RRTime, callback: () -> Unit) = addMarker(time.roadrunner().raw, callback)
-fun BaseTrajectoryBuilder.addMarker(time: Time, callback: () -> Unit) = addMarker(time.roadrunner(), callback)
+fun BaseTrajectoryBuilder.addMarker(time: Duration, callback: () -> Unit) = addMarker(time.roadrunner(), callback)
 
 fun BaseTrajectoryBuilder.addMarker(pos: PositionVector, callback: () -> Unit) = addMarker(pos.roadrunner(), callback)

@@ -48,13 +48,13 @@ data class AngularVelocityPerSecond(val AngularVelocity: AngularVelocity, val ti
 
 operator fun AngularVelocity.div(time: Seconds) = AngularVelocityPerSecond(this, time)
 
-data class AngularVelocityPerTime(val AngularVelocity: AngularVelocity, val time: Time) : AngularAcceleration {
+data class AngularVelocityPerTime(val AngularVelocity: AngularVelocity, val time: Duration) : AngularAcceleration {
     inline override fun toRevolutionsPerSecondSquared(): RevolutionsPerSecondSquared {
         return AngularVelocity.toRevolutionsPerSecond() / time.toSeconds()
     }
 }
 
-operator fun AngularVelocity.div(time: Time) = AngularVelocityPerTime(this, time)
+operator fun AngularVelocity.div(time: Duration) = AngularVelocityPerTime(this, time)
 
 inline class RadiansPerSecondSquared(val raw: RawAngularAcceleration) : AngularAcceleration {
     inline override fun toRevolutionsPerSecondSquared(): RevolutionsPerSecondSquared {
@@ -82,10 +82,10 @@ operator fun AngularAcceleration.compareTo(other: AngularAcceleration) = (this.t
 operator fun AngularAcceleration.unaryMinus() = -this.toRevolutionsPerSecondSquared()
 operator fun AngularAcceleration.plus(other: AngularAcceleration) = this.toRevolutionsPerSecondSquared() + other.toRevolutionsPerSecondSquared()
 operator fun AngularAcceleration.minus(other: AngularAcceleration) = this.toRevolutionsPerSecondSquared() - other.toRevolutionsPerSecondSquared()
-operator fun AngularAcceleration.times(time: Time) = this.toRevolutionsPerSecondSquared() * time.toSeconds()
+operator fun AngularAcceleration.times(time: Duration) = this.toRevolutionsPerSecondSquared() * time.toSeconds()
 operator fun AngularAcceleration.times(num: Double) = this.toRevolutionsPerSecondSquared() * num
 operator fun AngularAcceleration.div(num: Double) = this.toRevolutionsPerSecondSquared() / num
 
-operator fun Time.times(vel: AngularAcceleration) = this.toSeconds() * vel.toRevolutionsPerSecondSquared()
+operator fun Duration.times(vel: AngularAcceleration) = this.toSeconds() * vel.toRevolutionsPerSecondSquared()
 operator fun Double.times(vel: AngularAcceleration) = this * vel.toRevolutionsPerSecondSquared()
 operator fun AngularVelocity.div(vel: AngularAcceleration) = this.toRevolutionsPerSecond() / vel.toRevolutionsPerSecondSquared()

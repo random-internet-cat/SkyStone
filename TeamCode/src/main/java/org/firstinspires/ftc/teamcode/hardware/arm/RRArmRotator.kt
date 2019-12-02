@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.arm
 
-import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.control.PIDFController
 import com.acmerobotics.roadrunner.profile.MotionProfile
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator
@@ -31,7 +30,7 @@ class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val
 
     private var desiredAngle: RadiansPoint = AnglePoint.zero()
     private var profile: MotionProfile? = null
-    private var profileStartTime: Time = Time.zero()
+    private var profileStartTime: Duration = Duration.zero()
     private val _pid: RRPIDCoefficients
 
     private fun currentTime() = Seconds(clock.seconds())
