@@ -19,6 +19,7 @@ fun <MotorType : DcMotor> BasicFourWheelDrivetrain<MotorType>.forEachRightMotor(
 
 fun BasicFourWheelDrivetrain<*>.enableEncoders() = forEachMotor { enableEncoder() }
 fun BasicFourWheelDrivetrain<*>.disableEncoders() = forEachMotor { disableEncoder() }
+fun BasicFourWheelDrivetrain<*>.resetEncoders() = forEachMotor { resetEncoder() }
 
 fun BasicFourWheelDrivetrain<*>.brakeOnZeroPower() = forEachMotor { brakeOnZeroPower() }
 fun BasicFourWheelDrivetrain<*>.floatOnZeroPower() = forEachMotor { floatOnZeroPower() }
@@ -64,6 +65,7 @@ open class BasicBaseDrive<out MotorType : DcMotor>(val drivetrain: BasicFourWhee
 
 fun BasicBaseDrive<*>.enableEncoders() = drivetrain.enableEncoders()
 fun BasicBaseDrive<*>.disableEncoders() = drivetrain.disableEncoders()
+fun BasicBaseDrive<*>.resetEncoders() = drivetrain.resetEncoders()
 
 fun BasicBaseDrive<*>.brakeOnZeroPower() = drivetrain.brakeOnZeroPower()
 fun BasicBaseDrive<*>.floatOnZeroPower() = drivetrain.floatOnZeroPower()
