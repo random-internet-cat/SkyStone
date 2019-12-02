@@ -25,7 +25,7 @@ fun BaseTrajectoryBuilder.strafeRight(distance: Distance) = strafeRight(distance
 fun BaseTrajectoryBuilder.splineTo(pos: RobotPosition) = splineTo(pos.roadrunner())
 fun BaseTrajectoryBuilder.splineTo(pos: RobotPosition, interpolator: HeadingInterpolator) = splineTo(pos.roadrunner(), interpolator)
 
-fun BaseTrajectoryBuilder.addMarker(time: RRTime, callback: () -> Unit) = addMarker(time.roadrunner().raw, callback)
+fun BaseTrajectoryBuilder.addMarker(time: RRDuration, callback: () -> Unit) = addMarker(time.roadrunner().raw, callback)
 fun BaseTrajectoryBuilder.addMarker(time: Duration, callback: () -> Unit) = addMarker(time.roadrunner(), callback)
 
 fun BaseTrajectoryBuilder.addMarker(pos: PositionVector, callback: () -> Unit) = addMarker(pos.roadrunner(), callback)

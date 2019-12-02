@@ -25,15 +25,15 @@ data class ArmFeedforward(val angleFeedforward: Double)
  */
 class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val characterization: DcMotorCharacterization, feedforward: ArmFeedforward, private val movementConstraints: ArmMovementConstraints) {
     private lateinit var controller: PIDFController
-    private val clock = NanoClock.system()
+    private val clock = DefaultSystemClock
     private val angleOffset: AnglePoint
 
     private var desiredAngle: RadiansPoint = AnglePoint.zero()
     private var profile: MotionProfile? = null
-    private var profileStartTime: Duration = Duration.zero()
+    private lateinit var profileStartTime: SystemTime
     private val _pid: RRPIDCoefficients
 
-    private fun currentTime() = Seconds(clock.seconds())
+    private fun currentTime() = clock.currentTime()
 
     private data class MutableFeedforward(var angleFeedforward: Double)
 
@@ -52,7 +52,7 @@ class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val
 
     fun isBusy(): Boolean {
         val profile = profile
-        return profile != null && currentTime() - profileStartTime <= RRTime(profile.duration())
+        return profile != null && currentTime() - profileStartTime <= RRDuration(profile.duration())
     }
 
     fun targetAngle() = desiredAngle
@@ -79,7 +79,7 @@ class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val
         controller = PIDFController(_pid, characterization, { raw ->
             val angle = RRAnglePoint(raw)
             feedforward.angleFeedforward * cos(angle)
-        }, clock)
+        }, clock.roadrunner())
     }
 
     fun moveToAngle(angle: AnglePoint) {

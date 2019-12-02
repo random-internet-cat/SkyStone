@@ -32,19 +32,19 @@ data class TankDrivePID(val axialPID: PIDCoefficients, val headingPID: PIDCoeffi
 @Config
 abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: TankDrivePID, characterization: DcMotorCharacterization, baseConstraints: DriveConstraints) : TankDrive(characterization.kV, characterization.kA, characterization.kStatic, drivetrainConfig.trackWidth.roadrunner().raw) {
     private val dashboard = FtcDashboard.getInstance()
-    private val clock = NanoClock.system()
+    private val clock = DefaultSystemClock
 
     private var mode: Mode = Mode.IDLE
 
     private val turnController: PIDFController
     private var turnProfile: MotionProfile? = null
-    private var turnStart: Duration = Duration.zero()
+    private lateinit var turnStart: SystemTime
 
     private val constraints: DriveConstraints
     private val follower: TrajectoryFollower
 
     private var lastWheelPositions: List<Double>? = null
-    private var lastTimestamp: Seconds = Seconds(Duration.zero())
+    private lateinit var lastTimestamp: SystemTime
 
     init {
         dashboard.setTelemetryTransmissionInterval(25)
@@ -67,7 +67,7 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
 
     fun isBusy(): Boolean = mode != Mode.IDLE
 
-    private fun currentTime() = Seconds(clock.seconds())
+    private fun currentTime() = clock.currentTime()
 
     enum class Mode {
         IDLE,
@@ -147,7 +147,7 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
                     0.0, 0.0, targetAlpha
                 )))
 
-                if (t >= RRTime(turnProfile!!.duration())) {
+                if (t >= RRDuration(turnProfile!!.duration())) {
                     mode = Mode.IDLE
                     setDriveSignal(DriveSignal())
                 }
@@ -186,7 +186,7 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
 
     open fun getWheelVelocities(): List<Double> {
         val positions = getWheelPositions()
-        val currentTimestamp = Seconds(clock.seconds())
+        val currentTimestamp = currentTime()
         val lastWheelPositions = lastWheelPositions
 
         val velocities = mutableListOf<Double>()

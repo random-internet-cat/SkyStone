@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
 
 typealias RRAngle = Radians
 typealias RRAnglePoint = RadiansPoint
-typealias RRTime = Seconds
+typealias RRDuration = Seconds
 typealias RRDistance = Meters
 typealias RRVelocity = MetersPerSecond
 typealias RRAcceleration = MetersPerSecondSquared
@@ -20,8 +20,8 @@ fun Angle.roadrunner(): RRAngle = Radians(this)
 inline fun RRAnglePoint.roadrunner(): RRAnglePoint = this
 fun AnglePoint.roadrunner(): RRAnglePoint = RadiansPoint(this)
 
-inline fun RRTime.roadrunner(): RRTime = this
-fun Duration.roadrunner(): RRTime = Seconds(this)
+inline fun RRDuration.roadrunner(): RRDuration = this
+fun Duration.roadrunner(): RRDuration = Seconds(this)
 
 inline fun RRDistance.roadrunner(): RRDistance = this
 fun Distance.roadrunner(): RRDistance = Meters(this)
