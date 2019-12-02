@@ -45,22 +45,22 @@ data class DistancePerSecond(val distance: Distance, val time: Seconds) : Veloci
 
 operator fun Distance.div(time: Seconds) = DistancePerSecond(this, time)
 
-data class DistancePerTime(val distance: Distance, val time: Time) : Velocity {
+data class DistancePerTime(val distance: Distance, val time: Duration) : Velocity {
     inline override fun toMetersPerSecond(): MetersPerSecond {
         return distance.toMeters() / time.toSeconds()
     }
 }
 
-operator fun Distance.div(time: Time) = DistancePerTime(this, time)
+operator fun Distance.div(time: Duration) = DistancePerTime(this, time)
 
 operator fun Velocity.compareTo(other: Velocity) = (this.toMetersPerSecond()).compareTo(other.toMetersPerSecond())
 operator fun Velocity.unaryMinus() = -this.toMetersPerSecond()
 operator fun Velocity.plus(other: Velocity) = this.toMetersPerSecond() + other.toMetersPerSecond()
 operator fun Velocity.minus(other: Velocity) = this.toMetersPerSecond() - other.toMetersPerSecond()
-operator fun Velocity.times(time: Time) = this.toMetersPerSecond() * time.toSeconds()
+operator fun Velocity.times(time: Duration) = this.toMetersPerSecond() * time.toSeconds()
 operator fun Velocity.times(num: Double) = this.toMetersPerSecond() * num
 operator fun Velocity.div(num: Double) = this.toMetersPerSecond() / num
 
-operator fun Time.times(vel: Velocity) = this.toSeconds() * vel.toMetersPerSecond()
+operator fun Duration.times(vel: Velocity) = this.toSeconds() * vel.toMetersPerSecond()
 operator fun Double.times(vel: Velocity) = this * vel.toMetersPerSecond()
 operator fun Distance.div(vel: Velocity) = this.toMeters() / vel.toMetersPerSecond()

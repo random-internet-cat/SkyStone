@@ -48,13 +48,13 @@ data class AngularAccelerationPerSecond(val accel: AngularAcceleration, val time
 
 operator fun AngularAcceleration.div(time: Seconds) = AngularAccelerationPerSecond(this, time)
 
-data class AngularAccelerationPerTime(val accel: AngularAcceleration, val time: Time) : AngularJerk {
+data class AngularAccelerationPerTime(val accel: AngularAcceleration, val time: Duration) : AngularJerk {
     inline override fun toRevolutionsPerSecondCubed(): RevolutionsPerSecondCubed {
         return accel.toRevolutionsPerSecondSquared() / time.toSeconds()
     }
 }
 
-operator fun AngularAcceleration.div(time: Time) = AngularAccelerationPerTime(this, time)
+operator fun AngularAcceleration.div(time: Duration) = AngularAccelerationPerTime(this, time)
 
 inline class RadiansPerSecondCubed(val raw: RawAngularJerk) : AngularJerk {
     inline override fun toRevolutionsPerSecondCubed(): RevolutionsPerSecondCubed {
@@ -71,10 +71,10 @@ operator fun AngularJerk.compareTo(other: AngularJerk) = (this.toRevolutionsPerS
 operator fun AngularJerk.unaryMinus() = -this.toRevolutionsPerSecondCubed()
 operator fun AngularJerk.plus(other: AngularJerk) = this.toRevolutionsPerSecondCubed() + other.toRevolutionsPerSecondCubed()
 operator fun AngularJerk.minus(other: AngularJerk) = this.toRevolutionsPerSecondCubed() - other.toRevolutionsPerSecondCubed()
-operator fun AngularJerk.times(time: Time) = this.toRevolutionsPerSecondCubed() * time.toSeconds()
+operator fun AngularJerk.times(time: Duration) = this.toRevolutionsPerSecondCubed() * time.toSeconds()
 operator fun AngularJerk.times(num: Double) = this.toRevolutionsPerSecondCubed() * num
 operator fun AngularJerk.div(num: Double) = this.toRevolutionsPerSecondCubed() / num
 
-operator fun Time.times(vel: AngularJerk) = this.toSeconds() * vel.toRevolutionsPerSecondCubed()
+operator fun Duration.times(vel: AngularJerk) = this.toSeconds() * vel.toRevolutionsPerSecondCubed()
 operator fun Double.times(vel: AngularJerk) = this * vel.toRevolutionsPerSecondCubed()
 operator fun AngularAcceleration.div(vel: AngularJerk) = this.toRevolutionsPerSecondSquared() / vel.toRevolutionsPerSecondCubed()

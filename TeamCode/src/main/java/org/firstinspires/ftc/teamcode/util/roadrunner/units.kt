@@ -21,7 +21,7 @@ inline fun RRAnglePoint.roadrunner(): RRAnglePoint = this
 fun AnglePoint.roadrunner(): RRAnglePoint = RadiansPoint(this)
 
 inline fun RRTime.roadrunner(): RRTime = this
-fun Time.roadrunner(): RRTime = Seconds(this)
+fun Duration.roadrunner(): RRTime = Seconds(this)
 
 inline fun RRDistance.roadrunner(): RRDistance = this
 fun Distance.roadrunner(): RRDistance = Meters(this)

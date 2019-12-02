@@ -44,21 +44,21 @@ data class AccelerationPerSecond(val distance: Acceleration, val time: Seconds) 
 
 operator fun Acceleration.div(time: Seconds) = AccelerationPerSecond(this, time)
 
-data class AccelerationPerTime(val distance: Acceleration, val time: Time) : Jerk {
+data class AccelerationPerTime(val distance: Acceleration, val time: Duration) : Jerk {
     inline override fun toMetersPerSecondCubed(): MetersPerSecondCubed {
         return distance.toMetersPerSecondSquared() / time.toSeconds()
     }
 }
 
-operator fun Acceleration.div(time: Time) = AccelerationPerTime(this, time)
+operator fun Acceleration.div(time: Duration) = AccelerationPerTime(this, time)
 
 operator fun Jerk.compareTo(other: Jerk) = (this.toMetersPerSecondCubed()).compareTo(other.toMetersPerSecondCubed())
 operator fun Jerk.unaryMinus() = -this.toMetersPerSecondCubed()
 operator fun Jerk.plus(other: Jerk) = this.toMetersPerSecondCubed() + other.toMetersPerSecondCubed()
 operator fun Jerk.minus(other: Jerk) = this.toMetersPerSecondCubed() - other.toMetersPerSecondCubed()
-operator fun Jerk.times(time: Time) = this.toMetersPerSecondCubed() * time.toSeconds()
+operator fun Jerk.times(time: Duration) = this.toMetersPerSecondCubed() * time.toSeconds()
 operator fun Jerk.times(num: Double) = this.toMetersPerSecondCubed() * num
 operator fun Jerk.div(num: Double) = this.toMetersPerSecondCubed() / num
 
-operator fun Time.times(jerk: Jerk) = this.toSeconds() * jerk.toMetersPerSecondCubed()
+operator fun Duration.times(jerk: Jerk) = this.toSeconds() * jerk.toMetersPerSecondCubed()
 operator fun Double.times(jerk: Jerk) = this * jerk.toMetersPerSecondCubed()

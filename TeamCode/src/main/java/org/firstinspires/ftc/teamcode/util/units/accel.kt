@@ -44,21 +44,21 @@ data class VelocityPerSecond(val velocity: Velocity, val time: Seconds) : Accele
 
 operator fun Velocity.div(time: Seconds) = VelocityPerSecond(this, time)
 
-data class VelocityPerTime(val velocity: Velocity, val time: Time) : Acceleration {
+data class VelocityPerTime(val velocity: Velocity, val time: Duration) : Acceleration {
     inline override fun toMetersPerSecondSquared(): MetersPerSecondSquared {
         return velocity.toMetersPerSecond() / time.toSeconds()
     }
 }
 
-operator fun Velocity.div(time: Time) = VelocityPerTime(this, time)
+operator fun Velocity.div(time: Duration) = VelocityPerTime(this, time)
 
 operator fun Acceleration.compareTo(other: Acceleration) = (this.toMetersPerSecondSquared()).compareTo(other.toMetersPerSecondSquared())
 operator fun Acceleration.unaryMinus() = -this.toMetersPerSecondSquared()
 operator fun Acceleration.plus(other: Acceleration) = this.toMetersPerSecondSquared() + other.toMetersPerSecondSquared()
 operator fun Acceleration.minus(other: Acceleration) = this.toMetersPerSecondSquared() - other.toMetersPerSecondSquared()
-operator fun Acceleration.times(time: Time) = this.toMetersPerSecondSquared() * time.toSeconds()
+operator fun Acceleration.times(time: Duration) = this.toMetersPerSecondSquared() * time.toSeconds()
 operator fun Acceleration.times(num: Double) = this.toMetersPerSecondSquared() * num
 operator fun Acceleration.div(num: Double) = this.toMetersPerSecondSquared() / num
 
-operator fun Time.times(accel: Acceleration) = this.toSeconds() * accel.toMetersPerSecondSquared()
+operator fun Duration.times(accel: Acceleration) = this.toSeconds() * accel.toMetersPerSecondSquared()
 operator fun Double.times(accel: Acceleration) = this * accel.toMetersPerSecondSquared()

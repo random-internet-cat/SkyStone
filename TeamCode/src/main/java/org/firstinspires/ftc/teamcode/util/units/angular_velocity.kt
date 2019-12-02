@@ -51,13 +51,13 @@ fun RevolutionsPerMinute(rot: AngularVelocity) = rot
 
 inline operator fun Revolutions.div(minutes: Minutes) = RevolutionsPerMinute(this.raw / minutes.raw)
 
-data class RevolutionsPerTime(val revolutions: Revolutions, val time: Time) : AngularVelocity {
+data class RevolutionsPerTime(val revolutions: Revolutions, val time: Duration) : AngularVelocity {
     inline override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
         return revolutions / time.toSeconds()
     }
 }
 
-operator fun Revolutions.div(time: Time) = RevolutionsPerTime(this, time)
+operator fun Revolutions.div(time: Duration) = RevolutionsPerTime(this, time)
 
 inline class DegreesPerSecond(val raw: RawAngularVelocity) : AngularVelocity {
     override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
@@ -70,7 +70,7 @@ inline fun DegreesPerSecond(raw: Int) = DegreesPerSecond(raw.toDouble())
 fun DegreesPerSecond(rot: AngularVelocity) = DegreesPerSecond(rot.toRevolutionsPerSecond())
 
 inline operator fun Degrees.div(time: Seconds) = DegreesPerSecond(this.raw / time.raw)
-operator fun Degrees.div(time: Time) = this / (time.toSeconds())
+operator fun Degrees.div(time: Duration) = this / (time.toSeconds())
 
 inline class RadiansPerSecond(val raw: RawAngularVelocity) : AngularVelocity {
     override fun toRevolutionsPerSecond(): RevolutionsPerSecond {
@@ -83,18 +83,18 @@ inline fun RadiansPerSecond(raw: Int) = RadiansPerSecond(raw.toDouble())
 fun RadiansPerSecond(rot: AngularVelocity) = RadiansPerSecond(rot.toRevolutionsPerSecond())
 
 inline operator fun Radians.div(time: Seconds) = RadiansPerSecond(this.raw / time.raw)
-operator fun Radians.div(time: Time) = this/  (time.toSeconds())
+operator fun Radians.div(time: Duration) = this/  (time.toSeconds())
 
 operator fun AngularVelocity.compareTo(other: AngularVelocity) = (this.toRevolutionsPerSecond()).compareTo(other.toRevolutionsPerSecond())
 operator fun AngularVelocity.unaryMinus() = -(this.toRevolutionsPerSecond())
 operator fun AngularVelocity.plus(other: AngularVelocity) = this.toRevolutionsPerSecond() + other.toRevolutionsPerSecond()
 operator fun AngularVelocity.minus(other: AngularVelocity) = this.toRevolutionsPerSecond() - other.toRevolutionsPerSecond()
 operator fun AngularVelocity.times(num: Double) = this.toRevolutionsPerSecond() * num
-operator fun AngularVelocity.times(time: Time) = this.toRevolutionsPerSecond() * time.toSeconds()
+operator fun AngularVelocity.times(time: Duration) = this.toRevolutionsPerSecond() * time.toSeconds()
 operator fun AngularVelocity.div(other: AngularVelocity) = this.toRevolutionsPerSecond() / other.toRevolutionsPerSecond()
 operator fun AngularVelocity.div(num: Double) = this.toRevolutionsPerSecond() / num
 
-operator fun Time.times(rot: AngularVelocity) = this.toSeconds() * rot.toRevolutionsPerSecond()
+operator fun Duration.times(rot: AngularVelocity) = this.toSeconds() * rot.toRevolutionsPerSecond()
 operator fun Double.times(rot: AngularVelocity) = this * rot.toRevolutionsPerSecond()
 
-operator fun Angle.div(time: Time) = (this.toRadians()) / time
+operator fun Angle.div(time: Duration) = (this.toRadians()) / time
