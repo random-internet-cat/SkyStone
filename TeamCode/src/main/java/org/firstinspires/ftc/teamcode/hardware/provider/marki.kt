@@ -4,11 +4,9 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.teamcode.hardware.*
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
+import org.firstinspires.ftc.teamcode.hardware.drive.*
 import org.firstinspires.ftc.teamcode.hardware.drive.constants.MarkIDriveConstants
-import org.firstinspires.ftc.teamcode.hardware.drive.enableEncoders
-import org.firstinspires.ftc.teamcode.hardware.drive.floatOnZeroPower
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
-import org.firstinspires.ftc.teamcode.hardware.drive.setPID
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
@@ -37,7 +35,7 @@ private object MarkIHardwareProvider {
             backRight = TypedMotorEx(backRight, externalGearing = externalGearing)
         )
 
-        val drive = MecanumDrive(MecanumNoExternalHeading, MarkIDriveConstants, drivetrain)
+        val drive = MecanumDrive(MecanumUseHeadingProvider(IMUHeadingProvider(imu)), MarkIDriveConstants, drivetrain)
         drive.enableEncoders()
         drive.floatOnZeroPower()
         drive.setPID(DcMotor.RunMode.RUN_USING_ENCODER, PIDCoefficients(20, 7, 3))
