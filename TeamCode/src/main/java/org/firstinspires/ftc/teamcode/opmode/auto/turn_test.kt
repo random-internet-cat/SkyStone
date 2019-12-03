@@ -27,5 +27,7 @@ class TurnTest : LinearOpMode() {
             telemetry.addData("Heading (deg)", Degrees(Radians(drive.poseEstimate.heading)).raw)
             telemetry.update()
         }
+
+        sleep(2000)
     }
 }
