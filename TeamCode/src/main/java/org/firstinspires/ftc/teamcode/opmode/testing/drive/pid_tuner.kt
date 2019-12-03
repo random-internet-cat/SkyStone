@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase
+import org.firstinspires.ftc.teamcode.hardware.drive.brakeOnZeroPower
 import org.firstinspires.ftc.teamcode.hardware.drive.constants.MarkIDriveConstants
 import org.firstinspires.ftc.teamcode.hardware.drive.enableEncoders
 import org.firstinspires.ftc.teamcode.hardware.drive.floatOnZeroPower
@@ -106,7 +107,7 @@ class DriveVelocityPIDTuner : LinearOpMode() {
         telemetry = MultipleTelemetry(telemetry, dashboard.telemetry)
         telemetry.msTransmissionInterval = 15
 
-        drive = makeMarkIDrive(hardwareMap).also { it.floatOnZeroPower(); it.enableEncoders() }.roadrunner()
+        drive = makeMarkIDrive(hardwareMap).also { it.brakeOnZeroPower(); it.enableEncoders() }.roadrunner()
 
         addPidVariable()
 
