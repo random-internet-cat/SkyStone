@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.hardware.drive.brakeOnZeroPower
 import org.firstinspires.ftc.teamcode.hardware.drive.enableEncoders
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
-import org.firstinspires.ftc.teamcode.hardware.intake_release.MarkIIntakeRelease
 import org.firstinspires.ftc.teamcode.hardware.provider.makeMarkIHardware
 import org.firstinspires.ftc.teamcode.util.cutoffToZero
 import org.firstinspires.ftc.teamcode.util.roadrunner.RRAngularVelocity
@@ -75,12 +74,6 @@ class MarkITeleop : LinearOpMode() {
         handleArmClampInputs(gamepad, arm.clamp)
     }
 
-    private fun handleIntakeReleaseInputs(gamepad: Gamepad, release: MarkIIntakeRelease) {
-        when {
-            gamepad.right_bumper -> release.release()
-        }
-    }
-
     override fun runOpMode() {
         val hardware = makeMarkIHardware(hardwareMap)
         val arm = hardware.arm
@@ -104,7 +97,6 @@ class MarkITeleop : LinearOpMode() {
             handleFoundationMoverInputs(gamepad1, foundationMover)
             handleIntakeInputs(gamepad1, intake)
             handleArmInputs(gamepad1, arm)
-            handleIntakeReleaseInputs(gamepad1, hardware.intakeRelease)
 
             telemetry.update()
             hardware.update()

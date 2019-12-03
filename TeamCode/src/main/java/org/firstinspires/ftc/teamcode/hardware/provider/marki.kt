@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
-import org.firstinspires.ftc.teamcode.hardware.intake_release.MarkIIntakeRelease
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 
@@ -66,10 +65,6 @@ private object MarkIHardwareProvider {
         return MarkIIntake(firstMotor, secondMotor)
     }
 
-    fun makeIntakeRelease(hardwareMap: HardwareMap): MarkIIntakeRelease {
-        return MarkIIntakeRelease(hardwareMap.getServo("awful_servo"))
-    }
-
     fun makeFoundationMover(hardwareMap: HardwareMap): MarkIFoundationMover {
         val firstServo = hardwareMap.getServo("foundation_mover_1")
         val secondServo = hardwareMap.getServo("foundation_mover_2")
@@ -79,8 +74,7 @@ private object MarkIHardwareProvider {
     }
 }
 
-fun makeMarkIIntakeRelease(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeIntakeRelease(hardwareMap)
 fun makeMarkIArm(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeArm(hardwareMap)
 fun makeMarkIIntake(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeIntake(hardwareMap)
 fun makeMarkIDrive(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeDrive(hardwareMap)
-fun makeMarkIHardware(hardwareMap: HardwareMap) = MarkIHardware(MarkIHardwareProvider.makeDrive(hardwareMap), MarkIHardwareProvider.makeArm(hardwareMap), MarkIHardwareProvider.makeIntake(hardwareMap), MarkIHardwareProvider.makeIntakeRelease(hardwareMap), MarkIHardwareProvider.makeFoundationMover(hardwareMap))
+fun makeMarkIHardware(hardwareMap: HardwareMap) = MarkIHardware(MarkIHardwareProvider.makeDrive(hardwareMap), MarkIHardwareProvider.makeArm(hardwareMap), MarkIHardwareProvider.makeIntake(hardwareMap), MarkIHardwareProvider.makeFoundationMover(hardwareMap))
