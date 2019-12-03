@@ -87,7 +87,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
 
     override fun maxWheelRPM() = MAX_ACHIEVABLE_RPM.roadrunner()
 
-    private val BASE_CONSTRAINTS = DriveConstraints(maxVelocity(), Inches(30) / Seconds(1) / Seconds(1), RevolutionsPerSecond(0.5), DegreesPerSecondSquared(180))
+    private val BASE_CONSTRAINTS = DriveConstraints(Feet(5) / Seconds(1), Inches(30) / Seconds(1) / Seconds(1), RevolutionsPerSecond(0.5), DegreesPerSecondSquared(180))
 
     override fun baseConstraints(): DriveConstraints {
         return BASE_CONSTRAINTS
