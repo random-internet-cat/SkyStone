@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware.provider
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.hardware.*
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
 import org.firstinspires.ftc.teamcode.hardware.drive.*
@@ -72,6 +73,7 @@ private object MarkIHardwareProvider {
     fun makeFoundationMover(hardwareMap: HardwareMap): MarkIFoundationMover {
         val firstServo = hardwareMap.getServo("foundation_mover_1")
         val secondServo = hardwareMap.getServo("foundation_mover_2")
+        secondServo.direction = Servo.Direction.REVERSE
 
         return MarkIFoundationMover(firstServo, secondServo)
     }
