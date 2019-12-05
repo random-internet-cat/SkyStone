@@ -85,7 +85,7 @@ fun RadiansPerSecond(rot: AngularVelocity) = RadiansPerSecond(rot.toRevolutionsP
 inline operator fun Radians.div(time: Seconds) = RadiansPerSecond(this.raw / time.raw)
 operator fun Radians.div(time: Duration) = this/  (time.toSeconds())
 
-inline operator fun Radians.div(vel: RevolutionsPerSecond) = Seconds(this.raw / vel.raw)
+inline operator fun Radians.div(vel: RevolutionsPerSecond) = Seconds((this.raw / TWO_PI) / vel.raw)
 operator fun Radians.div(vel: AngularVelocity) = this / vel.toRevolutionsPerSecond()
 
 operator fun AngularVelocity.compareTo(other: AngularVelocity) = (this.toRevolutionsPerSecond()).compareTo(other.toRevolutionsPerSecond())
