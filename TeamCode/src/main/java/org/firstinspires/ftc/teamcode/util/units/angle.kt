@@ -84,6 +84,7 @@ inline operator fun Radians.plus(angle: RadiansPoint) = angle + this
 inline operator fun RadiansPoint.minus(diff: Radians) = this + (-diff)
 inline operator fun RadiansPoint.minus(other: RadiansPoint) = Radians(this.raw - other.raw)
 
+fun Radians.normalized() = Radians(normalizeWith(this.raw, TWO_PI))
 fun RadiansPoint.normalized() = RadiansPoint(normalizeWith(this.raw, TWO_PI))
 
 inline fun min(first: RadiansPoint, second: RadiansPoint) = RadiansPoint(min(first.raw, second.raw))
@@ -138,6 +139,7 @@ operator fun Double.times(angle: Angle) = this * angle.toRadians()
 fun min(first: AnglePoint, second: AnglePoint) = min(first.toRadians(), second.toRadians())
 fun max(first: AnglePoint, second: AnglePoint) = max(first.toRadians(), second.toRadians())
 
+fun Angle.normalized() = this.toRadians().normalized()
 fun AnglePoint.normalized() = this.toRadians().normalized()
 
 fun abs(angle: Angle) = abs(angle.toRadians())
