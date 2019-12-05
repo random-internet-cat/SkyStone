@@ -47,7 +47,7 @@ inline class RevolutionsPerMinute(val raw: RawAngularVelocity) : AngularVelocity
 
 inline fun RevolutionsPerMinute(rot: RevolutionsPerSecond) = RevolutionsPerMinute(rot.raw * SECONDS_PER_MINUTE)
 inline fun RevolutionsPerMinute(rot: RevolutionsPerMinute) = rot
-fun RevolutionsPerMinute(rot: AngularVelocity) = rot
+fun RevolutionsPerMinute(rot: AngularVelocity) = RevolutionsPerMinute(rot.toRevolutionsPerSecond())
 
 inline operator fun Revolutions.div(minutes: Minutes) = RevolutionsPerMinute(this.raw / minutes.raw)
 
