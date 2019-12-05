@@ -35,6 +35,7 @@ inline operator fun Radians.compareTo(other: Radians) = (this.raw).compareTo(oth
 inline operator fun Radians.unaryMinus() = Radians(-this.raw)
 inline operator fun Radians.plus(other: Radians) = Radians(this.raw + other.raw)
 inline operator fun Radians.minus(other: Radians) = this + (-other)
+inline operator fun Radians.div(other: Radians) = this.raw / other.raw
 inline operator fun Radians.times(num: Double) = Degrees(this.raw * num)
 inline operator fun Radians.div(num: Double) = Degrees(this.raw / num)
 
@@ -128,6 +129,7 @@ operator fun AnglePoint.minus(diff: Angle) = this.toRadians() - diff.toRadians()
 operator fun AnglePoint.minus(other: AnglePoint) = this.toRadians() - other.toRadians()
 operator fun Angle.plus(diff: Angle) = this.toRadians() + diff.toRadians()
 operator fun Angle.minus(diff: Angle) = this.toRadians() - diff.toRadians()
+operator fun Angle.div(other: Angle) = this.toRadians() / other.toRadians()
 operator fun Angle.times(num: Double) = this.toRadians() * num
 operator fun Angle.div(num: Double) = this.toRadians() / num
 
