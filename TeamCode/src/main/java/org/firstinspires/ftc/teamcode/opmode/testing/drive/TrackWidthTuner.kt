@@ -33,6 +33,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
 @Config
 @Autonomous(group = "drive")
 class TrackWidthTuner : LinearOpMode() {
+    val driveConstants = MarkIDriveConstants
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
@@ -60,27 +61,27 @@ class TrackWidthTuner : LinearOpMode() {
 
             // it is important to handle heading wraparounds
             var headingAccumulator = Radians(0.0)
-            var lastHeading = 0.0
+            var lastHeading = RadiansPoint(0.0)
 
-            drive.turn(Degrees(ANGLE))
+            drive.turn(ANGLE)
 
             while (!isStopRequested && drive.isBusy()) {
-                val heading = drive.poseEstimate.heading
-                headingAccumulator += Radians(Angle.norm(heading - lastHeading))
+                val heading = RadiansPoint(drive.poseEstimate.heading)
+                headingAccumulator += (heading - lastHeading).normalized()
                 lastHeading = heading
 
                 drive.update()
             }
 
-            val trackWidth = MarkIDriveConstants._TRACK_WIDTH_IN * (ANGLE / headingAccumulator)
-            trackWidthStats.add(trackWidth)
+            val trackWidth = Inches(driveConstants.trackWidth()) * (ANGLE / headingAccumulator)
+            trackWidthStats.add(Inches(trackWidth).raw)
 
             sleep(DELAY)
         }
 
         telemetry.clearAll()
         telemetry.addLine("Tuning complete")
-        telemetry.addLine(Misc.formatInvariant("Effective track width = %.2f (SE = %.3f)",
+        telemetry.addLine(Misc.formatInvariant("Effective track width (in) = %.2f (SE = %.3f)",
                 trackWidthStats.mean,
                 trackWidthStats.standardDeviation / Math.sqrt(NUM_TRIALS.toDouble())))
         telemetry.update()
@@ -93,6 +94,6 @@ class TrackWidthTuner : LinearOpMode() {
     companion object {
         var ANGLE = Degrees(180.0)
         var NUM_TRIALS = 5
-        var DELAY = Seconds(1)
+        var DELAY = Seconds(1.5)
     }
 }
