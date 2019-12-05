@@ -44,7 +44,7 @@ const val SECONDS_PER_MINUTE = 60
 
 inline class Minutes(val raw: RawTime) : Duration {
     inline override fun toSeconds(): Seconds {
-        return Seconds(this.raw / SECONDS_PER_MINUTE)
+        return Seconds(this.raw * SECONDS_PER_MINUTE)
     }
 }
 
