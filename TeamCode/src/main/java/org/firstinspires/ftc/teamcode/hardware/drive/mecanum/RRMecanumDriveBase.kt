@@ -15,7 +15,6 @@ import com.acmerobotics.roadrunner.profile.MotionState
 import com.acmerobotics.roadrunner.trajectory.Trajectory
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
-import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.util.DcMotorCharacterization
 import org.firstinspires.ftc.teamcode.util.roadrunner.*
@@ -47,14 +46,39 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
     private var lastWheelPositions: List<Double>? = null
     private lateinit var lastTimestamp: SystemTime
 
+    private val _mutableTranslationalPID: RRPIDCoefficients
+    private val _mutableHeadingPID: RRPIDCoefficients
+
     init {
+        _mutableTranslationalPID = RRPIDCoefficients(pid.translationalPID)
+        _mutableHeadingPID = RRPIDCoefficients(pid.headingPID)
+
         dashboard.setTelemetryTransmissionInterval(25)
 
         constraints = MecanumConstraints(baseConstraints, drivetrainConfig.trackWidth, drivetrainConfig.wheelBase)
-        follower = HolonomicPIDVAFollower(RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.translationalPID), RRPIDCoefficients(pid.headingPID))
+        follower = HolonomicPIDVAFollower(_mutableTranslationalPID, _mutableTranslationalPID, _mutableHeadingPID)
         turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
 
         turnController.setInputBounds(0.0, 2 * Math.PI)
+    }
+
+    fun translationalPID() = PIDCoefficients(_mutableTranslationalPID)
+
+    fun setTranslationalPID(newPID: PIDCoefficients) {
+        _mutableTranslationalPID.assign(newPID)
+    }
+
+    fun headingPID() = PIDCoefficients(_mutableHeadingPID)
+
+    fun setHeadingPID(newPID: PIDCoefficients) {
+        _mutableHeadingPID.assign(newPID)
+    }
+
+    fun pid() = MecanumPID(translationalPID = translationalPID(), headingPID = headingPID())
+
+    fun setPID(newPID: MecanumPID) {
+        setHeadingPID(newPID.headingPID)
+        setTranslationalPID(newPID.translationalPID)
     }
 
     fun lastError(): Pose2d = when (mode) {
