@@ -36,8 +36,8 @@ inline operator fun Radians.unaryMinus() = Radians(-this.raw)
 inline operator fun Radians.plus(other: Radians) = Radians(this.raw + other.raw)
 inline operator fun Radians.minus(other: Radians) = this + (-other)
 inline operator fun Radians.div(other: Radians) = this.raw / other.raw
-inline operator fun Radians.times(num: Double) = Degrees(this.raw * num)
-inline operator fun Radians.div(num: Double) = Degrees(this.raw / num)
+inline operator fun Radians.times(num: Double) = Radians(this.raw * num)
+inline operator fun Radians.div(num: Double) = Radians(this.raw / num)
 
 inline operator fun Double.times(angle: Radians) = angle * this
 
