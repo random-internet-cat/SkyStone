@@ -20,6 +20,12 @@ data class PIDCoefficients(val kP: Double, val kI: Double, val kD: Double) {
 
 fun RRPIDCoefficients(pid: PIDCoefficients) = RRPIDCoefficients(pid.kP, pid.kI, pid.kD)
 
+fun RRPIDCoefficients.assign(newValue: PIDCoefficients) {
+    this.kP = newValue.kP
+    this.kI = newValue.kI
+    this.kD = newValue.kD
+}
+
 data class PIDFCoefficients(val kP: Double, val kI: Double, val kD: Double, val kF: Double) {
     constructor(pidf: FtcPIDFCoefficients) : this(pidf.p, pidf.i, pidf.d, pidf.f)
     constructor(pid: RRPIDCoefficients, kF: Double) : this(pid.kP, pid.kI, pid.kD, kF)
