@@ -59,9 +59,7 @@ class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val
     fun currentAngle() = (typedMotor.anglePosition() - angleOffset) + AnglePoint.zero() // This is known to work, since angle at angleOffset is supposed to be 0
 
     fun setPID(newPID: PIDCoefficients) {
-        _pid.kP = newPID.kP
-        _pid.kI = newPID.kI
-        _pid.kD = newPID.kD
+        _pid.assign(newPID)
     }
 
     fun pid() = PIDCoefficients(_pid)
