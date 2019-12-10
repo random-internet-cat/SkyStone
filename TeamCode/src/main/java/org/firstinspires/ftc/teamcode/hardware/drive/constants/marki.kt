@@ -76,7 +76,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
         return 32767.toDouble() / ticksPerSecond().raw.toDouble()
     }
 
-    override fun wheelAngularVelocityToLinear(angular: RRAngularVelocity): RRVelocity {
+    override fun wheelAngularVelocityToLinear(angular: AngularVelocity): RRVelocity {
         val revPerSec = RevolutionsPerSecond(angular)
         return MetersPerSecond(distancePerRev() * revPerSec).roadrunner()
     }
