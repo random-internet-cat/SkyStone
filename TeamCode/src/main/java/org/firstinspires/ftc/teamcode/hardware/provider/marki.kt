@@ -15,7 +15,8 @@ import org.firstinspires.ftc.teamcode.hardware.intake_flippers.MarkIIntakeFlippe
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 
-private object MarkIHardwareProvider {
+object MarkIHardwareProvider {
+    @JvmStatic
     fun makeDrive(hardwareMap: HardwareMap): MarkIDrivetrain {
         val imu = hardwareMap.getIMU()
 
@@ -44,6 +45,7 @@ private object MarkIHardwareProvider {
         return drive
     }
 
+    @JvmStatic
     fun makeArmRotator(hardwareMap: HardwareMap) = MarkIArm.Rotator(TypedMotorEx(hardwareMap.getMotorEx("arm"), externalGearing = 0.5).also {
         it.motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         it.motor.targetPosition = 0
@@ -53,11 +55,16 @@ private object MarkIHardwareProvider {
         it.motor.setPID(DcMotor.RunMode.RUN_USING_ENCODER, 10.0, 0.0, 10.0)
     })
 
+    @JvmStatic
     fun makeArmWrist(hardwareMap: HardwareMap) = MarkIArm.Wrist(hardwareMap.getServo("wrist"))
+
+    @JvmStatic
     fun makeArmClamp(hardwareMap: HardwareMap) = MarkIArm.Clamp(hardwareMap.getServo("clamp"))
 
+    @JvmStatic
     fun makeArm(hardwareMap: HardwareMap): MarkIArm = MarkIArm(makeArmRotator(hardwareMap), makeArmWrist(hardwareMap), makeArmClamp(hardwareMap))
 
+    @JvmStatic
     fun makeIntake(hardwareMap: HardwareMap): MarkIIntake {
         val firstMotor = hardwareMap.getMotor("intake")
         val secondMotor = hardwareMap.getMotor("intake2")
@@ -67,6 +74,7 @@ private object MarkIHardwareProvider {
         return MarkIIntake(firstMotor, secondMotor)
     }
 
+    @JvmStatic
     fun makeIntakeFlippers(hardwareMap: HardwareMap): MarkIIntakeFlippers {
         val firstServo = hardwareMap.getServo("right_arm")
         val secondServo = hardwareMap.getServo("left_arm")
@@ -74,6 +82,7 @@ private object MarkIHardwareProvider {
         return MarkIIntakeFlippers(firstServo, secondServo)
     }
 
+    @JvmStatic
     fun makeFoundationMover(hardwareMap: HardwareMap): MarkIFoundationMover {
         val firstServo = hardwareMap.getServo("foundation_mover_1")
         val secondServo = hardwareMap.getServo("foundation_mover_2")
@@ -81,9 +90,20 @@ private object MarkIHardwareProvider {
 
         return MarkIFoundationMover(firstServo, secondServo)
     }
+
+    @JvmStatic
+    fun makeHardware(hardwareMap: HardwareMap): MarkIHardware {
+        return MarkIHardware(
+            makeDrive(hardwareMap),
+            makeArm(hardwareMap),
+            makeIntake(hardwareMap),
+            makeIntakeFlippers(hardwareMap),
+            makeFoundationMover(hardwareMap)
+        )
+    }
 }
 
 fun makeMarkIArm(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeArm(hardwareMap)
 fun makeMarkIIntake(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeIntake(hardwareMap)
 fun makeMarkIDrive(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeDrive(hardwareMap)
-fun makeMarkIHardware(hardwareMap: HardwareMap) = MarkIHardware(MarkIHardwareProvider.makeDrive(hardwareMap), MarkIHardwareProvider.makeArm(hardwareMap), MarkIHardwareProvider.makeIntake(hardwareMap), MarkIHardwareProvider.makeIntakeFlippers(hardwareMap), MarkIHardwareProvider.makeFoundationMover(hardwareMap))
+fun makeMarkIHardware(hardwareMap: HardwareMap) = MarkIHardwareProvider.makeHardware(hardwareMap)
