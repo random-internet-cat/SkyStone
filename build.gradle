@@ -22,4 +22,4 @@ allprojects {
     }
 }
 
-ext.ftcDashboardVersion = '0.3.4'
+ext.ftcDashboardVersion = '0.3.6'
