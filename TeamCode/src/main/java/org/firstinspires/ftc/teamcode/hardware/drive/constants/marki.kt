@@ -59,7 +59,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
     fun wheelCircumference() = (wheelRadius() * TWO_PI).roadrunner()
     fun distancePerRev() = ((wheelCircumference() * GEAR_RATIO) / Revolutions(1.0)).roadrunner()
 
-    private val BASE_CONSTRAINTS = DriveConstraints(Feet(5) / Seconds(1), Inches(30) / Seconds(1) / Seconds(1), RevolutionsPerSecond(0.5), DegreesPerSecondSquared(180))
+    private val BASE_CONSTRAINTS = DriveConstraints(Feet(5) / Seconds(1), Inches(20) / Seconds(1) / Seconds(1), RevolutionsPerSecond(0.5), DegreesPerSecondSquared(180))
 
     override fun baseConstraints(): DriveConstraints {
         return BASE_CONSTRAINTS
