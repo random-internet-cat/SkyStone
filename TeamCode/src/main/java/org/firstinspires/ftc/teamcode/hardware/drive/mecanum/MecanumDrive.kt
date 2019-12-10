@@ -32,8 +32,8 @@ data class MecanumDrivetrain(val frontLeft: MecanumDriveMotor, val frontRight: M
 }
 
 interface MecanumDriveConfig {
-    fun trackWidth(): RRDistance
-    fun wheelBase(): RRDistance
+    fun trackWidth(): Distance
+    fun wheelBase(): Distance
 
     fun translationalPID(): PIDCoefficients
     fun headingPID(): PIDCoefficients
@@ -44,12 +44,12 @@ interface MecanumDriveConfig {
     fun baseConstraints(): DriveConstraints
 
     fun ticksPerRev(): EncoderTicksPerRev
-    fun maxWheelRPM(): RRAngularVelocity
+    fun maxWheelRPM(): AngularVelocity
 
-    fun encoderTicksToDistance(ticks: EncoderTicks): RRDistance
+    fun encoderTicksToDistance(ticks: EncoderTicks): Distance
     fun distanceToEncoderTicks(distance: RRDistance): EncoderTicks
 
-    fun wheelAngularVelocityToLinear(angular: RRAngularVelocity): RRVelocity
+    fun wheelAngularVelocityToLinear(angular: AngularVelocity): Velocity
 }
 
 fun MecanumDriveConfig.maxVelocity() = RRVelocity(baseConstraints().maxVel)
