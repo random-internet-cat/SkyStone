@@ -57,12 +57,11 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
     }
 
     fun lastError(): Pose2d {
-        when (mode) {
-            Mode.FOLLOW_TRAJECTORY -> return follower.lastError
-            Mode.TURN -> return Pose2d(0.0, 0.0, turnController.lastError)
-            Mode.IDLE -> return Pose2d()
+        return when (mode) {
+            Mode.FOLLOW_TRAJECTORY -> follower.lastError
+            Mode.TURN -> Pose2d(0.0, 0.0, turnController.lastError)
+            Mode.IDLE -> Pose2d()
         }
-        throw AssertionError()
     }
 
     fun isBusy(): Boolean = mode != Mode.IDLE
