@@ -18,5 +18,5 @@ open class BaseFoundationMover(val servos: List<Servo>, val config: FoundationMo
     fun grab() = setPosition(config.grabPosition)
     fun release() = setPosition(config.releasePosition)
 
-    inline fun update() {}
+    fun update() {}
 }

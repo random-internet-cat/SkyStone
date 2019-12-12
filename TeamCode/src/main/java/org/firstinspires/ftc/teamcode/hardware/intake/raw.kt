@@ -42,7 +42,7 @@ class RawIntake {
         power(-power)
     }
 
-    inline fun update() {}
+    fun update() {}
 }
 
 open class FixedPowerIntake {
