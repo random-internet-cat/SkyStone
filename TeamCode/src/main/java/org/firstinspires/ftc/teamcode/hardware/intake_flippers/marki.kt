@@ -16,5 +16,5 @@ class MarkIIntakeFlippers(val servos: List<Servo>) {
         servos.forEach { it.position = RELEASE_POSITION }
     }
 
-    inline fun update() {}
+    fun update() {}
 }
