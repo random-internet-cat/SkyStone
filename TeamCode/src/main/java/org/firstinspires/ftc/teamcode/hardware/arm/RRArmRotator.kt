@@ -24,7 +24,7 @@ data class ArmFeedforward(val angleFeedforward: Double)
  * Hardware class for a rotary arm (for linearly-actuated mechanisms, see Elevator).
  */
 class RRArmRotator(private val typedMotor: TypedMotor, pid: PIDCoefficients, val characterization: DcMotorCharacterization, feedforward: ArmFeedforward, private val movementConstraints: ArmMovementConstraints) {
-    private lateinit var controller: PIDFController
+    private val controller: PIDFController
     private val clock = DefaultSystemClock
     private val angleOffset: AnglePoint
 
