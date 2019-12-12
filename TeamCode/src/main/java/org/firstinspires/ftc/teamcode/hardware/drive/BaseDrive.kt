@@ -72,7 +72,7 @@ fun BasicBaseDrive<*>.floatOnZeroPower() = drivetrain.floatOnZeroPower()
 
 fun <MotorType : DcMotorEx> BasicBaseDrive<MotorType>.setPID(runMode: DcMotor.RunMode, pid: PIDCoefficients) = drivetrain.setPID(runMode, pid)
 
-inline fun BasicBaseDrive<*>.power(power: Int) {
+fun BasicBaseDrive<*>.power(power: Int) {
     this.power(power.toDouble())
 }
 
