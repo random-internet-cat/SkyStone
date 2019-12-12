@@ -78,7 +78,6 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
     }
 
     fun turn(angle: Angle) {
-        val angle = Radians(angle)
         val heading = Radians(poseEstimate.heading)
 
         turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
