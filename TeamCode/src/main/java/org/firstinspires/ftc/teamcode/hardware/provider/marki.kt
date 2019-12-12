@@ -46,23 +46,22 @@ object MarkIHardwareProvider {
     }
 
     @JvmStatic
-    fun makeArmRotator(hardwareMap: HardwareMap) = MarkIArm.Rotator(TypedMotorEx(hardwareMap.getMotorEx("arm"), externalGearing = 0.5).also {
-        it.motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        it.motor.targetPosition = 0
-        it.motor.resetEncoder()
-        it.motor.setReversed()
-        it.brakeOnZeroPower()
-        it.motor.setPID(DcMotor.RunMode.RUN_USING_ENCODER, 10.0, 0.0, 10.0)
-    })
+    fun makeArmHorizontal(hardwareMap: HardwareMap): MarkIArm.HorizontalControl {
+        val motor = hardwareMap.getMotor("horizontal")
+        return MarkIArm.HorizontalControl(motor)
+    }
 
     @JvmStatic
-    fun makeArmWrist(hardwareMap: HardwareMap) = MarkIArm.Wrist(hardwareMap.getServo("wrist"))
+    fun makeArmVertical(hardwareMap: HardwareMap): MarkIArm.VerticalControl {
+        val motor = hardwareMap.getMotor("vertical")
+        return MarkIArm.VerticalControl(motor)
+    }
 
     @JvmStatic
     fun makeArmClamp(hardwareMap: HardwareMap) = MarkIArm.Clamp(hardwareMap.getServo("clamp"))
 
     @JvmStatic
-    fun makeArm(hardwareMap: HardwareMap): MarkIArm = MarkIArm(makeArmRotator(hardwareMap), makeArmWrist(hardwareMap), makeArmClamp(hardwareMap))
+    fun makeArm(hardwareMap: HardwareMap): MarkIArm = MarkIArm(makeArmHorizontal(hardwareMap), makeArmVertical(hardwareMap), makeArmClamp(hardwareMap))
 
     @JvmStatic
     fun makeIntake(hardwareMap: HardwareMap): MarkIIntake {
