@@ -47,17 +47,19 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
-    private fun handleArmRotatorInputs(gamepad: Gamepad, rotator: MarkIArm.Rotator) {
+    private fun handleArmVerticalInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl) {
         when {
-            gamepad.a -> rotator.moveToCollect()
-            gamepad.b -> rotator.moveToStage0()
+            gamepad.a -> vertical.moveUp()
+            gamepad.b -> vertical.moveDown()
+            else -> vertical.stop()
         }
     }
 
-    private fun handleArmWristInputs(gamepad: Gamepad, wrist: MarkIArm.Wrist) {
+    private fun handleArmHorizontalInputs(gamepad: Gamepad, horizontal: MarkIArm.HorizontalControl) {
         when {
-            gamepad.x -> wrist.moveToCollect()
-            gamepad.y -> wrist.moveToStage0()
+            gamepad.x -> horizontal.moveOut()
+            gamepad.y -> horizontal.moveIn()
+            else -> horizontal.stop()
         }
     }
 
@@ -69,8 +71,8 @@ class MarkITeleop : LinearOpMode() {
     }
 
     private fun handleArmInputs(gamepad: Gamepad, arm: MarkIArm) {
-        handleArmRotatorInputs(gamepad, arm.rotator)
-        handleArmWristInputs(gamepad, arm.wrist)
+        handleArmHorizontalInputs(gamepad, arm.horizontal)
+        handleArmVerticalInputs(gamepad, arm.vertical)
         handleArmClampInputs(gamepad, arm.clamp)
     }
 
