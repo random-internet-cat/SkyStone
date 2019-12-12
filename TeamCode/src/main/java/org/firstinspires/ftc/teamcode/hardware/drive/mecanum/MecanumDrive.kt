@@ -109,11 +109,11 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
                 return drivetrain.typedMotors().map { positionOf(it).roadrunner().raw }
             }
 
-            override fun setMotorPowers(frontLeftPower: Double, backLeftPower: Double, backRightPower: Double, frontRightPower: Double) {
-                drivetrain.frontLeft.setPower(frontLeftPower)
-                drivetrain.backLeft.setPower(backLeftPower)
-                drivetrain.backRight.setPower(backRightPower)
-                drivetrain.frontRight.setPower(frontRightPower)
+            override fun setMotorPowers(frontLeft: Double, rearLeft: Double, rearRight: Double, frontRight: Double) {
+                drivetrain.frontLeft.setPower(frontLeft)
+                drivetrain.backLeft.setPower(rearLeft)
+                drivetrain.backRight.setPower(rearRight)
+                drivetrain.frontRight.setPower(frontRight)
             }
         }
     }
