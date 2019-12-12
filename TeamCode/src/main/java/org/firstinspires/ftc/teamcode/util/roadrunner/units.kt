@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE", "OVERRIDE_BY_INLINE")
+
 package org.firstinspires.ftc.teamcode.util.roadrunner
 
 import org.firstinspires.ftc.teamcode.util.units.*

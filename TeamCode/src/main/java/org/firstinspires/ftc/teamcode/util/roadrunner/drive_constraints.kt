@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE", "OVERRIDE_BY_INLINE")
+
 package org.firstinspires.ftc.teamcode.util.roadrunner
 
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
