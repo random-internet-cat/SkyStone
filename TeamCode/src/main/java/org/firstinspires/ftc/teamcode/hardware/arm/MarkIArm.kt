@@ -9,88 +9,57 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.*
 import kotlin.math.PI
 
-private typealias MarkIRotatorPosition = Int
-private typealias MarkIWristPosition = Double
-
-class MarkIArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
-    @Config
-    class Rotator(val motor: TypedMotorEx) {
+data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
+    data class HorizontalControl(val motor: DcMotor) {
         companion object {
-            @JvmField
-            public var _COLLECT_ANGLE_DEG: Int = 0
-
-            private val COLLECT_ANGLE get() = DegreesPoint(_COLLECT_ANGLE_DEG)
-
-            @JvmField
-            public var _STAGE0_ANGLE_DEG: Int = 160
-
-            private val STAGE0_ANGLE get() = DegreesPoint(_STAGE0_ANGLE_DEG)
-
-            @JvmField
-            public var _STAGE1_ANGLE_DEG: Int = 110
-
-            private val STAGE1_ANGLE get() = DegreesPoint(_STAGE1_ANGLE_DEG)
+            private const val MOTOR_POWER = 0.8
         }
 
-        init {
-            motor.resetEncoder() // Assume start angle is 0
-            motor.setTargetPosition(motor.encoderPosition())
-            motor.motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+        private fun power(power: Double) {
+            motor.power = power
         }
 
-        private fun moveToAngle(angle: DegreesPoint) {
-            motor.setTargetPosition(motor.config.angleToEncoder(angle))
+        private fun power(power: Int) = power(power.toDouble())
+
+        fun moveOut() {
+            power(MOTOR_POWER)
         }
 
-        fun currentAngle() = motor.anglePosition()
-        fun targetAngle() = motor.targetAnglePosition()
-
-        fun moveToCollect() {
-            moveToAngle(COLLECT_ANGLE)
-            motor.setPower(0.6)
+        fun moveIn() {
+            power(-MOTOR_POWER)
         }
 
-        fun moveToStage0() {
-            moveToAngle(STAGE0_ANGLE)
+        fun stop() {
+            power(0)
         }
 
-        fun moveToStage1() {
-            moveToAngle(STAGE1_ANGLE)
-        }
-
-        inline fun update() {}
+        fun update() {}
     }
 
-    @Config
-    class Wrist(val servo: Servo) {
+    data class VerticalControl(val motor: DcMotor) {
         companion object {
-            @JvmField
-            public var COLLECT_POSITION: MarkIWristPosition = 0.7
-
-            @JvmField
-            public var STAGE0_POSITION: MarkIWristPosition = 0.0
-
-            @JvmField
-            public var STAGE1_POSITION: MarkIWristPosition = 0.0
+            private const val MOTOR_POWER = 0.8
         }
 
-        private fun setPosition(position: MarkIWristPosition) {
-            servo.setPosition(position)
+        private fun power(power: Double) {
+            motor.power = power
         }
 
-        fun moveToCollect() {
-            setPosition(COLLECT_POSITION)
+        private fun power(power: Int) = power(power.toDouble())
+
+        fun moveUp() {
+            power(MOTOR_POWER)
         }
 
-        fun moveToStage0() {
-            setPosition(STAGE0_POSITION)
+        fun moveDown() {
+            power(-MOTOR_POWER)
         }
 
-        fun moveToStage1() {
-            setPosition(STAGE1_POSITION)
+        fun stop() {
+            power(0)
         }
 
-        inline fun update() {}
+        fun update() {}
     }
 
     @Config
@@ -113,12 +82,12 @@ class MarkIArm(val rotator: Rotator, val wrist: Wrist, val clamp: Clamp) {
 
         fun servoPosition() = servo.position
 
-        inline fun update() {}
+        fun update() {}
     }
 
     fun update() {
-        rotator.update()
-        wrist.update()
+        horizontal.update()
+        vertical.update()
         clamp.update()
     }
 }
