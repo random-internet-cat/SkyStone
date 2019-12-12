@@ -79,7 +79,6 @@ abstract class RRTankDriveBase(drivetrainConfig: TankDrivetrainConfig, pid: Tank
     }
 
     fun turn(angle: Angle) {
-        val angle = Radians(angle)
         val heading = RadiansPoint(poseEstimate.heading)
         turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
             MotionState(heading.raw, 0.0, 0.0, 0.0),
