@@ -127,6 +127,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             motor.power = 0.0
         }
 
+        fun switchToManual() {
+            manuallyMoveWithPower(0.0)
+        }
+
         fun stopIfManual() {
             if (isManual) stop()
         }
