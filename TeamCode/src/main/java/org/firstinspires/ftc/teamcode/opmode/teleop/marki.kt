@@ -47,11 +47,32 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
+    private var _armMotionLastTick = false
+
     private fun handleArmVerticalInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl) {
         when {
-            gamepad.a -> vertical.moveUp()
-            gamepad.b -> vertical.moveDown()
-            else -> vertical.stop()
+            gamepad.a -> {
+                if (!_armMotionLastTick) {
+                    val nextUpState = vertical.lastAutomaticState().nextUp
+                    if (nextUpState != null) vertical.moveToState(nextUpState)
+                }
+
+                _armMotionLastTick = true
+            }
+
+            gamepad.b -> {
+                if (!_armMotionLastTick) {
+                    val nextDownState = vertical.lastAutomaticState().nextDown
+                    if (nextDownState != null) vertical.moveToState(nextDownState)
+                }
+
+                _armMotionLastTick = true
+            }
+
+            else -> {
+                vertical.stopIfManual()
+                _armMotionLastTick = false
+            }
         }
     }
 
@@ -90,8 +111,6 @@ class MarkITeleop : LinearOpMode() {
         drive.enableEncoders()
         drive.brakeOnZeroPower()
 
-        telemetry = MultipleTelemetry(telemetry, dashboard.telemetry)
-
         waitForStart()
 
         while (opModeIsActive()) {
@@ -100,6 +119,7 @@ class MarkITeleop : LinearOpMode() {
             handleIntakeInputs(gamepad1, intake)
             handleArmInputs(gamepad1, arm)
 
+            telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
             telemetry.update()
             hardware.update()
         }
