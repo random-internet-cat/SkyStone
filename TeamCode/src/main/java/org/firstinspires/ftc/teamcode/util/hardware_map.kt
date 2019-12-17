@@ -5,9 +5,11 @@ import com.qualcomm.robotcore.hardware.*
 import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.openftc.revextensions2.ExpansionHubEx
 
-fun HardwareMap.getHub(key: String = "hub") = get(ExpansionHubEx::class.java, key)
-fun HardwareMap.getIMU(key: String = "imu") = InternalIMU(get(BNO055IMU::class.java, key))
-fun HardwareMap.getMotor(key: String): DcMotor = get(DcMotor::class.java, key)
-fun HardwareMap.getMotorEx(key: String): DcMotorEx = get(DcMotorEx::class.java, key)
-fun HardwareMap.getCRServo(key: String): CRServo = get(CRServo::class.java, key)
-fun HardwareMap.getServo(key: String): Servo = get(Servo::class.java, key)
+inline fun <reified T> HardwareMap.get(key: String): T = get(T::class.java, key) // Guaranteed not to return null
+
+fun HardwareMap.getHub(key: String = "hub") = get<ExpansionHubEx>(key)
+fun HardwareMap.getIMU(key: String = "imu") = InternalIMU(get<BNO055IMU>(key))
+fun HardwareMap.getMotor(key: String) = get<DcMotor>(key)
+fun HardwareMap.getMotorEx(key: String) = get<DcMotorEx>(key)
+fun HardwareMap.getCRServo(key: String) = get<CRServo>(key)
+fun HardwareMap.getServo(key: String) = get<Servo>(key)
