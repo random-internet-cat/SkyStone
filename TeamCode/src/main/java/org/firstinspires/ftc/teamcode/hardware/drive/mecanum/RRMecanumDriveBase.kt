@@ -57,7 +57,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
 
         constraints = MecanumConstraints(baseConstraints, drivetrainConfig.trackWidth, drivetrainConfig.wheelBase)
         follower = HolonomicPIDVAFollower(_mutableTranslationalPID, _mutableTranslationalPID, _mutableHeadingPID)
-        turnController = PIDFController(RRPIDCoefficients(pid.headingPID))
+        turnController = PIDFController(_mutableHeadingPID)
 
         turnController.setInputBounds(0.0, 2 * Math.PI)
     }
