@@ -16,14 +16,22 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.RRAngularVelocity
 import org.firstinspires.ftc.teamcode.util.roadrunner.RRVelocity
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.times
+import kotlin.math.withSign
 
 @TeleOp
 class MarkITeleop : LinearOpMode() {
     private val dashboard = FtcDashboard.getInstance()
 
+    private fun driveInputRamp(joystickInput: Double): Double {
+        val cutoff = joystickInput.cutoffToZero()
+        return (cutoff * cutoff).withSign(cutoff)
+    }
+
+    private fun driveInputRamp(joystickInput: Float) = driveInputRamp(joystickInput.toDouble())
+
     private fun handleDriveInputs(gamepad: Gamepad, drive: MecanumDrive, maxDriveRPM: RRAngularVelocity, maxVel: RRVelocity) {
-        val x = gamepad.left_stick_y.toDouble().cutoffToZero() * maxVel
-        val y = gamepad.left_stick_x.toDouble().cutoffToZero() * maxVel
+        val x = driveInputRamp(gamepad.left_stick_y) * maxVel
+        val y = driveInputRamp(gamepad.left_stick_x) * maxVel
         val turn = gamepad.right_stick_x.toDouble().cutoffToZero() * maxDriveRPM
 
         drive.mecanumDrive(x = x, y = y, turn = turn)
