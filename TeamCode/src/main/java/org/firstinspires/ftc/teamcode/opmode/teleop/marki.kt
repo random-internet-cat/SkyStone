@@ -20,8 +20,6 @@ import kotlin.math.withSign
 
 @TeleOp
 class MarkITeleop : LinearOpMode() {
-    private val dashboard = FtcDashboard.getInstance()
-
     private fun driveInputRamp(joystickInput: Double): Double {
         val cutoff = joystickInput.cutoffToZero()
         return (cutoff * cutoff).withSign(cutoff)
