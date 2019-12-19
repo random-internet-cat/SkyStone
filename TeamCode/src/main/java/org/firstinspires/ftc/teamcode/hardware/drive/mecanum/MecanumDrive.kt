@@ -31,6 +31,16 @@ data class MecanumDrivetrain(val frontLeft: MecanumDriveMotor, val frontRight: M
     fun typedMotors() = listOf(frontLeft, frontRight, backLeft, backRight)
 }
 
+sealed class MecanumPIDOrFeedForward {
+    abstract val characterization: DcMotorCharacterization
+}
+
+data class MecanumUsePID(val initialCoefficients: PIDCoefficients, private val kV: Double, val motorKF: Double) : MecanumPIDOrFeedForward() {
+    override val characterization = DcMotorCharacterization.forBuiltinPID(kV = kV)
+}
+
+data class MecanumUseFeedforward(override val characterization: DcMotorCharacterization) : MecanumPIDOrFeedForward()
+
 interface MecanumDriveConfig {
     fun trackWidth(): Distance
     fun wheelBase(): Distance
@@ -38,8 +48,7 @@ interface MecanumDriveConfig {
     fun translationalPID(): PIDCoefficients
     fun headingPID(): PIDCoefficients
 
-    fun characterization(): DcMotorCharacterization
-    fun motorKF(): Double
+    fun pidOrFeedforward(): MecanumPIDOrFeedForward
 
     fun baseConstraints(): DriveConstraints
 
@@ -77,8 +86,20 @@ data class MecanumUseHeadingProvider(private val headingProvider: HeadingProvide
 }
 
 class MecanumDrive(private val localizationConfig: MecanumLocalizationConfiguration, val config: MecanumDriveConfig, drivetrain: MecanumDrivetrain) : BaseDriveEx(drivetrain.toFourWheelDrivetrain()) {
+    private val pidOrFeedForward = config.pidOrFeedforward()
+    private val _onlyPID = pidOrFeedForward as? MecanumUsePID
+
+    init {
+        if (pidOrFeedForward is MecanumUsePID) roadrunner().setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidOrFeedForward.initialCoefficients)
+    }
+
+    private fun requirePID(): MecanumUsePID {
+        check(_onlyPID != null)
+        return _onlyPID
+    }
+
     private val roadrunnerValue by lazy {
-        object : RRMecanumDriveBase(MecanumDrivetrainConfig(trackWidth = config.trackWidth(), wheelBase = config.wheelBase()), MecanumPID(config.translationalPID(), config.headingPID()), config.characterization(), config.baseConstraints()) {
+        object : RRMecanumDriveBase(MecanumDrivetrainConfig(trackWidth = config.trackWidth(), wheelBase = config.wheelBase()), MecanumPID(config.translationalPID(), config.headingPID()), pidOrFeedForward.characterization, config.baseConstraints()) {
             private fun positionOf(motor: TypedMotor) = config.encoderTicksToDistance(motor.encoderPosition())
             private fun velocityOf(motor: DcMotorEx): RRVelocity = (config.encoderTicksToDistance(EncoderTicks(motor.getVelocity().toInt())) / Seconds(1)).roadrunner()
 
@@ -88,7 +109,8 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
             }
 
             override fun setPIDCoefficients(runMode: DcMotor.RunMode, coefficients: PIDCoefficients) {
-                val kF = config.motorKF()
+                val pidConfig = requirePID()
+                val kF = pidConfig.motorKF
 
                 forEachMotor {
                     setPIDF(runMode, coefficients.kP, coefficients.kI, coefficients.kD, kF)

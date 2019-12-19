@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive.constants
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
-import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.MecanumDriveConfig
-import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.maxVelocity
-import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.ticksPerSecond
+import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
 import org.firstinspires.ftc.teamcode.hardware.drive.motors.YellowJacket5202_0002_0019
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.*
@@ -65,15 +63,27 @@ object MarkIDriveConstants : MecanumDriveConfig {
         return BASE_CONSTRAINTS
     }
 
-    private val CHARACTERIZATION = DcMotorCharacterization.forBuiltinPID(kV = 1 / (maxVelocity().roadrunner().raw))
-
-    override fun characterization(): DcMotorCharacterization {
-        return CHARACTERIZATION
+    // Per https://github.com/acmerobotics/road-runner-quickstart/commit/2c4968515de06f094afc0d51fb3c564c3ab32b3d
+    private fun pidMotorKF(): Double {
+        return 32767.toDouble() / ticksPerSecond().raw.toDouble()
     }
 
-    // Per https://github.com/acmerobotics/road-runner-quickstart/commit/2c4968515de06f094afc0d51fb3c564c3ab32b3d
-    override fun motorKF(): Double {
-        return 32767.toDouble() / ticksPerSecond().raw.toDouble()
+    private fun pidKV(): Double {
+        return 1 / (maxVelocity().roadrunner().raw)
+    }
+
+    private sealed class PIDOrFeedforward {
+        data class UsePID(val coefficients: PIDCoefficients) : PIDOrFeedforward()
+        data class UseFeedforward(val characterization: DcMotorCharacterization) : PIDOrFeedforward()
+    }
+
+    private val PID_OR_FEEDFORWARD: PIDOrFeedforward = PIDOrFeedforward.UsePID(PIDCoefficients(33.0, 0.0, 8.0))
+
+    override fun pidOrFeedforward(): MecanumPIDOrFeedForward {
+        return when (PID_OR_FEEDFORWARD) {
+            is PIDOrFeedforward.UsePID -> MecanumUsePID(PID_OR_FEEDFORWARD.coefficients, kV = pidKV(), motorKF = pidMotorKF())
+            is PIDOrFeedforward.UseFeedforward -> MecanumUseFeedforward(PID_OR_FEEDFORWARD.characterization)
+        }
     }
 
     override fun wheelAngularVelocityToLinear(angular: AngularVelocity): RRVelocity {
