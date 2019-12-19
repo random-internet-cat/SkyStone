@@ -88,7 +88,14 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
 
         private var _state: State
 
-        public fun lastAutomaticState() = _state
+        /**
+         * @return The most recent (or current) automatic state, regardless of if currently in automatic
+         */
+        public fun mostRecentAutomaticState() = _state
+
+        /**
+         * @return If in automatic, the current state, otherwise null
+         */
         public fun currentAutomaticState() = if (!isManual) _state else null
 
         init {
