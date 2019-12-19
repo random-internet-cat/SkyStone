@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop
 
 import com.acmerobotics.dashboard.FtcDashboard
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.*
@@ -53,7 +52,7 @@ class MarkITeleop : LinearOpMode() {
         when {
             gamepad.a -> {
                 if (!_armMotionLastTick) {
-                    val nextUpState = vertical.lastAutomaticState().nextUp
+                    val nextUpState = vertical.mostRecentAutomaticState().nextUp
                     if (nextUpState != null) vertical.moveToState(nextUpState)
                 }
 
@@ -62,7 +61,7 @@ class MarkITeleop : LinearOpMode() {
 
             gamepad.b -> {
                 if (!_armMotionLastTick) {
-                    val nextDownState = vertical.lastAutomaticState().nextDown
+                    val nextDownState = vertical.mostRecentAutomaticState().nextDown
                     if (nextDownState != null) vertical.moveToState(nextDownState)
                 }
 
