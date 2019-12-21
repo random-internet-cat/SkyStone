@@ -116,12 +116,14 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
 
             override var localizer: Localizer = MecanumLocalizer(this, useExternalHeading = localizationConfig.useExternalHeading)
 
+            private fun rrOrderedMotors() = drivetrain.run { listOf(frontLeft, backLeft, backRight, frontRight) }
+
             override fun getWheelVelocities(): List<Double> {
-                return motors().map { velocityOf(it).roadrunner().raw }
+                return rrOrderedMotors().map { velocityOf(it.motor).roadrunner().raw }
             }
 
             override fun getWheelPositions(): List<Double> {
-                return drivetrain.typedMotors().map { positionOf(it).roadrunner().raw }
+                return rrOrderedMotors().map { positionOf(it).roadrunner().raw }
             }
 
             override fun setMotorPowers(frontLeft: Double, rearLeft: Double, rearRight: Double, frontRight: Double) {
