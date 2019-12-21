@@ -2,6 +2,7 @@
 
 package org.firstinspires.ftc.teamcode.util.units
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.teamcode.util.TWO_PI
 import org.firstinspires.ftc.teamcode.util.units.min
 import kotlin.math.*
@@ -63,10 +64,6 @@ interface AnglePoint {
     fun toRadians(): RadiansPoint
 }
 
-private fun normalizeWith(value: RawAngle, modulo: RawAngle): RawAngle {
-    return (((value % modulo) + modulo) % modulo)
-}
-
 inline class RadiansPoint(val raw: RawAngle) : AnglePoint {
     companion object {
         fun zero() = RadiansPoint(0)
@@ -86,8 +83,8 @@ inline operator fun Radians.plus(angle: RadiansPoint) = angle + this
 inline operator fun RadiansPoint.minus(diff: Radians) = this + (-diff)
 inline operator fun RadiansPoint.minus(other: RadiansPoint) = Radians(this.raw - other.raw).normalized()
 
-fun Radians.normalized() = Radians(normalizeWith(this.raw, TWO_PI))
-fun RadiansPoint.normalized() = RadiansPoint(normalizeWith(this.raw, TWO_PI))
+fun Radians.normalized() = Radians(AngleUnit.normalizeRadians(this.raw))
+fun RadiansPoint.normalized() = RadiansPoint(AngleUnit.normalizeRadians(this.raw))
 
 inline fun min(first: RadiansPoint, second: RadiansPoint) = RadiansPoint(min(first.raw, second.raw))
 inline fun max(first: RadiansPoint, second: RadiansPoint) = RadiansPoint(max(first.raw, second.raw))
