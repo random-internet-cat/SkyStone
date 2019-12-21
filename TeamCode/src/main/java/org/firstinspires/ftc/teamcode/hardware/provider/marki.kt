@@ -25,8 +25,8 @@ object MarkIHardwareProvider {
         val backLeft = hardwareMap.getMotorEx("back_left")
         val backRight = hardwareMap.getMotorEx("back_right")
 
-        frontLeft.setReversed()
-        backLeft.setReversed()
+        frontRight.setReversed()
+        backRight.setReversed()
 
         val externalGearing = 1.0
 
