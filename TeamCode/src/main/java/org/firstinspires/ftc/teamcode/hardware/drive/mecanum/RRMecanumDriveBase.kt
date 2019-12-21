@@ -191,7 +191,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
                 DashboardUtil.drawRobot(fieldOverlay, trajectory[t])
 
                 fieldOverlay.setStroke("#3F51B5")
-                fieldOverlay.fillCircle(currentPose.x, currentPose.y, 3.0)
+                fieldOverlay.fillCircle(Inches(RRDistance(currentPose.x)).raw, Inches(RRDistance(currentPose.y)).raw, 3.0)
 
                 if (!follower.isFollowing()) {
                     mode = Mode.IDLE
