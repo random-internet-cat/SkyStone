@@ -40,7 +40,6 @@ object MarkIHardwareProvider {
         val drive = MecanumDrive(MecanumUseHeadingProvider(InvertedHeadingProvider(IMUHeadingProvider(imu))), MarkIDriveConstants, drivetrain)
         drive.enableEncoders()
         drive.brakeOnZeroPower()
-        drive.roadrunner().setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, PIDCoefficients(33.0, 0.0, 8.0))
 
         return drive
     }
