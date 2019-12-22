@@ -28,9 +28,9 @@ class MarkITeleop : LinearOpMode() {
     private fun driveInputRamp(joystickInput: Float) = driveInputRamp(joystickInput.toDouble())
 
     private fun handleDriveInputs(gamepad: Gamepad, drive: MecanumDrive, maxDriveRPM: RRAngularVelocity, maxVel: RRVelocity) {
-        val x = driveInputRamp(gamepad.left_stick_y) * maxVel
-        val y = driveInputRamp(gamepad.left_stick_x) * maxVel
-        val turn = gamepad.right_stick_x.toDouble().cutoffToZero() * maxDriveRPM
+        val x = driveInputRamp(gamepad.left_stick_y * -1) * maxVel
+        val y = driveInputRamp(gamepad.left_stick_x * -1) * maxVel
+        val turn = (gamepad.right_stick_x * -1).toDouble().cutoffToZero() * maxDriveRPM
 
         drive.mecanumDrive(x = x, y = y, turn = turn)
     }
