@@ -149,6 +149,16 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
         packet.put("yError", lastError.y)
         packet.put("headingError", lastError.heading)
 
+        run {
+            fieldOverlay.setStroke("#3F51B5")
+            val poseX = Inches(RRDistance(currentPose.x)).raw
+            val poseY = Inches(RRDistance(currentPose.y)).raw
+            fieldOverlay.fillCircle(poseX, poseY, 3.0)
+
+            val (hX, hY) = poseEstimate.headingVec()
+            fieldOverlay.strokeLine(poseX, poseY, poseX + hX * 4.5, poseY + hY * 4.5)
+        }
+
         when (mode) {
             Mode.IDLE -> {
                 // do nothing
@@ -189,9 +199,6 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
                 fieldOverlay.setStroke("#F44336")
                 val t = follower.elapsedTime()
                 DashboardUtil.drawRobot(fieldOverlay, trajectory[t])
-
-                fieldOverlay.setStroke("#3F51B5")
-                fieldOverlay.fillCircle(Inches(RRDistance(currentPose.x)).raw, Inches(RRDistance(currentPose.y)).raw, 3.0)
 
                 if (!follower.isFollowing()) {
                     mode = Mode.IDLE
