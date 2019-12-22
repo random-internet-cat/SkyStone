@@ -37,7 +37,7 @@ object MarkIHardwareProvider {
             backRight = TypedMotorEx(backRight, externalGearing = externalGearing)
         )
 
-        val drive = MecanumDrive(MecanumNoExternalHeading, MarkIDriveConstants, drivetrain)
+        val drive = MecanumDrive(MecanumUseHeadingProvider(IMUHeadingProvider(imu)), MarkIDriveConstants, drivetrain)
         drive.enableEncoders()
         drive.brakeOnZeroPower()
 
