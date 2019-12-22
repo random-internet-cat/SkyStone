@@ -23,8 +23,6 @@ import org.firstinspires.ftc.teamcode.hardware.provider.makeMarkIDrive
 class LocalizationTest : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry)
-
         val drive = makeMarkIDrive(hardwareMap).roadrunner()
 
         waitForStart()
