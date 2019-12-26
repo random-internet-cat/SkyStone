@@ -18,9 +18,20 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.zeroHeading;
 @Autonomous
 public class AutoBase extends LinearOpMode {
     enum QuarryState {
-        CLOSE_TO_BRIDGES,
-        MIDDLE,
-        CLOSE_TO_WALL
+        CLOSE_TO_BRIDGES(inchesVector(-36, 33)),
+        MIDDLE(inchesVector(-43, 33)),
+        CLOSE_TO_WALL(inchesVector(-50, 33)),
+        ;
+
+        private final Vector2d grabPosition;
+
+        private QuarryState(Vector2d grabPosition) {
+            this.grabPosition = grabPosition;
+        }
+
+        public Vector2d grabPosition() {
+            return grabPosition;
+        }
     }
 
     private QuarryState readQuarry() {
@@ -44,31 +55,14 @@ public class AutoBase extends LinearOpMode {
         checkInterrupted();
 
         QuarryState quarryState = readQuarry();
-
-        Vector2d skystonePos;
-        switch (quarryState) {
-            // skystone pos 1
-            case CLOSE_TO_BRIDGES:
-                skystonePos = inchesVector(-36, 33);
-                break;
-            // skystone pos 2
-            case MIDDLE:
-                skystonePos = inchesVector(-43, 33);
-                break;
-            // skystone pos 3
-            case CLOSE_TO_WALL:
-                skystonePos = inchesVector(-50, 33);
-                break;
-            default:
-                // TODO: implement error handling
-                skystonePos = inchesVector(0, 0);
-        }
+        // TODO: can this be null? if it can, implement error handling
+        if (quarryState == null) quarryState = QuarryState.CLOSE_TO_BRIDGES;
 
         // Drive to first skystone
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .setReversed(true)
                 .splineTo(new Pose2d(
-                        skystonePos,
+                        quarryState.grabPosition(),
                         degHeading(90)
                 )).build());
 
