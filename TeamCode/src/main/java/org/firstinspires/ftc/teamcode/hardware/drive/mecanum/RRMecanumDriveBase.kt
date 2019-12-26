@@ -115,9 +115,14 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
         mode = Mode.TURN
     }
 
+    private fun brake() {
+        setMotorPowers(0.0, 0.0, 0.0, 0.0)
+    }
+
     fun turnSync(angle: Angle) {
         turn(angle)
         waitForIdle()
+        brake()
     }
 
     fun followTrajectory(trajectory: Trajectory) {
@@ -128,6 +133,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
     fun followTrajectorySync(trajectory: Trajectory) {
         followTrajectory(trajectory)
         waitForIdle()
+        brake()
     }
 
     fun update() {
