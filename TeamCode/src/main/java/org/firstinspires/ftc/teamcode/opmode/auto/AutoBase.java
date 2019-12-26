@@ -100,7 +100,7 @@ public class AutoBase extends LinearOpMode {
         // Turn to face foundation
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .setReversed(true)
-                .splineTo(new Pose2d(inchesVector(48, 34), degHeading(90)))
+                .splineTo(new Pose2d(inchesVector(48, 32), degHeading(90)))
                 .build());
 
         checkInterrupted();
@@ -121,7 +121,7 @@ public class AutoBase extends LinearOpMode {
 
         // Drive forward to push foundation into building site
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .forward(-16)
+                .forward(-inches(16))
                 .build());
 
         checkInterrupted();
