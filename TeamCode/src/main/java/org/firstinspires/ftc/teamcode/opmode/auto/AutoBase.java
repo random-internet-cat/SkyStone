@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.provider.MarkIHardwareProvider;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.radHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.zeroDistance;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.zeroHeading;
 
@@ -58,9 +59,9 @@ public class AutoBase extends LinearOpMode {
         // TODO: can this be null? if it can, implement error handling
         if (quarryState == null) quarryState = QuarryState.CLOSE_TO_BRIDGES;
 
-        // Drive to first skystone
+        // Move to stone
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .setReversed(true)
+                .setReversed(false)
                 .splineTo(new Pose2d(
                         quarryState.grabPosition(),
                         degHeading(90)
@@ -68,44 +69,35 @@ public class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
-        // Clamp skystone
+        // Grab stone
         hardware.getFoundationMover().grab();
         //sleep(1000);
 
         checkInterrupted();
 
-        // Move back
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                .setReversed(false)
-                .forward(inches(20))
-                .build());
-
-        checkInterrupted();
-
-        // Spline to foundation
+        // Move to center of field
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .setReversed(true)
                 .splineTo(new Pose2d(inchesVector(12, 36), degHeading(180)))
-                .splineTo(new Pose2d(inchesVector(48, 36), degHeading(180)))
                 .build());
 
         checkInterrupted();
 
-        // Un clamp skystone
+        // Release stone
         hardware.getFoundationMover().release();
         sleep(1000);
 
         checkInterrupted();
 
-        // Turn to face foundation
+        // Move to foundation
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .setReversed(true)
-                .splineTo(new Pose2d(inchesVector(48, 32), degHeading(90)))
-                .build());
+                .splineTo(new Pose2d(inchesVector(48, 31), degHeading(90)))
+                .build()
+        );
 
         checkInterrupted();
 
-        // Clamp foundation
+        // Grab foundation
         hardware.getFoundationMover().grab();
         sleep(1500);
 
@@ -119,19 +111,19 @@ public class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
-        // Drive forward to push foundation into building site
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .forward(-inches(16))
+                .setReversed(true)
+                .forward(inches(-16))
                 .build());
 
         checkInterrupted();
 
-        // Un clamp foundation
+        // Release foundation
         hardware.getFoundationMover().release();
 
         checkInterrupted();
 
-        // Park spline
+        // Park
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .setReversed(false)
                 .splineTo(new Pose2d(inchesVector(0, 36), degHeading(180)))
