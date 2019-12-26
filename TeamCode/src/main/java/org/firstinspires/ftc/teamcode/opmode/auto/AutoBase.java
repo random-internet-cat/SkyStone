@@ -28,14 +28,20 @@ public class AutoBase extends LinearOpMode {
         return QuarryState.CLOSE_TO_BRIDGES;
     }
 
+    private void checkInterrupted() throws InterruptedException {
+        if (isStopRequested() || Thread.currentThread().isInterrupted()) throw new InterruptedException();
+    }
+
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
         drive.setPoseEstimate(new Pose2d(inchesVector(-32.0, 60.0), degHeading(90)));
 
         waitForStart();
+
+        checkInterrupted();
 
         QuarryState quarryState = readQuarry();
 
@@ -66,15 +72,21 @@ public class AutoBase extends LinearOpMode {
                         degHeading(90)
                 )).build());
 
+        checkInterrupted();
+
         // Clamp skystone
         hardware.getFoundationMover().grab();
         //sleep(1000);
+
+        checkInterrupted();
 
         // Move back
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .setReversed(false)
                 .forward(inches(20))
                 .build());
+
+        checkInterrupted();
 
         // Spline to foundation
         drive.followTrajectorySync(drive.trajectoryBuilder()
@@ -83,9 +95,13 @@ public class AutoBase extends LinearOpMode {
                 .splineTo(new Pose2d(inchesVector(48, 36), degHeading(180)))
                 .build());
 
+        checkInterrupted();
+
         // Un clamp skystone
         hardware.getFoundationMover().release();
         sleep(1000);
+
+        checkInterrupted();
 
         // Turn to face foundation
         drive.followTrajectorySync(drive.trajectoryBuilder()
@@ -93,8 +109,13 @@ public class AutoBase extends LinearOpMode {
                 .splineTo(new Pose2d(inchesVector(48, 34), degHeading(90)))
                 .build());
 
+        checkInterrupted();
+
         // Clamp foundation
         hardware.getFoundationMover().grab();
+        sleep(1500);
+
+        checkInterrupted();
 
         // Spline to make foundation horizontal
         drive.followTrajectorySync(drive.trajectoryBuilder()
@@ -102,18 +123,26 @@ public class AutoBase extends LinearOpMode {
                 .splineTo(new Pose2d(inchesVector(30, 42), degHeading(180)))
                 .build());
 
+        checkInterrupted();
+
         // Drive forward to push foundation into building site
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .forward(-16)
                 .build());
 
+        checkInterrupted();
+
         // Un clamp foundation
         hardware.getFoundationMover().release();
+
+        checkInterrupted();
 
         // Park spline
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .setReversed(false)
                 .splineTo(new Pose2d(inchesVector(0, 36), degHeading(180)))
                 .build());
+
+        checkInterrupted();
     }
 }
