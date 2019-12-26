@@ -48,7 +48,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
         return TRANSLATIONAL_PID
     }
 
-    private val HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
+    private val HEADING_PID = PIDCoefficients(2.0, 0.0, 0.0)
 
     override fun headingPID(): PIDCoefficients {
         return HEADING_PID
