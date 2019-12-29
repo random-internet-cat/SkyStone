@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.provider
 
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.hardware.*
@@ -76,8 +77,10 @@ object MarkIHardwareProvider {
 
     @JvmStatic
     fun makeIntakeFlippers(hardwareMap: HardwareMap): MarkIIntakeFlippers {
-        val firstServo = hardwareMap.getServo("right_arm")
-        val secondServo = hardwareMap.getServo("left_arm")
+        val firstServo = hardwareMap.getCRServo("right_arm")
+        firstServo.direction = DcMotorSimple.Direction.REVERSE
+
+        val secondServo = hardwareMap.getCRServo("left_arm")
 
         return MarkIIntakeFlippers(firstServo, secondServo)
     }
