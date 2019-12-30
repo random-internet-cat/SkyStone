@@ -84,7 +84,7 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive);
-    protected abstract void moveFoundationToQuarry(RRMecanumDriveBase drive);
+    protected abstract void moveFoundationToDepot(RRMecanumDriveBase drive);
     protected abstract void park(RRMecanumDriveBase drive);
 
     @Override
@@ -110,7 +110,7 @@ public abstract class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
-        moveFoundationToQuarry(drive);
+        moveFoundationToDepot(drive);
 
         checkInterrupted();
 

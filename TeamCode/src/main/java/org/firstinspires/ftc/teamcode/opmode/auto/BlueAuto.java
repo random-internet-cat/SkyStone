@@ -57,7 +57,7 @@ public class BlueAuto extends AutoBase {
     }
 
     @Override
-    protected void moveFoundationToQuarry(RRMecanumDriveBase drive) {
+    protected void moveFoundationToDepot(RRMecanumDriveBase drive) {
         // Spline to make foundation horizontal
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(false)
