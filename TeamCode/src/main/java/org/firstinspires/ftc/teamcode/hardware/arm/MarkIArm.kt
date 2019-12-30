@@ -40,7 +40,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             private const val AUTOMATIC_MOTOR_POWER = 0.6
 
             @JvmField
-            public var _COLLECT_TICKS: Int = 0
+            public var _COLLECT_TICKS: Int = 250
 
             @JvmField
             public var _STAGE0_TICKS: Int = 400
