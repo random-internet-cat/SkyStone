@@ -12,9 +12,9 @@ class MarkIFoundationMover(servos: List<Servo>) : BaseFoundationMover(servos, ob
 
     companion object {
         @JvmField
-        public var GRAB_POSITION = 0.5
+        public var GRAB_POSITION = 0.15
 
         @JvmField
-        public var RELEASE_POSITION = 0.15
+        public var RELEASE_POSITION = 1.0
     }
 }
