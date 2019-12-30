@@ -187,7 +187,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
     class Clamp(val servo: Servo) {
         companion object {
             @JvmField
-            public var OPEN_POSITION = 0.5
+            public var OPEN_POSITION = 0.7
 
             @JvmField
             public var CLOSED_POSITION = 0.2
