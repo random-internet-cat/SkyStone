@@ -97,8 +97,9 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
         FOLLOW_TRAJECTORY
     }
 
-    fun trajectoryBuilder(): TrajectoryBuilder {
-        return TrajectoryBuilder(poseEstimate, constraints)
+    @JvmOverloads
+    fun trajectoryBuilder(overrideConstraints: DriveConstraints = constraints): TrajectoryBuilder {
+        return TrajectoryBuilder(poseEstimate, overrideConstraints)
     }
 
     fun turn(angle: Angle) {
