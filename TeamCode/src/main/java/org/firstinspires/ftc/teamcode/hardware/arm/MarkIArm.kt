@@ -12,8 +12,14 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             private const val MOTOR_POWER = 0.8
         }
 
-        private fun power(power: Double) {
-            motor.power = power
+        init {
+            motor.resetEncoder()
+        }
+
+        private fun power(rawPower: Double) {
+            val adjustedPower = if (rawPower < 0 && motor.currentPosition <= 10) 0.0 else rawPower
+
+            motor.power = adjustedPower
         }
 
         private fun power(power: Int) = power(power.toDouble())
