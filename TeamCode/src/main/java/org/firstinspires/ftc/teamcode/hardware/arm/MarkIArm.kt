@@ -74,6 +74,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
                 override val nextUp: State? get() = PlaceBlockState(MIN_BLOCK_HEIGHT)
                 override val position: EncoderPosition
                     get() = COLLECT_POSITION
+
+                override fun toString(): String {
+                    return "CollectState"
+                }
             }
 
             data class PlaceBlockState(val blockHeight: Int) : State() {
