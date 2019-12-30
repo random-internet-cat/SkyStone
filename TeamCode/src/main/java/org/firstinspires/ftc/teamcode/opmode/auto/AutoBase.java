@@ -49,7 +49,7 @@ public class AutoBase extends LinearOpMode {
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
-        drive.setPoseEstimate(new Pose2d(inchesVector(-32.0, 60.0), degHeading(90)));
+        drive.setPoseEstimate(new Pose2d(inchesVector(-32.0, 60.0), degHeading(270)));
 
         waitForStart();
 
@@ -64,7 +64,7 @@ public class AutoBase extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Pose2d(
                         quarryState.grabPosition(),
-                        degHeading(90)
+                        degHeading(270)
                 )).build());
 
         checkInterrupted();
