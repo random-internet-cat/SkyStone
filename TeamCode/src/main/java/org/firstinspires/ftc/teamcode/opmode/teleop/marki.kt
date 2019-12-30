@@ -91,8 +91,8 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleArmClampInputs(gamepad: Gamepad, clamp: MarkIArm.Clamp) {
         when {
-            gamepad.left_bumper -> clamp.close()
-            gamepad.right_bumper -> clamp.open()
+            gamepad.dpad_left -> clamp.close()
+            gamepad.dpad_right -> clamp.open()
         }
     }
 
