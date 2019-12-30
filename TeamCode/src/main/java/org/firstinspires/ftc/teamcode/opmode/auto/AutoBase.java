@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
+import org.firstinspires.ftc.teamcode.hardware.intake_flippers.MarkIIntakeFlippers;
 import org.firstinspires.ftc.teamcode.hardware.provider.MarkIHardwareProvider;
 
 import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
@@ -56,6 +57,11 @@ public abstract class AutoBase extends LinearOpMode {
         drive.setPoseEstimate(startPosition());
     }
 
+    private void releaseIntake(MarkIIntakeFlippers flippers) {
+        flippers.release();
+        sleep(500);
+    }
+
     protected abstract double grabStoneYPos();
     protected abstract double grabStoneHeading();
 
@@ -98,7 +104,15 @@ public abstract class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
+        releaseIntake(hardware.getIntakeFlippers());
+
+        checkInterrupted();
+
+        hardware.getIntake().intake();
+
         moveToGrabStone(drive);
+
+        hardware.getIntake().stop();
 
         checkInterrupted();
 
