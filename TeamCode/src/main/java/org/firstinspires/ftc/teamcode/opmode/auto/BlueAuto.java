@@ -28,7 +28,7 @@ public class BlueAuto extends AutoBase {
 
     @Override
     protected Pose2d startPosition() {
-        return new Pose2d(inchesVector(-32.0, 60.0), degHeading(270));
+        return new Pose2d(inchesVector(-32.0, 64.0), degHeading(270));
     }
 
     @Override
