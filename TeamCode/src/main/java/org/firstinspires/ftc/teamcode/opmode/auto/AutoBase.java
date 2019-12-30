@@ -9,9 +9,7 @@ import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationM
 import org.firstinspires.ftc.teamcode.hardware.intake_flippers.MarkIIntakeFlippers;
 import org.firstinspires.ftc.teamcode.hardware.provider.MarkIHardwareProvider;
 
-import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
-import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 
 public abstract class AutoBase extends LinearOpMode {
     enum QuarryState {
@@ -93,6 +91,11 @@ public abstract class AutoBase extends LinearOpMode {
     protected abstract void moveFoundationToDepot(RRMecanumDriveBase drive);
     protected abstract void park(RRMecanumDriveBase drive);
 
+    protected final void log(String message) {
+        telemetry.log().add(message);
+        telemetry.update();
+    }
+
     @Override
     public final void runOpMode() throws InterruptedException {
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
@@ -104,35 +107,53 @@ public abstract class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
+        log("Releasing intake");
         releaseIntake(hardware.getIntakeFlippers());
+        log("Released intake");
 
         checkInterrupted();
 
+        log("Starting intake");
         hardware.getIntake().intake();
+        log("Started intake");
 
+        log("Moving to grab stone");
         moveToGrabStone(drive);
+        log("Moved to grab stone");
 
+        log("Stopping intake");
         hardware.getIntake().stop();
+        log("Stopped intake");
 
         checkInterrupted();
 
+        log("Moving to grab foundation");
         moveToGrabFoundation(drive);
+        log("Moved to grab foundation");
 
         checkInterrupted();
 
+        log("Grabbing foundation");
         grabFoundation(hardware.getFoundationMover());
+        log("Grabbed foundation");
 
         checkInterrupted();
 
+        log("Moving foundation to depot");
         moveFoundationToDepot(drive);
+        log("Moved foundation to depot");
 
         checkInterrupted();
 
+        log("Releasing foundation");
         releaseFoundation(hardware.getFoundationMover());
+        log("Released foundation");
 
         checkInterrupted();
 
+        log("Parking");
         park(drive);
+        log("Parked");
 
         checkInterrupted();
     }
