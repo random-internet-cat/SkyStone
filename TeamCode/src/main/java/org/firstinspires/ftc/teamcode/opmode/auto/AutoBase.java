@@ -69,23 +69,11 @@ public class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
-        // Grab stone
-        hardware.getFoundationMover().grab();
-        //sleep(1000);
-
-        checkInterrupted();
-
         // Move to center of field
         drive.followTrajectorySync(drive.trajectoryBuilder()
                 .setReversed(true)
                 .splineTo(new Pose2d(inchesVector(12, 36), degHeading(180)))
                 .build());
-
-        checkInterrupted();
-
-        // Release stone
-        hardware.getFoundationMover().release();
-        sleep(1000);
 
         checkInterrupted();
 
