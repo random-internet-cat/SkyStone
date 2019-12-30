@@ -56,7 +56,7 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleArmVerticalInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl) {
         when {
-            gamepad.a -> {
+            gamepad.y -> {
                 if (!_armMotionLastTick) {
                     val nextUpState = vertical.mostRecentAutomaticState().nextUp
                     if (nextUpState != null) vertical.moveToState(nextUpState)
@@ -65,7 +65,7 @@ class MarkITeleop : LinearOpMode() {
                 _armMotionLastTick = true
             }
 
-            gamepad.y -> {
+            gamepad.a -> {
                 if (!_armMotionLastTick) {
                     val nextDownState = vertical.mostRecentAutomaticState().nextDown
                     if (nextDownState != null) vertical.moveToState(nextDownState)
