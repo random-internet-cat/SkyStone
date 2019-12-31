@@ -38,7 +38,7 @@ public class BlueAuto extends AutoBase {
 
     @Override
     protected double grabStoneHeading() {
-        return degHeading(180);
+        return degHeading(270);
     }
 
     @Override
@@ -46,11 +46,12 @@ public class BlueAuto extends AutoBase {
         // Move to center of field
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
-                                        .splineTo(new Pose2d(inchesVector(12, 36), degHeading(180)))
+                                        .splineTo(new Pose2d(inchesVector(12, 42), degHeading(180)))
                                         .build());
 
         // Move to foundation
         drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(true)
                                         .splineTo(new Pose2d(inchesVector(48, 31), degHeading(90)))
                                         .build()
         );
@@ -74,7 +75,7 @@ public class BlueAuto extends AutoBase {
     protected void park(RRMecanumDriveBase drive) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(false)
-                                        .splineTo(new Pose2d(inchesVector(0, 36), degHeading(180)))
+                                        .splineTo(new Pose2d(inchesVector(0, 36), degHeading(0)))
                                         .build());
     }
 }
