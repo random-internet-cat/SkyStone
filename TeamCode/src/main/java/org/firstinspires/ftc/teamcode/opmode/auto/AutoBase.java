@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.provider.MarkIHardwareProvider;
 
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 
+@Config
 public abstract class AutoBase extends LinearOpMode {
     enum QuarryState {
         CLOSE_TO_BRIDGES(inches(-36)),
@@ -36,9 +38,11 @@ public abstract class AutoBase extends LinearOpMode {
         ;
     }
 
+    public static int DEFAULT_RELATIVE_POS = 0;
+
     protected final SkystoneRelativePos readQuarryRelative() {
         // TODO: actually figure out where stones are
-        return SkystoneRelativePos.RIGHT;
+        return SkystoneRelativePos.values()[DEFAULT_RELATIVE_POS];
     }
 
     protected abstract QuarryState mapQuarryState(SkystoneRelativePos relativePos);
