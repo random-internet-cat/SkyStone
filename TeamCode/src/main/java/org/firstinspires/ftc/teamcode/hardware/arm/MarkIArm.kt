@@ -46,7 +46,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             private const val AUTOMATIC_MOTOR_POWER = 0.6
 
             @JvmField
-            public var _COLLECT_TICKS: Int = 175
+            public var _COLLECT_TICKS: Int = 120
 
             @JvmField
             public var _STAGE0_TICKS: Int = 400
@@ -197,10 +197,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
     class Clamp(val servo: Servo) {
         companion object {
             @JvmField
-            public var OPEN_POSITION = 0.8
+            public var OPEN_POSITION = 0.5
 
             @JvmField
-            public var CLOSED_POSITION = 0.2
+            public var CLOSED_POSITION = 0.8
         }
 
         fun open() {
