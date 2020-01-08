@@ -6,9 +6,9 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 
-import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.oppositeHeading;
 
 @Config
 public abstract class SidedAutoBase extends AutoBase {
@@ -50,7 +50,16 @@ public abstract class SidedAutoBase extends AutoBase {
         return ySidedInches(GRAB_STONE_Y_POS_IN);
     }
 
-    protected abstract double grabStoneHeading();
+    protected abstract double headingTowardsFoundationWall();
+    protected abstract double headingTowardsHomeWall();
+
+    private double headingAwayFromHomeWall() {
+        return oppositeHeading(headingTowardsHomeWall());
+    }
+
+    private double grabStoneHeading() {
+        return headingAwayFromHomeWall();
+    }
 
     @Override
     protected final void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState) {

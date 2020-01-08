@@ -38,8 +38,13 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     @Override
-    protected double grabStoneHeading() {
-        return degHeading(270);
+    protected double headingTowardsFoundationWall() {
+        return degHeading(180);
+    }
+
+    @Override
+    protected double headingTowardsHomeWall() {
+        return degHeading(90);
     }
 
     @Override
