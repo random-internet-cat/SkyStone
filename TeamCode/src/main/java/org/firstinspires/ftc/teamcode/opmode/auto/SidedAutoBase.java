@@ -110,4 +110,12 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .forward(inches(-16))
                                         .build());
     }
+
+    @Override
+    protected final void park(RRMecanumDriveBase drive) {
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(false)
+                                        .splineTo(new Pose2d(sidedInchesVector(0, 36), headingTowardsDepotWall()))
+                                        .build());
+    }
 }
