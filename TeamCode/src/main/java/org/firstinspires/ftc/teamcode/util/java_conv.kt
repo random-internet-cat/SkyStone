@@ -37,6 +37,12 @@ object RRUnits {
     fun zeroHeading() = AnglePoint.zero().roadrunner().raw
 
     @JvmStatic
+    fun degHeading(deg: Double) = DegreesPoint(deg).roadrunner().raw
+
+    @JvmStatic
+    fun radHeading(rad: Double) = RadiansPoint(rad).roadrunner().raw
+
+    @JvmStatic
     fun rr(angle: Angle) = angle.roadrunner().raw
 
     @JvmStatic
