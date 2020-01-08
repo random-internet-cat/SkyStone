@@ -96,4 +96,18 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .build()
         );
     }
+
+    @Override
+    protected final void moveFoundationToDepot(RRMecanumDriveBase drive) {
+        // Spline to make foundation horizontal
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(false)
+                                        .splineTo(new Pose2d(sidedInchesVector(30, 42), headingTowardsDepotWall()))
+                                        .build());
+
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(true)
+                                        .forward(inches(-16))
+                                        .build());
+    }
 }
