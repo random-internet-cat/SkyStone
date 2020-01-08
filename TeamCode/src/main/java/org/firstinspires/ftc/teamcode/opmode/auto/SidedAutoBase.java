@@ -81,18 +81,32 @@ public abstract class SidedAutoBase extends AutoBase {
                                         )).build());
     }
 
+    public static double MIDDLE_STOP_X_IN = 12;
+    public static double MIDDLE_STOP_Y_IN = 42;
+
+    private Vector2d middleStopPosition() {
+        return sidedInchesVector(MIDDLE_STOP_X_IN, MIDDLE_STOP_Y_IN);
+    }
+
+    public static double GRAB_FOUNDATION_X_IN = 48;
+    public static double GRAB_FOUNDATION_Y_IN = 31;
+
+    private Vector2d grabFoundationPosition() {
+        return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
+    }
+
     @Override
     protected final void moveToGrabFoundation(RRMecanumDriveBase drive) {
         // Move to center of field
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
-                                        .splineTo(new Pose2d(sidedInchesVector(12, 42), headingTowardsFoundationWall()))
+                                        .splineTo(new Pose2d(middleStopPosition(), headingTowardsFoundationWall()))
                                         .build());
 
         // Move to foundation
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
-                                        .splineTo(new Pose2d(sidedInchesVector(48, 31), headingTowardsHomeWall()))
+                                        .splineTo(new Pose2d(grabFoundationPosition(), headingTowardsHomeWall()))
                                         .build()
         );
     }
@@ -111,11 +125,18 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .build());
     }
 
+    public static double PARK_X_IN = 0;
+    public static double PARK_Y_IN = 36;
+
+    private Vector2d parkPosition() {
+        return sidedInchesVector(PARK_X_IN, PARK_Y_IN);
+    }
+
     @Override
     protected final void park(RRMecanumDriveBase drive) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(false)
-                                        .splineTo(new Pose2d(sidedInchesVector(0, 36), headingTowardsDepotWall()))
+                                        .splineTo(new Pose2d(parkPosition(), headingTowardsDepotWall()))
                                         .build());
     }
 }
