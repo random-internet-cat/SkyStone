@@ -14,21 +14,32 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 
 @Config
 public abstract class AutoBase extends LinearOpMode {
+    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -36;
+    public static double _STONE_MIDDLE_X_IN = -43;
+    public static double _STONE_CLOSE_TO_WALL_X_IN = -50;
+
     enum QuarryState {
-        CLOSE_TO_BRIDGES(inches(-36)),
-        MIDDLE(inches(-43)),
-        CLOSE_TO_WALL(inches(-50)),
+        CLOSE_TO_BRIDGES {
+            @Override
+            public double xPosition() {
+                return inches(_STONE_CLOSE_TO_BRIDGES_X_IN);
+            }
+        },
+        MIDDLE {
+            @Override
+            public double xPosition() {
+                return inches(_STONE_MIDDLE_X_IN);
+            }
+        },
+        CLOSE_TO_WALL {
+            @Override
+            public double xPosition() {
+                return inches(_STONE_CLOSE_TO_WALL_X_IN);
+            }
+        },
         ;
 
-        private final double xPosition;
-
-        private QuarryState(double xPosition) {
-            this.xPosition = xPosition;
-        }
-
-        public double xPosition() {
-            return xPosition;
-        }
+        public abstract double xPosition();
     }
 
     enum SkystoneRelativePos {
