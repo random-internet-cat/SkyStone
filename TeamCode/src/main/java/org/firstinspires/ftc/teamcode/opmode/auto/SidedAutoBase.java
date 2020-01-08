@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 
+import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
+
 @Config
 public abstract class SidedAutoBase extends AutoBase {
     enum SideYSign {
@@ -31,7 +33,12 @@ public abstract class SidedAutoBase extends AutoBase {
         return ySign.scale(raw);
     }
 
-    protected abstract double grabStoneYPos();
+    public static double GRAB_STONE_Y_POS_IN = 33;
+
+    private double grabStoneYPos() {
+        return sideY(inches(GRAB_STONE_Y_POS_IN));
+    }
+
     protected abstract double grabStoneHeading();
 
     @Override

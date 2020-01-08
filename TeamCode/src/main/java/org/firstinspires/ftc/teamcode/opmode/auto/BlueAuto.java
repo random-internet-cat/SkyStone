@@ -37,13 +37,6 @@ public class BlueAuto extends SidedAutoBase {
         return new Pose2d(inchesVector(-32.0, 64.0), degHeading(270));
     }
 
-    public static double GRAB_STONE_Y_POS_IN = 33;
-
-    @Override
-    protected double grabStoneYPos() {
-        return inches(GRAB_STONE_Y_POS_IN);
-    }
-
     @Override
     protected double grabStoneHeading() {
         return degHeading(270);
