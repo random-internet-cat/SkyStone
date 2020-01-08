@@ -62,6 +62,11 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     @Override
+    protected final Pose2d startPosition() {
+        return new Pose2d(sidedInchesVector(-32, 64), headingAwayFromHomeWall());
+    }
+
+    @Override
     protected final void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(false)

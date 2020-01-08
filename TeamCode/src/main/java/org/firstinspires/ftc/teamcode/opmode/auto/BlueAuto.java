@@ -33,11 +33,6 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     @Override
-    protected Pose2d startPosition() {
-        return new Pose2d(inchesVector(-32.0, 64.0), degHeading(270));
-    }
-
-    @Override
     protected double headingTowardsFoundationWall() {
         return degHeading(180);
     }
