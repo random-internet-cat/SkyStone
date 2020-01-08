@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.util
 
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import org.firstinspires.ftc.teamcode.util.roadrunner.PositionVector
+import org.firstinspires.ftc.teamcode.util.roadrunner.RRAnglePoint
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.*
 
@@ -41,6 +42,9 @@ object RRUnits {
 
     @JvmStatic
     fun radHeading(rad: Double) = RadiansPoint(rad).roadrunner().raw
+
+    @JvmStatic
+    fun oppositeHeading(rrHeading: Double) = (RRAnglePoint(rrHeading) + Degrees(180)).roadrunner().raw
 
     @JvmStatic
     fun rr(angle: Angle) = angle.roadrunner().raw
