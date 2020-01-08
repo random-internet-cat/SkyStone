@@ -76,4 +76,20 @@ public abstract class SidedAutoBase extends AutoBase {
                                             grabStoneHeading()
                                         )).build());
     }
+
+    @Override
+    protected final void moveToGrabFoundation(RRMecanumDriveBase drive) {
+        // Move to center of field
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(true)
+                                        .splineTo(new Pose2d(sidedInchesVector(12, 42), headingTowardsFoundationWall()))
+                                        .build());
+
+        // Move to foundation
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(true)
+                                        .splineTo(new Pose2d(sidedInchesVector(48, 31), headingTowardsHomeWall()))
+                                        .build()
+        );
+    }
 }

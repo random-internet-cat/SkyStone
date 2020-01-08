@@ -43,22 +43,6 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     @Override
-    protected void moveToGrabFoundation(RRMecanumDriveBase drive) {
-        // Move to center of field
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(true)
-                                        .splineTo(new Pose2d(inchesVector(12, 42), degHeading(180)))
-                                        .build());
-
-        // Move to foundation
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(true)
-                                        .splineTo(new Pose2d(inchesVector(48, 31), degHeading(90)))
-                                        .build()
-        );
-    }
-
-    @Override
     protected void moveFoundationToDepot(RRMecanumDriveBase drive) {
         // Spline to make foundation horizontal
         drive.followTrajectorySync(drive.trajectoryBuilder()
