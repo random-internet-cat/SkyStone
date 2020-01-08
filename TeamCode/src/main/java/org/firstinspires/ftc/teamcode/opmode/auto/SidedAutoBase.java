@@ -108,11 +108,11 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final void moveToGrabFoundation(RRMecanumDriveBase drive) {
-        // Move to center of field
-        splineToReversed(drive, new Pose2d(middleStopPosition(), headingTowardsFoundationWall()));
-
-        // Move to foundation
-        splineToReversed(drive, new Pose2d(grabFoundationPosition(), headingTowardsHomeWall()));
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(true)
+                                        .splineTo(new Pose2d(middleStopPosition(), headingTowardsFoundationWall()))
+                                        .splineTo(new Pose2d(grabFoundationPosition(), headingTowardsHomeWall()))
+                                        .build());
     }
 
     @Override
