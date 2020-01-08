@@ -2,10 +2,13 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 
+import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 
 @Config
 public abstract class SidedAutoBase extends AutoBase {
@@ -33,10 +36,18 @@ public abstract class SidedAutoBase extends AutoBase {
         return ySign.scale(raw);
     }
 
+    private double ySidedInches(double y) {
+        return inches(y);
+    }
+
+    private Vector2d sidedInchesVector(double x, double y) {
+        return inchesVector(x, sideY(y));
+    }
+
     public static double GRAB_STONE_Y_POS_IN = 33;
 
     private double grabStoneYPos() {
-        return sideY(inches(GRAB_STONE_Y_POS_IN));
+        return ySidedInches(GRAB_STONE_Y_POS_IN);
     }
 
     protected abstract double grabStoneHeading();
