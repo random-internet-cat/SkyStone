@@ -14,7 +14,7 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 
 @Autonomous
 @Config
-public class BlueAuto extends AutoBase {
+public class BlueAuto extends SidedAutoBase {
     @Override
     protected QuarryState mapQuarryState(SkystoneRelativePos relativePos) {
         Objects.requireNonNull(relativePos, "relativePos");

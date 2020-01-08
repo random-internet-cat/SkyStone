@@ -75,18 +75,7 @@ public abstract class AutoBase extends LinearOpMode {
         sleep(500);
     }
 
-    protected abstract double grabStoneYPos();
-    protected abstract double grabStoneHeading();
-
-    private void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState) {
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(false)
-                                        .splineTo(new Pose2d(
-                                            quarryState.xPosition(),
-                                            grabStoneYPos(),
-                                            grabStoneHeading()
-                                        )).build());
-    }
+    protected abstract void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState);
 
     private void moveToGrabStone(RRMecanumDriveBase drive) {
         moveToGrabStoneInternal(drive, readQuarryState());
