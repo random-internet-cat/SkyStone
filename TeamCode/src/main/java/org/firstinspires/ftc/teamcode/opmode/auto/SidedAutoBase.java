@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 
+@Config
 public abstract class SidedAutoBase extends AutoBase {
     enum SideYSign {
         POSITIVE(1),
