@@ -57,6 +57,10 @@ public abstract class SidedAutoBase extends AutoBase {
         return oppositeHeading(headingTowardsHomeWall());
     }
 
+    private double headingTowardsDepotWall() {
+        return oppositeHeading(headingTowardsFoundationWall());
+    }
+
     private double grabStoneHeading() {
         return headingAwayFromHomeWall();
     }
