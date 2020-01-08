@@ -8,7 +8,6 @@ import java.util.Objects;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 
 @Autonomous
-@Config
 public class RedAuto extends SidedAutoBase {
     RedAuto() {
         super(SideYSign.POSITIVE);
