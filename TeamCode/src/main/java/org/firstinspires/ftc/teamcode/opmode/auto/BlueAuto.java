@@ -14,7 +14,7 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 
 @Autonomous
 public class BlueAuto extends SidedAutoBase {
-    BlueAuto() {
+    public BlueAuto() {
         super(SideYSign.POSITIVE);
     }
 

@@ -28,7 +28,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     private final SideYSign ySign;
 
-    SidedAutoBase(SideYSign ySign) {
+    protected SidedAutoBase(SideYSign ySign) {
         this.ySign = ySign;
     }
 
