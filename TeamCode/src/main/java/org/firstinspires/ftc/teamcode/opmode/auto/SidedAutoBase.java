@@ -55,6 +55,23 @@ public abstract class SidedAutoBase extends AutoBase {
         return oppositeHeading(headingTowardsFoundationWall());
     }
 
+    private String formatPose(Pose2d pose) {
+        return pose.toString();
+    }
+
+    private void splineToInternal(RRMecanumDriveBase drive, boolean isReversed, Pose2d pose) {
+        log((isReversed ? "Reverse" : "Forward") + "-splining to: " + formatPose(pose));
+        drive.followTrajectorySync(drive.trajectoryBuilder().setReversed(isReversed).splineTo(pose).build());
+    }
+
+    private void splineToReversed(RRMecanumDriveBase drive, Pose2d pose) {
+        splineToInternal(drive, true, pose);
+    }
+
+    private void splineToForward(RRMecanumDriveBase drive, Pose2d pose) {
+        splineToInternal(drive, false, pose);
+    }
+
     private double grabStoneHeading() {
         return headingAwayFromHomeWall();
     }
@@ -72,13 +89,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState) {
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(false)
-                                        .splineTo(new Pose2d(
-                                            quarryState.xPosition(),
-                                            grabStoneYPos(),
-                                            grabStoneHeading()
-                                        )).build());
+        splineToForward(drive, new Pose2d(quarryState.xPosition(), grabStoneYPos(), grabStoneHeading()));
     }
 
     public static double MIDDLE_STOP_X_IN = 12;
@@ -98,27 +109,18 @@ public abstract class SidedAutoBase extends AutoBase {
     @Override
     protected final void moveToGrabFoundation(RRMecanumDriveBase drive) {
         // Move to center of field
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(true)
-                                        .splineTo(new Pose2d(middleStopPosition(), headingTowardsFoundationWall()))
-                                        .build());
+        splineToReversed(drive, new Pose2d(middleStopPosition(), headingTowardsFoundationWall()));
 
         // Move to foundation
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(true)
-                                        .splineTo(new Pose2d(grabFoundationPosition(), headingTowardsHomeWall()))
-                                        .build()
-        );
+        splineToReversed(drive, new Pose2d(grabFoundationPosition(), headingTowardsHomeWall()));
     }
 
     @Override
     protected final void moveFoundationToDepot(RRMecanumDriveBase drive) {
         // Spline to make foundation horizontal
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(false)
-                                        .splineTo(new Pose2d(sidedInchesVector(30, 42), headingTowardsDepotWall()))
-                                        .build());
+        splineToForward(drive, new Pose2d(sidedInchesVector(30, 42), headingTowardsDepotWall()));
 
+        log("Reversing");
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
                                         .forward(inches(-16))
@@ -134,9 +136,6 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final void park(RRMecanumDriveBase drive) {
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(false)
-                                        .splineTo(new Pose2d(parkPosition(), headingTowardsDepotWall()))
-                                        .build());
+        splineToForward(drive, new Pose2d(parkPosition(), headingTowardsDepotWall()));
     }
 }
