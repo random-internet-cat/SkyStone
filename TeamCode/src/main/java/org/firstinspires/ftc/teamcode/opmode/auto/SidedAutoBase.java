@@ -44,12 +44,6 @@ public abstract class SidedAutoBase extends AutoBase {
         return inchesVector(x, sideY(y));
     }
 
-    public static double GRAB_STONE_Y_POS_IN = 33;
-
-    private double grabStoneYPos() {
-        return ySidedInches(GRAB_STONE_Y_POS_IN);
-    }
-
     protected abstract double headingTowardsFoundationWall();
     protected abstract double headingTowardsHomeWall();
 
@@ -68,6 +62,12 @@ public abstract class SidedAutoBase extends AutoBase {
     @Override
     protected final Pose2d startPosition() {
         return new Pose2d(sidedInchesVector(-32, 64), headingAwayFromHomeWall());
+    }
+
+    public static double GRAB_STONE_Y_POS_IN = 33;
+
+    private double grabStoneYPos() {
+        return ySidedInches(GRAB_STONE_Y_POS_IN);
     }
 
     @Override
