@@ -5,6 +5,30 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 
 public abstract class SidedAutoBase extends AutoBase {
+    enum SideYSign {
+        POSITIVE(1),
+        NEGATIVE(-1)
+        ;
+
+        private final int multiplier;
+
+        private SideYSign(int multiplier) { this.multiplier = multiplier; }
+
+        double scale(double unsignedY) {
+            return unsignedY * multiplier;
+        }
+    }
+
+    private final SideYSign ySign;
+
+    SidedAutoBase(SideYSign ySign) {
+        this.ySign = ySign;
+    }
+
+    private double sideY(double raw) {
+        return ySign.scale(raw);
+    }
+
     protected abstract double grabStoneYPos();
     protected abstract double grabStoneHeading();
 
