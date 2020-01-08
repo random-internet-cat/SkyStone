@@ -102,12 +102,18 @@ public abstract class AutoBase extends LinearOpMode {
 
     @Override
     public final void runOpMode() throws InterruptedException {
+        log("Initializing...");
+
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
         setupDrive(drive);
 
+        log("Initialized. Waiting for start.");
+
         waitForStart();
+
+        log("Starting!");
 
         checkInterrupted();
 
