@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -12,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 
 @Autonomous
+@Config
 public class BlueAuto extends AutoBase {
     @Override
     protected QuarryState mapQuarryState(SkystoneRelativePos relativePos) {
@@ -31,9 +33,11 @@ public class BlueAuto extends AutoBase {
         return new Pose2d(inchesVector(-32.0, 64.0), degHeading(270));
     }
 
+    public static double GRAB_STONE_Y_POS_IN = 33;
+
     @Override
     protected double grabStoneYPos() {
-        return inches(33);
+        return inches(GRAB_STONE_Y_POS_IN);
     }
 
     @Override
