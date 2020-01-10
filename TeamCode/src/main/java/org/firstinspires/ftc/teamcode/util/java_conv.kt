@@ -47,6 +47,12 @@ object RRUnits {
     fun oppositeHeading(rrHeading: Double) = (RRAnglePoint(rrHeading) + Degrees(180)).roadrunner().raw
 
     @JvmStatic
+    fun ofHeading(heading: Double): AnglePoint = RRAnglePoint(heading)
+
+    @JvmStatic
+    fun sub(first: AnglePoint, second: AnglePoint): Angle = first - second
+
+    @JvmStatic
     fun rr(angle: Angle) = angle.roadrunner().raw
 
     @JvmStatic
