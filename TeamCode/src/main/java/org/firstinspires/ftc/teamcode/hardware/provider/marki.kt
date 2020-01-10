@@ -73,7 +73,12 @@ object MarkIHardwareProvider {
 
         firstMotor.setReversed()
 
-        return MarkIIntake(firstMotor, secondMotor)
+        val firstServo = hardwareMap.getCRServo("left_intake_servo")
+        val secondServo = hardwareMap.getCRServo("right_intake_servo")
+
+        secondServo.direction = DcMotorSimple.Direction.REVERSE
+
+        return MarkIIntake(listOf(firstMotor, secondMotor), listOf(firstServo, secondServo))
     }
 
     @JvmStatic
