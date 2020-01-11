@@ -6,9 +6,12 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 
+import static java.lang.Math.PI;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.ofHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.oppositeHeading;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.sub;
 
 @Config
 public abstract class SidedAutoBase extends AutoBase {
@@ -70,6 +73,11 @@ public abstract class SidedAutoBase extends AutoBase {
 
     private void splineToForward(RRMecanumDriveBase drive, Pose2d pose) {
         splineToInternal(drive, false, pose);
+    }
+
+    private void turnToHeading(RRMecanumDriveBase drive, double heading) {
+        log("Turning to: " + (heading * 180/PI));
+        drive.turnSync(sub(ofHeading(heading), ofHeading(drive.getPoseEstimate().getHeading())));
     }
 
     private double grabStoneHeading() {
