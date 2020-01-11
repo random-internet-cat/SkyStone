@@ -75,7 +75,7 @@ inline class DegreesPerSecondSquared(val raw: RawAngularAcceleration) : AngularA
     }
 }
 
-inline fun DegreesPerSecondSquared(raw: Int) = RadiansPerSecondSquared(raw.toDouble())
+inline fun DegreesPerSecondSquared(raw: Int) = DegreesPerSecondSquared(raw.toDouble())
 inline fun DegreesPerSecondSquared(accel: RevolutionsPerSecondSquared) = DegreesPerSecondSquared(accel.raw * 360)
 inline fun DegreesPerSecondSquared(accel: DegreesPerSecondSquared) = accel
 fun DegreesPerSecondSquared(accel: AngularAcceleration) = DegreesPerSecondSquared(accel.toRevolutionsPerSecondSquared())
