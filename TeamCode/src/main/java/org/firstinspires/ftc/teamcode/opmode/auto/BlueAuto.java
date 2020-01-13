@@ -33,7 +33,7 @@ public class BlueAuto extends SidedAutoBase {
 
     @Override
     protected double headingTowardsFoundationWall() {
-        return degHeading(-180);
+        return degHeading(0);
     }
 
     @Override
