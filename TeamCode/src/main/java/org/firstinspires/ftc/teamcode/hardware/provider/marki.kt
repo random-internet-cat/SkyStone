@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMo
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.intake_flippers.MarkIIntakeFlippers
+import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 
@@ -101,13 +102,22 @@ object MarkIHardwareProvider {
     }
 
     @JvmStatic
+    fun makeRearClaws(hardwareMap: HardwareMap): MarkIRearClaws {
+        val left = hardwareMap.getServo("rear_clamp_left")
+        val right = hardwareMap.getServo("rear_clamp_right")
+
+        return MarkIRearClaws(left = left, right = right)
+    }
+
+    @JvmStatic
     fun makeHardware(hardwareMap: HardwareMap): MarkIHardware {
         return MarkIHardware(
             makeDrive(hardwareMap),
             makeArm(hardwareMap),
             makeIntake(hardwareMap),
             makeIntakeFlippers(hardwareMap),
-            makeFoundationMover(hardwareMap)
+            makeFoundationMover(hardwareMap),
+            makeRearClaws(hardwareMap)
         )
     }
 }
