@@ -117,23 +117,9 @@ public abstract class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
-        log("Releasing intake");
-        releaseIntake(hardware.getIntakeFlippers());
-        log("Released intake");
-
-        checkInterrupted();
-
-        log("Starting intake");
-        hardware.getIntake().intake();
-        log("Started intake");
-
         log("Moving to grab stone");
         moveToGrabStone(drive);
         log("Moved to grab stone");
-
-        log("Stopping intake");
-        hardware.getIntake().stop();
-        log("Stopped intake");
 
         checkInterrupted();
 
