@@ -81,12 +81,12 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     private double grabStoneHeading() {
-        return headingAwayFromHomeWall();
+        return headingTowardsHomeWall();
     }
 
     @Override
     protected final Pose2d startPosition() {
-        return new Pose2d(sidedInchesVector(-36, 64), headingAwayFromHomeWall());
+        return new Pose2d(sidedInchesVector(-36, 64), headingTowardsHomeWall());
     }
 
     public static double GRAB_STONE_Y_POS_IN = 33;
@@ -97,46 +97,62 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState) {
-        splineToForward(drive, new Pose2d(quarryState.xPosition(), grabStoneYPos(), grabStoneHeading()));
+        splineToReversed(drive, new Pose2d(quarryState.xPosition(), grabStoneYPos(), grabStoneHeading()));
     }
 
     public static double MIDDLE_STOP_X_IN = 12;
-    public static double MIDDLE_STOP_Y_IN = 42;
+    public static double MIDDLE_STOP_Y_IN = 48;
 
     private Vector2d middleStopPosition() {
         return sidedInchesVector(MIDDLE_STOP_X_IN, MIDDLE_STOP_Y_IN);
     }
 
     public static double GRAB_FOUNDATION_X_IN = 48;
-    public static double GRAB_FOUNDATION_Y_IN = 31;
+    public static double GRAB_FOUNDATION_Y_IN = 48;
 
     private Vector2d grabFoundationPosition() {
         return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
     }
 
+    public static double GRAB_FOUNDATION_REVERSE_DISTANCE_IN = 8;
+
     @Override
     protected final void moveToGrabFoundation(RRMecanumDriveBase drive) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(true)
+                                        .setReversed(false)
                                         .splineTo(new Pose2d(middleStopPosition(), headingTowardsFoundationWall()))
                                         .splineTo(new Pose2d(grabFoundationPosition(), headingTowardsHomeWall()))
                                         .build());
+
+        log("Reversing");
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(true)
+                                        .forward(inches(-GRAB_FOUNDATION_REVERSE_DISTANCE_IN))
+                                        .build());
+    }
+
+    public static double MOVE_FOUNDATION_TO_DEPOT_REVERSE_DISTANCE_IN = 16;
+    public static double ALIGN_FOUNDATION_X_IN = 30;
+    public static double ALIGN_FOUNDATION_Y_IN = 42;
+
+    private Pose2d alignFoundationPosition() {
+        return new Pose2d(sidedInchesVector(ALIGN_FOUNDATION_X_IN, ALIGN_FOUNDATION_Y_IN), headingTowardsDepotWall());
     }
 
     @Override
     protected final void moveFoundationToDepot(RRMecanumDriveBase drive) {
         // Spline to make foundation horizontal
-        splineToForward(drive, new Pose2d(sidedInchesVector(30, 42), headingTowardsDepotWall()));
+        splineToForward(drive, alignFoundationPosition());
 
         log("Reversing");
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
-                                        .forward(inches(-16))
+                                        .forward(inches(-MOVE_FOUNDATION_TO_DEPOT_REVERSE_DISTANCE_IN))
                                         .build());
     }
 
     public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 36;
+    public static double PARK_Y_IN = 46;
 
     private Vector2d parkPosition() {
         return sidedInchesVector(PARK_X_IN, PARK_Y_IN);
