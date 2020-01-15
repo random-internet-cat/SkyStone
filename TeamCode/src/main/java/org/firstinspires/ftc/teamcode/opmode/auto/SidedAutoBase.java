@@ -120,7 +120,7 @@ public abstract class SidedAutoBase extends AutoBase {
         return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
     }
 
-    public static double GRAB_FOUNDATION_REVERSE_DISTANCE_IN = 8;
+    public static double GRAB_FOUNDATION_REVERSE_DISTANCE_IN = 16;
 
     @Override
     protected final void moveToGrabFoundation(RRMecanumDriveBase drive) {
@@ -158,7 +158,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 46;
+    public static double PARK_Y_IN = 40;
 
     private Vector2d parkPosition() {
         return sidedInchesVector(PARK_X_IN, PARK_Y_IN);
