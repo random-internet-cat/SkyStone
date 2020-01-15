@@ -96,7 +96,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     @Override
-    protected final void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState) {
+    protected final void moveToGrabStone(RRMecanumDriveBase drive, QuarryState quarryState) {
         splineToReversed(drive, new Pose2d(quarryState.xPosition(), grabStoneYPos(), grabStoneHeading()));
     }
 

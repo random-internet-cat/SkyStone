@@ -75,11 +75,7 @@ public abstract class AutoBase extends LinearOpMode {
         sleep(500);
     }
 
-    protected abstract void moveToGrabStoneInternal(RRMecanumDriveBase drive, QuarryState quarryState);
-
-    private void moveToGrabStone(RRMecanumDriveBase drive) {
-        moveToGrabStoneInternal(drive, readQuarryState());
-    }
+    protected abstract void moveToGrabStone(RRMecanumDriveBase drive, QuarryState quarryState);
 
     private void grabFoundation(MarkIFoundationMover foundationMover) {
         foundationMover.grab();
@@ -107,6 +103,8 @@ public abstract class AutoBase extends LinearOpMode {
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
+        QuarryState quarryState = readQuarryState();
+
         setupDrive(drive);
 
         log("Initialized. Waiting for start.");
@@ -118,7 +116,7 @@ public abstract class AutoBase extends LinearOpMode {
         checkInterrupted();
 
         log("Moving to grab stone");
-        moveToGrabStone(drive);
+        moveToGrabStone(drive, quarryState);
         log("Moved to grab stone");
 
         checkInterrupted();
