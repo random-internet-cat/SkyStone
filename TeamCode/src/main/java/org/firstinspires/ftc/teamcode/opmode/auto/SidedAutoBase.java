@@ -86,7 +86,12 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final Pose2d startPosition() {
-        return new Pose2d(sidedInchesVector(-36, 64), headingTowardsHomeWall());
+        return new Pose2d(sidedInchesVector(-36, 64), headingAwayFromHomeWall());
+    }
+
+    @Override
+    protected void turnTowardsWall(RRMecanumDriveBase drive) {
+        turnToHeading(drive, headingTowardsHomeWall());
     }
 
     public static double GRAB_STONE_Y_POS_IN = 33;

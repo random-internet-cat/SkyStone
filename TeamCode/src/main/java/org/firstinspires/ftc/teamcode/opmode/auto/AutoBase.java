@@ -70,6 +70,8 @@ public abstract class AutoBase extends LinearOpMode {
         drive.setPoseEstimate(startPosition());
     }
 
+    protected abstract void turnTowardsWall(RRMecanumDriveBase drive);
+
     private void releaseIntake(MarkIIntakeFlippers flippers) {
         flippers.release();
         sleep(500);
@@ -114,6 +116,10 @@ public abstract class AutoBase extends LinearOpMode {
         log("Starting!");
 
         checkInterrupted();
+
+        log("Turning to face wall");
+        turnTowardsWall(drive);
+        log("Turned to face wall");
 
         log("Moving to grab stone");
         moveToGrabStone(drive, quarryState);
