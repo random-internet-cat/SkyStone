@@ -136,7 +136,7 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .build());
     }
 
-    public static double MOVE_FOUNDATION_TO_DEPOT_REVERSE_DISTANCE_IN = 16;
+    public static double MOVE_FOUNDATION_TO_BUILDING_ZONE_REVERSE_DISTANCE_IN = 16;
     public static double ALIGN_FOUNDATION_X_IN = 30;
     public static double ALIGN_FOUNDATION_Y_IN = 42;
 
@@ -145,14 +145,14 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     @Override
-    protected final void moveFoundationToDepot(RRMecanumDriveBase drive) {
+    protected final void moveFoundationToBuildingZone(RRMecanumDriveBase drive) {
         // Spline to make foundation horizontal
         splineToForward(drive, alignFoundationPosition());
 
         log("Reversing");
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
-                                        .forward(inches(-MOVE_FOUNDATION_TO_DEPOT_REVERSE_DISTANCE_IN))
+                                        .forward(inches(-MOVE_FOUNDATION_TO_BUILDING_ZONE_REVERSE_DISTANCE_IN))
                                         .build());
     }
 

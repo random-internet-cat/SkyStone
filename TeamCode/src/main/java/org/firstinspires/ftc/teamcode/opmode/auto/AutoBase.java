@@ -90,7 +90,7 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive);
-    protected abstract void moveFoundationToDepot(RRMecanumDriveBase drive);
+    protected abstract void moveFoundationToBuildingZone(RRMecanumDriveBase drive);
     protected abstract void park(RRMecanumDriveBase drive);
 
     protected final void log(String message) {
@@ -140,7 +140,7 @@ public abstract class AutoBase extends LinearOpMode {
         checkInterrupted();
 
         log("Moving foundation to depot");
-        moveFoundationToDepot(drive);
+        moveFoundationToBuildingZone(drive);
         log("Moved foundation to depot");
 
         checkInterrupted();
