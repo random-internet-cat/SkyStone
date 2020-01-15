@@ -91,6 +91,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected void turnTowardsWall(RRMecanumDriveBase drive) {
+        drive.followTrajectorySync(drive.trajectoryBuilder().forward(inches(6)).build());
         turnToHeading(drive, headingTowardsHomeWall());
     }
 
