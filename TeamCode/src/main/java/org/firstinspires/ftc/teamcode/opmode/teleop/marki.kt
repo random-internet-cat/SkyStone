@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop
 
-import com.acmerobotics.dashboard.FtcDashboard
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.*
@@ -57,8 +56,8 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleFoundationMoverInputs(gamepad: Gamepad, foundationMover: BaseFoundationMover) {
         when {
-            gamepad.dpad_down -> foundationMover.grab()
-            gamepad.dpad_up -> foundationMover.release()
+            gamepad.dpad_down -> foundationMover.grabBoth()
+            gamepad.dpad_up -> foundationMover.releaseBoth()
         }
     }
 
