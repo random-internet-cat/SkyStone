@@ -27,10 +27,28 @@ class MarkITeleop : LinearOpMode() {
 
     private fun driveInputRamp(joystickInput: Float) = driveInputRamp(joystickInput.toDouble())
 
+    private var _isSlow: Boolean = false
+    private var _slowPressedLastTick: Boolean = false
+
+    private fun shouldDriveSlow(gamepad: Gamepad): Boolean {
+        val slowButtonIsPressed = gamepad.a
+
+        if (slowButtonIsPressed && !_slowPressedLastTick) {
+            _isSlow = !_isSlow
+        }
+
+        _slowPressedLastTick = slowButtonIsPressed
+
+        return _isSlow
+    }
+
     private fun handleDriveInputs(gamepad: Gamepad, drive: MecanumDrive, maxDriveRPM: RRAngularVelocity, maxVel: RRVelocity) {
-        val x = driveInputRamp(gamepad.left_stick_y * -1) * maxVel
-        val y = driveInputRamp(gamepad.left_stick_x * -1) * maxVel
-        val turn = (gamepad.right_stick_x * -1).toDouble().cutoffToZero() * maxDriveRPM
+        val isSlowMode = shouldDriveSlow(gamepad)
+        val slowFactor = if (isSlowMode) 0.5 else 1.0
+
+        val x = driveInputRamp(gamepad.left_stick_y * -1) * maxVel * slowFactor
+        val y = driveInputRamp(gamepad.left_stick_x * -1) * maxVel * slowFactor
+        val turn = (gamepad.right_stick_x * -1).toDouble().cutoffToZero() * maxDriveRPM * slowFactor
 
         drive.mecanumDrive(x = x, y = y, turn = turn)
     }
