@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.provider
 
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
@@ -9,13 +8,11 @@ import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
 import org.firstinspires.ftc.teamcode.hardware.drive.*
 import org.firstinspires.ftc.teamcode.hardware.drive.constants.MarkIDriveConstants
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
-import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.intake_flippers.MarkIIntakeFlippers
 import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws
 import org.firstinspires.ftc.teamcode.util.*
-import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 
 object MarkIHardwareProvider {
     @JvmStatic
@@ -94,19 +91,19 @@ object MarkIHardwareProvider {
 
     @JvmStatic
     fun makeFoundationMover(hardwareMap: HardwareMap): MarkIFoundationMover {
-        val firstServo = hardwareMap.getServo("foundation_mover_1")
-        val secondServo = hardwareMap.getServo("foundation_mover_2")
-        secondServo.direction = Servo.Direction.REVERSE
+        val rightServo = hardwareMap.getServo("foundation_mover_1")
+        val leftServo = hardwareMap.getServo("foundation_mover_2")
+        leftServo.direction = Servo.Direction.REVERSE
 
-        return MarkIFoundationMover(firstServo, secondServo)
+        return MarkIFoundationMover(leftServo, rightServo)
     }
 
     @JvmStatic
     fun makeRearClaws(hardwareMap: HardwareMap): MarkIRearClaws {
-        val left = hardwareMap.getServo("rear_clamp_left")
-        val right = hardwareMap.getServo("rear_clamp_right")
+        val right = hardwareMap.getServo("rear_clamp_left")
+        val left = hardwareMap.getServo("rear_clamp_right")
 
-        left.direction = Servo.Direction.REVERSE
+        right.direction = Servo.Direction.REVERSE
 
         return MarkIRearClaws(left = left, right = right)
     }
