@@ -31,8 +31,8 @@ open class BaseFoundationMover(val left: Servo, val right: Servo, val config: Fo
     fun release() = releaseBoth()
 
     fun moveLeftToCollectHeight() = setLeft(config.collectStonePosition)
-    fun moveRightToCollectheight() = setRight(config.collectStonePosition)
-    fun moveBothToCollectHeight() { moveLeftToCollectHeight(); moveRightToCollectheight(); }
+    fun moveRightToCollectHeight() = setRight(config.collectStonePosition)
+    fun moveBothToCollectHeight() { moveLeftToCollectHeight(); moveRightToCollectHeight(); }
     fun moveToCollectHeight() = moveBothToCollectHeight()
 
     fun moveLeftToStoneAboveGround() = setLeft(config.stoneAboveGroundPosition)
