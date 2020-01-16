@@ -106,6 +106,8 @@ object MarkIHardwareProvider {
         val left = hardwareMap.getServo("rear_clamp_left")
         val right = hardwareMap.getServo("rear_clamp_right")
 
+        left.direction = Servo.Direction.REVERSE
+
         return MarkIRearClaws(left = left, right = right)
     }
 
