@@ -77,7 +77,9 @@ public abstract class AutoBase extends LinearOpMode {
         sleep(500);
     }
 
+    protected abstract void prepareToGrabStone(MarkIHardware hardware, QuarryState quarryState);
     protected abstract void moveToGrabStone(RRMecanumDriveBase drive, QuarryState quarryState);
+    protected abstract void grabStone(MarkIHardware hardware, QuarryState quarryState);
 
     private void grabFoundation(MarkIFoundationMover foundationMover) {
         foundationMover.grab();
@@ -90,6 +92,7 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive);
+    protected abstract void releaseStone(MarkIHardware hardware, QuarryState quarryState);
     protected abstract void moveFoundationToBuildingZone(RRMecanumDriveBase drive);
     protected abstract void park(RRMecanumDriveBase drive);
 
@@ -121,15 +124,35 @@ public abstract class AutoBase extends LinearOpMode {
         turnTowardsWall(drive);
         log("Turned to face wall");
 
+        checkInterrupted();
+
+        log("Preparing to grab stone");
+        prepareToGrabStone(hardware, quarryState);
+        log("Prepared to grab stone");
+
+        checkInterrupted();
+
         log("Moving to grab stone");
         moveToGrabStone(drive, quarryState);
         log("Moved to grab stone");
 
         checkInterrupted();
 
+        log("Grabbing stone");
+        grabStone(hardware, quarryState);
+        log("Grabbed stone");
+
+        checkInterrupted();
+
         log("Moving to grab foundation");
         moveToGrabFoundation(drive);
         log("Moved to grab foundation");
+
+        checkInterrupted();
+
+        log("Releasing stone");
+        releaseStone(hardware, quarryState);
+        log("Released stone");
 
         checkInterrupted();
 

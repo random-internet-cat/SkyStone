@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws;
+
 import java.util.Objects;
 
 import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
@@ -24,6 +26,16 @@ public class RedAuto extends SidedAutoBase {
         }
 
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected void clampRearClawsForStone(MarkIRearClaws claws) {
+        claws.clampLeft();
+    }
+
+    @Override
+    protected void releaseRearClawsForStone(MarkIRearClaws claws) {
+        claws.releaseLeft();
     }
 
     @Override

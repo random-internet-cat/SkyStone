@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
+import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
+import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws;
 
 import java.util.Objects;
 
@@ -29,6 +31,16 @@ public class BlueAuto extends SidedAutoBase {
         }
 
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected void clampRearClawsForStone(MarkIRearClaws claws) {
+        claws.clampRight();
+    }
+
+    @Override
+    protected void releaseRearClawsForStone(MarkIRearClaws claws) {
+        claws.releaseRight();
     }
 
     @Override

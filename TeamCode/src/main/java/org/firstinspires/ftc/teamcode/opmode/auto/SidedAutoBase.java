@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
+import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
+import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws;
 
 import static java.lang.Math.PI;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
@@ -102,8 +104,24 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     @Override
+    protected void prepareToGrabStone(MarkIHardware hardware, QuarryState quarryState) {
+        hardware.getFoundationMover().moveToCollectHeight();
+    }
+
+    @Override
     protected final void moveToGrabStone(RRMecanumDriveBase drive, QuarryState quarryState) {
         splineToReversed(drive, new Pose2d(quarryState.xPosition(), grabStoneYPos(), grabStoneHeading()));
+    }
+
+    protected abstract void clampRearClawsForStone(MarkIRearClaws claws);
+    protected abstract void releaseRearClawsForStone(MarkIRearClaws claws);
+
+    @Override
+    protected void grabStone(MarkIHardware hardware, QuarryState quarryState) {
+        clampRearClawsForStone(hardware.getRearClaws());
+        sleep(500);
+        hardware.getFoundationMover().moveStoneAboveGround();
+        sleep(500);
     }
 
     public static double MIDDLE_STOP_X_IN = 12;
@@ -135,6 +153,11 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .setReversed(true)
                                         .forward(inches(-GRAB_FOUNDATION_REVERSE_DISTANCE_IN))
                                         .build());
+    }
+
+    @Override
+    protected void releaseStone(MarkIHardware hardware, QuarryState quarryState) {
+        releaseRearClawsForStone(hardware.getRearClaws());
     }
 
     public static double MOVE_FOUNDATION_TO_BUILDING_ZONE_REVERSE_DISTANCE_IN = 16;
