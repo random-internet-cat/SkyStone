@@ -73,7 +73,7 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleArmVerticalInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl) {
         when {
-            gamepad.y -> {
+            gamepad.right_bumper -> {
                 if (!_armMotionLastTick) {
                     val nextUpState = vertical.mostRecentAutomaticState().nextUp
                     if (nextUpState != null) vertical.moveToState(nextUpState)
@@ -82,7 +82,7 @@ class MarkITeleop : LinearOpMode() {
                 _armMotionLastTick = true
             }
 
-            gamepad.a -> {
+            gamepad.left_bumper -> {
                 if (!_armMotionLastTick) {
                     val nextDownState = vertical.mostRecentAutomaticState().nextDown
                     if (nextDownState != null) vertical.moveToState(nextDownState)
@@ -100,8 +100,8 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleArmHorizontalInputs(gamepad: Gamepad, horizontal: MarkIArm.HorizontalControl) {
         when {
-            gamepad.b -> horizontal.moveOut()
-            gamepad.x -> horizontal.moveIn()
+            gamepad.left_trigger > 0.1 -> horizontal.moveOut()
+            gamepad.right_trigger > 0.1 -> horizontal.moveIn()
             else -> horizontal.stop()
         }
     }
