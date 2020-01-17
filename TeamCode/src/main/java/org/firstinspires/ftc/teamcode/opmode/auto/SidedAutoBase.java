@@ -32,14 +32,28 @@ public abstract class SidedAutoBase extends AutoBase {
         }
     }
 
-    private final SideYSign ySign;
+    enum SideColor {
+        RED(SideYSign.POSITIVE),
+        BLUE(SideYSign.NEGATIVE)
+        ;
 
-    protected SidedAutoBase(SideYSign ySign) {
-        this.ySign = ySign;
+        private final SideYSign sideYSign;
+
+        private SideColor(SideYSign sideYSign) {
+            this.sideYSign = sideYSign;
+        }
+
+        public SideYSign sideYSign() { return sideYSign; }
+    }
+
+    private final SideColor sideColor;
+
+    protected SidedAutoBase(SideColor sideColor) {
+        this.sideColor = sideColor;
     }
 
     private double sideY(double raw) {
-        return ySign.scale(raw);
+        return sideColor.sideYSign().scale(raw);
     }
 
     private double ySidedInches(double y) {

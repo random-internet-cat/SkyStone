@@ -12,7 +12,7 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 @Autonomous
 public class BlueAuto extends SidedAutoBase {
     public BlueAuto() {
-        super(SideYSign.POSITIVE);
+        super(SideColor.BLUE);
     }
 
     @Override

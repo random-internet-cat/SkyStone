@@ -13,7 +13,7 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 @Autonomous
 public class RedAuto extends SidedAutoBase {
     public RedAuto() {
-        super(SideYSign.NEGATIVE);
+        super(SideColor.RED);
     }
 
     @Override
