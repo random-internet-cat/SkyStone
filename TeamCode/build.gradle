@@ -40,3 +40,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
     }
 }
+
+dependencies {
+    implementation 'org.openftc:easyopencv:1.3.1'
+}
