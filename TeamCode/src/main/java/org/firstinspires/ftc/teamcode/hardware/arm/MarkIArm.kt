@@ -49,7 +49,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             public var _COLLECT_TICKS: Int = 120
 
             @JvmField
-            public var _STAGE0_TICKS: Int = 400
+            public var _STAGE0_TICKS: Int = 500
 
             @JvmField
             public var _PER_STAGE_TICKS: Int = 730
@@ -62,7 +62,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         sealed class State {
             companion object {
                 private const val MIN_BLOCK_HEIGHT = 0
-                private const val MAX_BLOCK_HEIGHT = 6
+                private const val MAX_BLOCK_HEIGHT = 5
             }
 
             abstract val nextDown: State?
