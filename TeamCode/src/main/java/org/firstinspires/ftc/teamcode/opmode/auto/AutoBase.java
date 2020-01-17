@@ -42,7 +42,7 @@ public abstract class AutoBase extends LinearOpMode {
         public abstract double xPosition();
     }
 
-    enum SkystoneRelativePos {
+    public enum SkystoneRelativePos {
         LEFT,
         MIDDLE,
         RIGHT
@@ -100,8 +100,6 @@ public abstract class AutoBase extends LinearOpMode {
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
-        QuarryState quarryState = readQuarryState();
-
         setupDrive(drive);
 
         log("Initialized. Waiting for start.");
@@ -109,6 +107,10 @@ public abstract class AutoBase extends LinearOpMode {
         waitForStart();
 
         log("Starting!");
+
+        log("Reading quarry state");
+        QuarryState quarryState = readQuarryState();
+        log("Read quarry state, got: " + quarryState);
 
         checkInterrupted();
 
