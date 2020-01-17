@@ -14,9 +14,9 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 
 @Config
 public abstract class AutoBase extends LinearOpMode {
-    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -36;
-    public static double _STONE_MIDDLE_X_IN = -43;
-    public static double _STONE_CLOSE_TO_WALL_X_IN = -50;
+    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -33;
+    public static double _STONE_MIDDLE_X_IN = -40;
+    public static double _STONE_CLOSE_TO_WALL_X_IN = -47;
 
     enum QuarryState {
         CLOSE_TO_BRIDGES {
@@ -82,15 +82,16 @@ public abstract class AutoBase extends LinearOpMode {
     protected abstract void grabStone(MarkIHardware hardware, QuarryState quarryState);
 
     private void grabFoundation(MarkIFoundationMover foundationMover) {
-        foundationMover.grab();
+        foundationMover.grabBoth();
         sleep(1500 /* ms */);
     }
 
     private void releaseFoundation(MarkIFoundationMover foundationMover) {
-        foundationMover.release();
+        foundationMover.releaseBoth();
         sleep(1500 /* ms */);
     }
 
+    protected abstract void prepareToGrabFoundation(MarkIHardware hardware);
     protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive);
     protected abstract void releaseStone(MarkIHardware hardware, QuarryState quarryState);
     protected abstract void moveFoundationToBuildingZone(RRMecanumDriveBase drive);
@@ -143,6 +144,10 @@ public abstract class AutoBase extends LinearOpMode {
         log("Grabbed stone");
 
         checkInterrupted();
+
+        log("Preparing to grab foundation");
+        prepareToGrabFoundation(hardware);
+        log("Prepared to grab foundation");
 
         log("Moving to grab foundation");
         moveToGrabFoundation(drive);

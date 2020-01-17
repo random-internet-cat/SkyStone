@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
 import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws;
 
 import java.util.Objects;
 
 import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
-import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
-import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 
 @Autonomous
 public class BlueAuto extends SidedAutoBase {
@@ -41,6 +36,16 @@ public class BlueAuto extends SidedAutoBase {
     @Override
     protected void releaseRearClawsForStone(MarkIRearClaws claws) {
         claws.releaseRight();
+    }
+
+    @Override
+    protected void moveFoundationMoverToCollect(MarkIFoundationMover foundationMover) {
+        foundationMover.moveRightToCollectHeight();
+    }
+
+    @Override
+    protected void moveStoneAboveGround(MarkIFoundationMover foundationMover) {
+        foundationMover.moveRightToStoneAboveGround();
     }
 
     @Override

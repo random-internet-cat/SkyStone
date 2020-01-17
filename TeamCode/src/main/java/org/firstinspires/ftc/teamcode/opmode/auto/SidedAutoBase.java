@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
+import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
 import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws;
 
 import static java.lang.Math.PI;
@@ -42,7 +43,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     private double ySidedInches(double y) {
-        return inches(y);
+        return sideY(inches(y));
     }
 
     private Vector2d sidedInchesVector(double x, double y) {
@@ -97,15 +98,18 @@ public abstract class SidedAutoBase extends AutoBase {
         turnToHeading(drive, headingTowardsHomeWall());
     }
 
-    public static double GRAB_STONE_Y_POS_IN = 33;
+    public static double GRAB_STONE_Y_POS_IN = 36;
 
     private double grabStoneYPos() {
         return ySidedInches(GRAB_STONE_Y_POS_IN);
     }
 
+    protected abstract void moveFoundationMoverToCollect(MarkIFoundationMover foundationMover);
+
     @Override
     protected void prepareToGrabStone(MarkIHardware hardware, QuarryState quarryState) {
-        hardware.getFoundationMover().moveToCollectHeight();
+        moveFoundationMoverToCollect(hardware.getFoundationMover());
+        hardware.getRearClaws().releaseBoth();
     }
 
     @Override
@@ -116,29 +120,36 @@ public abstract class SidedAutoBase extends AutoBase {
     protected abstract void clampRearClawsForStone(MarkIRearClaws claws);
     protected abstract void releaseRearClawsForStone(MarkIRearClaws claws);
 
+    protected abstract void moveStoneAboveGround(MarkIFoundationMover foundationMover);
+
     @Override
     protected void grabStone(MarkIHardware hardware, QuarryState quarryState) {
         clampRearClawsForStone(hardware.getRearClaws());
         sleep(500);
-        hardware.getFoundationMover().moveStoneAboveGround();
+        moveStoneAboveGround(hardware.getFoundationMover());
         sleep(500);
     }
 
     public static double MIDDLE_STOP_X_IN = 12;
-    public static double MIDDLE_STOP_Y_IN = 48;
+    public static double MIDDLE_STOP_Y_IN = 43;
 
     private Vector2d middleStopPosition() {
         return sidedInchesVector(MIDDLE_STOP_X_IN, MIDDLE_STOP_Y_IN);
     }
 
-    public static double GRAB_FOUNDATION_X_IN = 48;
-    public static double GRAB_FOUNDATION_Y_IN = 48;
+    public static double GRAB_FOUNDATION_X_IN = 52;
+    public static double GRAB_FOUNDATION_Y_IN = 51;
 
     private Vector2d grabFoundationPosition() {
         return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
     }
 
     public static double GRAB_FOUNDATION_REVERSE_DISTANCE_IN = 16;
+
+    @Override
+    protected final void prepareToGrabFoundation(MarkIHardware hardware) {
+        hardware.getFoundationMover().moveStoneAboveGround();
+    }
 
     @Override
     protected final void moveToGrabFoundation(RRMecanumDriveBase drive) {
@@ -155,14 +166,20 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .build());
     }
 
+    public static int KICK_STONE_FALL_SLEEP_MS = 100;
+    public static int KICK_STONE_MOVE_SLEEP_MS = 500;
+
     @Override
     protected void releaseStone(MarkIHardware hardware, QuarryState quarryState) {
         releaseRearClawsForStone(hardware.getRearClaws());
+        sleep(KICK_STONE_FALL_SLEEP_MS);
+        hardware.getFoundationMover().release();
+        sleep(KICK_STONE_MOVE_SLEEP_MS);
     }
 
     public static double MOVE_FOUNDATION_TO_BUILDING_ZONE_REVERSE_DISTANCE_IN = 16;
-    public static double ALIGN_FOUNDATION_X_IN = 30;
-    public static double ALIGN_FOUNDATION_Y_IN = 42;
+    public static double ALIGN_FOUNDATION_X_IN = 27;
+    public static double ALIGN_FOUNDATION_Y_IN = 45;
 
     private Pose2d alignFoundationPosition() {
         return new Pose2d(sidedInchesVector(ALIGN_FOUNDATION_X_IN, ALIGN_FOUNDATION_Y_IN), headingTowardsDepotWall());
@@ -181,7 +198,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 40;
+    public static double PARK_Y_IN = 44;
 
     private Vector2d parkPosition() {
         return sidedInchesVector(PARK_X_IN, PARK_Y_IN);
