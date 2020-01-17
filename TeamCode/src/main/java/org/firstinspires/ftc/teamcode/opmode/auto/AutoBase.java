@@ -18,7 +18,7 @@ public abstract class AutoBase extends LinearOpMode {
     public static double _STONE_MIDDLE_X_IN = -40;
     public static double _STONE_CLOSE_TO_WALL_X_IN = -47;
 
-    enum QuarryState {
+    public enum QuarryState {
         CLOSE_TO_BRIDGES {
             @Override
             public double xPosition() {
@@ -49,16 +49,7 @@ public abstract class AutoBase extends LinearOpMode {
         ;
     }
 
-    public static int DEFAULT_RELATIVE_POS = 0;
-
-    protected final SkystoneRelativePos readQuarryRelative() {
-        // TODO: actually figure out where stones are
-        return SkystoneRelativePos.values()[DEFAULT_RELATIVE_POS];
-    }
-
-    protected abstract QuarryState mapQuarryState(SkystoneRelativePos relativePos);
-
-    private QuarryState readQuarryState() { return mapQuarryState(readQuarryRelative()); }
+    protected abstract QuarryState readQuarryState();
 
     protected final void checkInterrupted() throws InterruptedException {
         if (isStopRequested() || Thread.currentThread().isInterrupted()) throw new InterruptedException();
