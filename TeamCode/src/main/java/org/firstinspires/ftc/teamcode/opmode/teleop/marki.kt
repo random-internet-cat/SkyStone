@@ -72,6 +72,8 @@ class MarkITeleop : LinearOpMode() {
     private var _armMotionLastTick = false
 
     private fun handleArmVerticalInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl) {
+        val manualDirection = gamepad.left_stick_y
+
         when {
             gamepad.right_bumper -> {
                 if (!_armMotionLastTick) {
@@ -89,6 +91,14 @@ class MarkITeleop : LinearOpMode() {
                 }
 
                 _armMotionLastTick = true
+            }
+
+            manualDirection > 0.1 -> {
+                vertical.manuallyMoveUp()
+            }
+
+            manualDirection < 0.1 -> {
+                vertical.manuallyMoveDown()
             }
 
             else -> {
