@@ -106,6 +106,8 @@ public abstract class AutoBase extends LinearOpMode {
 
         waitForStart();
 
+        checkInterrupted();
+
         log("Starting!");
 
         log("Reading quarry state");
@@ -141,6 +143,8 @@ public abstract class AutoBase extends LinearOpMode {
         log("Preparing to grab foundation");
         prepareToGrabFoundation(hardware);
         log("Prepared to grab foundation");
+
+        checkInterrupted();
 
         log("Moving to grab foundation");
         moveToGrabFoundation(drive);
