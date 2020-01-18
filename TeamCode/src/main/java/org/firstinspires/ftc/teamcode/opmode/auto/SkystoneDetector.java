@@ -47,7 +47,7 @@ public class SkystoneDetector {
 
         pause(500);
 
-        // phoneCam.stopStreaming();
+        phoneCam.closeCameraDevice();
 
         return SkystonePosition;
     }
