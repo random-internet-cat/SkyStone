@@ -152,6 +152,7 @@ class MarkITeleop : LinearOpMode() {
             handleArmInputs(gamepad2, arm = arm)
 
             telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
+            telemetry.addData("Is slow:", _isSlow)
             telemetry.update()
             hardware.update()
         }
