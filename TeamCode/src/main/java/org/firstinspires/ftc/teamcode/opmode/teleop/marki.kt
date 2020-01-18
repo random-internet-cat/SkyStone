@@ -113,12 +113,10 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
-    private fun handleArmInputs(intakeGamepad: Gamepad, outtakeGamepad: Gamepad, arm: MarkIArm) {
-        require(intakeGamepad !== outtakeGamepad)
-
-        handleArmHorizontalInputs(outtakeGamepad, arm.horizontal)
-        handleArmVerticalInputs(outtakeGamepad, arm.vertical)
-        handleArmClampInputs(intakeGamepad, arm.clamp)
+    private fun handleArmInputs(gamepad: Gamepad, arm: MarkIArm) {
+        handleArmHorizontalInputs(gamepad, arm.horizontal)
+        handleArmVerticalInputs(gamepad, arm.vertical)
+        handleArmClampInputs(gamepad, arm.clamp)
     }
 
     override fun runOpMode() {
@@ -141,7 +139,7 @@ class MarkITeleop : LinearOpMode() {
             handleDriveInputs(gamepad1, drive, maxDriveRPM = maxDriveRPM.roadrunner(), maxVel = maxVel.roadrunner())
             handleFoundationMoverInputs(gamepad1, foundationMover)
             handleIntakeInputs(gamepad1, intake)
-            handleArmInputs(intakeGamepad = gamepad1, outtakeGamepad = gamepad2, arm = arm)
+            handleArmInputs(gamepad2, arm = arm)
 
             telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
             telemetry.update()
