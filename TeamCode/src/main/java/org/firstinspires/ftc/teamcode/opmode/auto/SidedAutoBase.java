@@ -64,8 +64,6 @@ public abstract class SidedAutoBase extends AutoBase {
         return inchesVector(x, sideY(y));
     }
 
-    public static int DEFAULT_RELATIVE_POS = 0;
-
     protected final SkystoneRelativePos readQuarryRelative() {
         SkystoneDetector detector = new SkystoneDetector();
         return detector.getPosition(hardwareMap, telemetry, /*nearBlueTape=*/ sideColor == SideColor.BLUE);
