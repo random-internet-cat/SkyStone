@@ -15,8 +15,8 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 @Config
 public abstract class AutoBase extends LinearOpMode {
     public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -33;
-    public static double _STONE_MIDDLE_X_IN = -40;
-    public static double _STONE_CLOSE_TO_WALL_X_IN = -47;
+    public static double _STONE_MIDDLE_X_IN = -43;
+    public static double _STONE_CLOSE_TO_WALL_X_IN = -53;
 
     public enum QuarryState {
         CLOSE_TO_BRIDGES {
