@@ -174,7 +174,6 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final void prepareToGrabFoundation(MarkIHardware hardware) {
-        hardware.getFoundationMover().moveStoneAboveGround();
     }
 
     @Override
