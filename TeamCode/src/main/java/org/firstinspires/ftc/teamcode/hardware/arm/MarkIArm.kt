@@ -10,6 +10,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
     data class HorizontalControl(val motor: DcMotor) {
         companion object {
             private const val MOTOR_POWER = 0.8
+            private const val MIN_ENCODER_VALUE = 10
+            private const val MAX_ENCODER_VALUE = 1245
         }
 
         init {
@@ -17,7 +19,11 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         }
 
         private fun power(rawPower: Double) {
-            val adjustedPower = if (rawPower < 0 && motor.currentPosition <= 10) 0.0 else rawPower
+            val wouldExceedRetract = rawPower < 0 && motor.currentPosition <= MIN_ENCODER_VALUE
+            val wouldExceedExtend = rawPower > 0 && motor.currentPosition >= MAX_ENCODER_VALUE
+            val wouldExceedLimit = wouldExceedRetract || wouldExceedExtend
+
+            val adjustedPower = if (wouldExceedLimit) 0.0 else rawPower
 
             motor.power = adjustedPower
         }
