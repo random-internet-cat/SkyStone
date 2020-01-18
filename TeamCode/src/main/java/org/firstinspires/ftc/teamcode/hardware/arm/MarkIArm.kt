@@ -55,10 +55,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             public var _COLLECT_TICKS: Int = 120
 
             @JvmField
-            public var _STAGE0_TICKS: Int = 500
+            public var _STAGE0_TICKS: Int = 370
 
             @JvmField
-            public var _PER_STAGE_TICKS: Int = 730
+            public var _PER_STAGE_TICKS: Int = 690
 
             private val COLLECT_POSITION get() = EncoderPosition(_COLLECT_TICKS)
             private val STAGE0_POSITION get() = EncoderPosition(_STAGE0_TICKS)
