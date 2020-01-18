@@ -33,8 +33,8 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     enum SideColor {
-        RED(SideYSign.POSITIVE),
-        BLUE(SideYSign.NEGATIVE)
+        RED(SideYSign.NEGATIVE),
+        BLUE(SideYSign.POSITIVE)
         ;
 
         private final SideYSign sideYSign;
