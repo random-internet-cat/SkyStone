@@ -97,7 +97,7 @@ class MarkITeleop : LinearOpMode() {
                 vertical.manuallyMoveUp()
             }
 
-            manualDirection < 0.1 -> {
+            manualDirection < -0.1 -> {
                 vertical.manuallyMoveDown()
             }
 
