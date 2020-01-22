@@ -127,6 +127,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
 
         private fun manuallyMoveWithPower(power: Double) {
             markManual()
+            setMotorRunMode(DcMotor.RunMode.RUN_USING_ENCODER)
             motor.power = power
         }
 
