@@ -125,10 +125,12 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         private val isManual get() = _mutableIsManual
         private val isAutomatic get() = !isManual
 
-        private fun manuallyMoveWithPower(power: Double) {
+        private fun manuallyMoveWithPower(logicalPower: Double) {
+            val rawPower = -1 * logicalPower
+
             markManual()
             setMotorRunMode(DcMotor.RunMode.RUN_USING_ENCODER)
-            motor.power = power
+            motor.power = rawPower
         }
 
         private fun markManual() {
