@@ -43,7 +43,7 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleDriveInputs(gamepad: Gamepad, drive: MecanumDrive, maxDriveRPM: RRAngularVelocity, maxVel: RRVelocity) {
         val isSlowMode = shouldDriveSlow(gamepad)
-        val slowFactor = if (isSlowMode) 0.5 else 1.0
+        val slowFactor = if (isSlowMode) 0.3 else 1.0
 
         val x = driveInputRamp(gamepad.left_stick_y * -1) * maxVel * slowFactor
         val y = driveInputRamp(gamepad.left_stick_x * -1) * maxVel * slowFactor
