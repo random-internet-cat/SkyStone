@@ -60,6 +60,9 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             @JvmField
             public var _PER_STAGE_TICKS: Int = 690
 
+            private const val MIN_ENCODER_TICKS = 10
+            private const val MAX_ENCODER_TICKS = 3650
+
             private val COLLECT_POSITION get() = EncoderPosition(_COLLECT_TICKS)
             private val STAGE0_POSITION get() = EncoderPosition(_STAGE0_TICKS)
             private val PER_STAGE_TICKS get() = EncoderTicks(_PER_STAGE_TICKS)
@@ -126,11 +129,18 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         private val isAutomatic get() = !isManual
 
         private fun manuallyMoveWithPower(logicalPower: Double) {
-            val rawPower = -1 * logicalPower
+            val uncheckedRawPower = -logicalPower
+
+            val motorPosition = motor.currentPosition
+            val exceedsLowerLimit = uncheckedRawPower < 0 && motorPosition < MIN_ENCODER_TICKS
+            val exceedsUpperLimit = uncheckedRawPower > 0 && motorPosition > MAX_ENCODER_TICKS
+            val exceedsLimit = exceedsLowerLimit || exceedsUpperLimit
+
+            val checkedRawPower = if (exceedsLimit) 0.0 else uncheckedRawPower
 
             markManual()
             setMotorRunMode(DcMotor.RunMode.RUN_USING_ENCODER)
-            motor.power = rawPower
+            motor.power = checkedRawPower
         }
 
         private fun markManual() {
