@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.hardware.Servo
 typealias FoundationMoverPosition = Double
 
 interface FoundationMoverConfig {
-    val releasePosition: FoundationMoverPosition
     val grabPosition: FoundationMoverPosition
-    val collectStonePosition: FoundationMoverPosition
-    val stoneAboveGroundPosition: FoundationMoverPosition
+    val inTheWayPosition: FoundationMoverPosition
+    val outOfTheWayPosition: FoundationMoverPosition
 }
 
 open class BaseFoundationMover(val left: Servo, val right: Servo, val config: FoundationMoverConfig) {
@@ -25,20 +24,13 @@ open class BaseFoundationMover(val left: Servo, val right: Servo, val config: Fo
     fun grabBoth() { grabLeft(); grabRight(); }
     fun grab() = grabBoth()
 
-    fun releaseLeft() = setLeft(config.releasePosition)
-    fun releaseRight() = setRight(config.releasePosition)
-    fun releaseBoth() { releaseLeft(); releaseRight(); }
-    fun release() = releaseBoth()
+    fun moveLeftToOutOfTheWay() = setLeft(config.outOfTheWayPosition)
+    fun moveRightToOutOfTheWay() = setRight(config.outOfTheWayPosition)
+    fun moveBothToOutOfTheWay() { moveLeftToOutOfTheWay(); moveRightToOutOfTheWay(); }
 
-    fun moveLeftToCollectHeight() = setLeft(config.collectStonePosition)
-    fun moveRightToCollectHeight() = setRight(config.collectStonePosition)
-    fun moveBothToCollectHeight() { moveLeftToCollectHeight(); moveRightToCollectHeight(); }
-    fun moveToCollectHeight() = moveBothToCollectHeight()
-
-    fun moveLeftToStoneAboveGround() = setLeft(config.stoneAboveGroundPosition)
-    fun moveRightToStoneAboveGround() = setRight(config.stoneAboveGroundPosition)
-    fun moveBothToStoneAboveGround() { moveLeftToStoneAboveGround(); moveRightToStoneAboveGround(); }
-    fun moveStoneAboveGround() = moveBothToStoneAboveGround()
+    fun moveLeftToInTheWay() = setLeft(config.inTheWayPosition)
+    fun moveRightToInTheWay() = setRight(config.inTheWayPosition)
+    fun moveBothToInTheWay() { moveLeftToInTheWay(); moveRightToInTheWay(); }
 
     fun update() {}
 }
