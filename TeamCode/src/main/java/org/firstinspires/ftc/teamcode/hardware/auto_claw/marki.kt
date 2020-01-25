@@ -1,16 +1,16 @@
-package org.firstinspires.ftc.teamcode.hardware.rear_claw
+package org.firstinspires.ftc.teamcode.hardware.auto_claw
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.Servo
 
 @Config
-data class MarkIRearClaws(val left: Servo, val right: Servo) {
+data class MarkIAutoClaws(val left: Servo, val right: Servo) {
     companion object {
         @JvmField
-        public var CLAMP_POSITION: Double = 1.0
+        public var CLAMP_STONE_POSITION: Double = 0.02
 
         @JvmField
-        public var RELEASE_POSITION: Double = 0.0
+        public var RELEASE_STONE_POSITION: Double = 0.7
     }
 
     fun moveLeft(newPosition: Double) {
@@ -22,19 +22,19 @@ data class MarkIRearClaws(val left: Servo, val right: Servo) {
     }
 
     fun clampLeft() {
-        moveLeft(CLAMP_POSITION)
+        moveLeft(CLAMP_STONE_POSITION)
     }
 
     fun releaseLeft() {
-        moveLeft(RELEASE_POSITION)
+        moveLeft(RELEASE_STONE_POSITION)
     }
 
     fun clampRight() {
-        moveRight(CLAMP_POSITION)
+        moveRight(CLAMP_STONE_POSITION)
     }
 
     fun releaseRight() {
-        moveRight(RELEASE_POSITION)
+        moveRight(RELEASE_STONE_POSITION)
     }
 
     fun clampBoth() {
