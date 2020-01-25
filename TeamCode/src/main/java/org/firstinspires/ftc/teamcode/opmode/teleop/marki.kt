@@ -57,7 +57,7 @@ class MarkITeleop : LinearOpMode() {
     private fun handleFoundationMoverInputs(gamepad: Gamepad, foundationMover: BaseFoundationMover) {
         when {
             gamepad.dpad_down -> foundationMover.grabBoth()
-            gamepad.dpad_up -> foundationMover.releaseBoth()
+            gamepad.dpad_up -> foundationMover.moveBothToOutOfTheWay()
         }
     }
 
