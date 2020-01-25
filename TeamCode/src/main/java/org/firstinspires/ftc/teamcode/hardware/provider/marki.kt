@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.intake_flippers.MarkIIntakeFlippers
-import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws
+import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws
 import org.firstinspires.ftc.teamcode.util.*
 
 object MarkIHardwareProvider {
@@ -99,13 +99,13 @@ object MarkIHardwareProvider {
     }
 
     @JvmStatic
-    fun makeRearClaws(hardwareMap: HardwareMap): MarkIRearClaws {
+    fun makeAutoClaws(hardwareMap: HardwareMap): MarkIAutoClaws {
         val right = hardwareMap.getServo("rear_clamp_left")
         val left = hardwareMap.getServo("rear_clamp_right")
 
         right.direction = Servo.Direction.REVERSE
 
-        return MarkIRearClaws(left = left, right = right)
+        return MarkIAutoClaws(left = left, right = right)
     }
 
     @JvmStatic
@@ -116,7 +116,7 @@ object MarkIHardwareProvider {
             makeIntake(hardwareMap),
             makeIntakeFlippers(hardwareMap),
             makeFoundationMover(hardwareMap),
-            makeRearClaws(hardwareMap)
+            makeAutoClaws(hardwareMap)
         )
     }
 }
