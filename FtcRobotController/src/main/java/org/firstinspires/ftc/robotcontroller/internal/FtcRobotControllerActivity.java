@@ -42,6 +42,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -255,6 +256,8 @@ public class FtcRobotControllerActivity extends Activity
     permissionsValidated = true;
   }
 
+  private MediaPlayer mediaPlayer;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -262,6 +265,21 @@ public class FtcRobotControllerActivity extends Activity
     if (enforcePermissionValidator()) {
       return;
     }
+
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        mediaPlayer = MediaPlayer.create(FtcRobotControllerActivity.this, R.raw.wii_sports_theme);
+        mediaPlayer.setVolume(1.0f, 1.0f);
+        mediaPlayer.start();
+
+        try {
+          Thread.sleep(6000);
+        } catch (InterruptedException ignored) {}
+
+        mediaPlayer.stop();
+      }
+    }).start();
 
     RobotLog.onApplicationStart();  // robustify against onCreate() following onDestroy() but using the same app instance, which apparently does happen
     RobotLog.vv(TAG, "onCreate()");
