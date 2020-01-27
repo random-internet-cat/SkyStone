@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo
 data class MarkIAutoClaws(val left: Servo, val right: Servo) {
     companion object {
         @JvmField
-        public var CLAMP_STONE_POSITION: Double = 0.02
+        public var CLAMP_STONE_POSITION: Double = 0.0
 
         @JvmField
         public var RELEASE_STONE_POSITION: Double = 0.7
