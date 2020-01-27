@@ -99,7 +99,10 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
 
     @JvmOverloads
     fun trajectoryBuilder(overrideConstraints: DriveConstraints = constraints): TrajectoryBuilder {
-        return TrajectoryBuilder(poseEstimate, overrideConstraints)
+        // Set resolution to 0.25 inches, since roadrunner has issues with paths with small numbers.
+        // Since we were using Meters for roadrunner, we have to convert to roadrunner units
+        // before passing in.
+        return TrajectoryBuilder(poseEstimate, overrideConstraints, resolution = Inches(0.25).roadrunner().raw)
     }
 
     fun turn(angle: Angle) {
