@@ -14,8 +14,8 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 @Config
 public abstract class AutoBase extends LinearOpMode {
     public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -33;
-    public static double _STONE_MIDDLE_X_IN = -43;
-    public static double _STONE_CLOSE_TO_WALL_X_IN = -53;
+    public static double _STONE_MIDDLE_X_IN = -42;
+    public static double _STONE_CLOSE_TO_WALL_X_IN = -51;
 
     public static double _CORRESPONDING_STONE_DISTANCE_IN = 30;
 
@@ -63,6 +63,11 @@ public abstract class AutoBase extends LinearOpMode {
         drive.setPoseEstimate(startPosition());
     }
 
+    private void setupHardware(MarkIHardware hardware) {
+        hardware.getAutoClaws().releaseBoth();
+        hardware.getFoundationMover().moveBothToOutOfTheWay();
+    }
+
     protected abstract void turnTowardsWall(RRMecanumDriveBase drive);
 
     private void grabFoundation(MarkIFoundationMover foundationMover) {
@@ -71,7 +76,7 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     private void releaseFoundation(MarkIFoundationMover foundationMover) {
-        foundationMover.releaseBoth();
+        foundationMover.moveBothToOutOfTheWay();
         sleep(1500 /* ms */);
     }
 
@@ -126,6 +131,7 @@ public abstract class AutoBase extends LinearOpMode {
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
         setupDrive(drive);
+        setupHardware(hardware);
 
         log("Initialized. Waiting for start.");
 

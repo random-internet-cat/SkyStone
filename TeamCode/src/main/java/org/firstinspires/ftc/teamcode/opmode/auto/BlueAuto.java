@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
-import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws;
 
 import java.util.Objects;
 
@@ -29,23 +29,13 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     @Override
-    protected void clampRearClawsForStone(MarkIRearClaws claws) {
-        claws.clampRight();
+    protected void clampClawsForStone(MarkIAutoClaws claws) {
+        claws.clampLeft();
     }
 
     @Override
-    protected void releaseRearClawsForStone(MarkIRearClaws claws) {
-        claws.releaseRight();
-    }
-
-    @Override
-    protected void moveFoundationMoverToCollect(MarkIFoundationMover foundationMover) {
-        foundationMover.moveRightToCollectHeight();
-    }
-
-    @Override
-    protected void moveStoneAboveGround(MarkIFoundationMover foundationMover) {
-        foundationMover.moveRightToStoneAboveGround();
+    protected void releaseClawsForStone(MarkIAutoClaws claws) {
+        claws.releaseLeft();
     }
 
     @Override

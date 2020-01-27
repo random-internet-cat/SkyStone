@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
-import org.firstinspires.ftc.teamcode.hardware.rear_claw.MarkIRearClaws;
+import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws;
 
 import java.util.Objects;
 
@@ -30,25 +28,14 @@ public class RedAuto extends SidedAutoBase {
     }
 
     @Override
-    protected void clampRearClawsForStone(MarkIRearClaws claws) {
-        claws.clampLeft();
+    protected void clampClawsForStone(MarkIAutoClaws claws) {
+        claws.clampRight();
     }
 
     @Override
-    protected void releaseRearClawsForStone(MarkIRearClaws claws) {
-        claws.releaseLeft();
+    protected void releaseClawsForStone(MarkIAutoClaws claws) {
+        claws.releaseRight();
     }
-
-    @Override
-    protected void moveFoundationMoverToCollect(MarkIFoundationMover foundationMover) {
-        foundationMover.moveLeftToCollectHeight();
-    }
-
-    @Override
-    protected void moveStoneAboveGround(MarkIFoundationMover foundationMover) {
-        foundationMover.moveLeftToStoneAboveGround();
-    }
-
 
     @Override
     protected double headingTowardsFoundationWall() {
