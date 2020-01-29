@@ -71,28 +71,39 @@ fun MecanumDriveConfig.encoderTicksToDistance(ticks: EncoderPosition) = encoderT
 
 fun MecanumDriveConfig.characterization() = pidOrFeedforward().characterization
 
-sealed class MecanumLocalizationConfiguration {
+sealed class MecanumHeadingConfig {
     abstract val useExternalHeading: Boolean
     abstract fun currentHeading(): Heading
 }
 
 class BadHeadingAccessException : Exception("Invalid request for heading; perhaps a bug in roadrunner?")
 
-object MecanumNoExternalHeading : MecanumLocalizationConfiguration() {
+object MecanumNoExternalHeading : MecanumHeadingConfig() {
     override val useExternalHeading: Boolean = false
     override fun currentHeading(): Nothing = throw BadHeadingAccessException()
 }
 
-data class MecanumUseHeadingProvider(private val headingProvider: HeadingProvider) : MecanumLocalizationConfiguration() {
+data class MecanumUseHeadingProvider(private val headingProvider: HeadingProvider) : MecanumHeadingConfig() {
     override val useExternalHeading: Boolean = true
     override fun currentHeading(): Heading = headingProvider.currentHeading()
 }
 
-sealed class MecanumWheelEncoderConfig(val useWheelEncoders: Boolean)
-class MecanumNoWheelEncoders(val localizer: ThreeTrackingWheelLocalizer) : MecanumWheelEncoderConfig(false)
-object MecanumUseWheelEncoders : MecanumWheelEncoderConfig(true)
+sealed class MecanumLocalizationConfig(val useWheelEncoders: Boolean) {
+    abstract val useExternalHeading: Boolean
+    abstract fun currentHeading(): Heading
+}
 
-class MecanumDrive(private val localizationConfig: MecanumLocalizationConfiguration, private val encoderConfig: MecanumWheelEncoderConfig, val config: MecanumDriveConfig, drivetrain: MecanumDrivetrain) : BaseDriveEx(drivetrain.toFourWheelDrivetrain()) {
+class MecanumNoWheelEncoders(val localizer: ThreeTrackingWheelLocalizer) : MecanumLocalizationConfig(false) {
+    override val useExternalHeading: Boolean = false
+    override fun currentHeading(): Heading = throw BadHeadingAccessException()
+}
+
+class MecanumUseWheelEncoders(val headingConfig: MecanumHeadingConfig) : MecanumLocalizationConfig(true) {
+    override val useExternalHeading: Boolean get() = headingConfig.useExternalHeading
+    override fun currentHeading(): Heading = headingConfig.currentHeading()
+}
+
+class MecanumDrive(private val localizationConfig: MecanumLocalizationConfig, val config: MecanumDriveConfig, drivetrain: MecanumDrivetrain) : BaseDriveEx(drivetrain.toFourWheelDrivetrain()) {
     private val pidOrFeedForward = config.pidOrFeedforward()
     private val _onlyPID = pidOrFeedForward as? MecanumUsePID
 
@@ -122,8 +133,8 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
             }
 
             override var localizer: Localizer =
-                if (encoderConfig is MecanumNoWheelEncoders)
-                    encoderConfig.localizer
+                if (localizationConfig is MecanumNoWheelEncoders)
+                    localizationConfig.localizer
                 else
                     MecanumLocalizer(this, useExternalHeading = localizationConfig.useExternalHeading)
 
@@ -158,7 +169,7 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
     }
 
     private fun requireEncoders() {
-        check(encoderConfig.useWheelEncoders)
+        check(localizationConfig.useWheelEncoders)
     }
 
     fun roadrunner() = roadrunnerValue
