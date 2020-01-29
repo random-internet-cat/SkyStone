@@ -97,6 +97,8 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
             private fun velocityOf(motor: DcMotorEx): RRVelocity = (config.encoderTicksToDistance(EncoderTicks(motor.getVelocity().toInt())) / Seconds(1)).roadrunner()
 
             override fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients {
+                requirePID()
+
                 val coeffs = drivetrain.frontLeft.motor.getPIDFCoefficients(runMode)
                 return PIDCoefficients(coeffs.p, coeffs.i, coeffs.d)
             }
