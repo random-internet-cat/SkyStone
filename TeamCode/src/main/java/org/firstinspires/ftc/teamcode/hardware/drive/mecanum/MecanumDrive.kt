@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive.mecanum
 import com.acmerobotics.roadrunner.drive.DriveSignal
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.Localizer
+import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
@@ -87,7 +88,11 @@ data class MecanumUseHeadingProvider(private val headingProvider: HeadingProvide
     override fun currentHeading(): Heading = headingProvider.currentHeading()
 }
 
-class MecanumDrive(private val localizationConfig: MecanumLocalizationConfiguration, val config: MecanumDriveConfig, drivetrain: MecanumDrivetrain) : BaseDriveEx(drivetrain.toFourWheelDrivetrain()) {
+sealed class MecanumWheelEncoderConfig(val useWheelEncoders: Boolean)
+class MecanumNoWheelEncoders(val localizer: ThreeTrackingWheelLocalizer) : MecanumWheelEncoderConfig(false)
+object MecanumUseWheelEncoders : MecanumWheelEncoderConfig(true)
+
+class MecanumDrive(private val localizationConfig: MecanumLocalizationConfiguration, private val encoderConfig: MecanumWheelEncoderConfig, val config: MecanumDriveConfig, drivetrain: MecanumDrivetrain) : BaseDriveEx(drivetrain.toFourWheelDrivetrain()) {
     private val pidOrFeedForward = config.pidOrFeedforward()
     private val _onlyPID = pidOrFeedForward as? MecanumUsePID
 
@@ -116,15 +121,21 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
                 return RadiansPoint(localizationConfig.currentHeading()).raw
             }
 
-            override var localizer: Localizer = MecanumLocalizer(this, useExternalHeading = localizationConfig.useExternalHeading)
+            override var localizer: Localizer =
+                if (encoderConfig is MecanumNoWheelEncoders)
+                    encoderConfig.localizer
+                else
+                    MecanumLocalizer(this, useExternalHeading = localizationConfig.useExternalHeading)
 
             private fun rrOrderedMotors() = drivetrain.run { listOf(frontLeft, backLeft, backRight, frontRight) }
 
             override fun getWheelVelocities(): List<Double> {
+                requireEncoders()
                 return rrOrderedMotors().map { velocityOf(it.motor).roadrunner().raw }
             }
 
             override fun getWheelPositions(): List<Double> {
+                requireEncoders()
                 return rrOrderedMotors().map { positionOf(it).roadrunner().raw }
             }
 
@@ -144,6 +155,10 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfigurat
     private fun requirePID(): MecanumUsePID {
         check(_onlyPID != null)
         return _onlyPID
+    }
+
+    private fun requireEncoders() {
+        check(encoderConfig.useWheelEncoders)
     }
 
     fun roadrunner() = roadrunnerValue
