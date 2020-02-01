@@ -39,7 +39,7 @@ class MarkIIntake {
     fun update() {}
 
     companion object {
-        private const val MOTOR_POWER = 0.5
+        private const val MOTOR_POWER = 0.85
         private const val SERVO_POWER = 0.8
     }
 }
