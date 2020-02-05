@@ -5,35 +5,26 @@ import com.qualcomm.robotcore.hardware.DcMotor
 
 class MarkIIntake {
     private val mainMotors: List<DcMotor>
-    private val servos: List<CRServo>
 
-    constructor(mainMotors: List<DcMotor>, servos: List<CRServo>) {
+    constructor(mainMotors: List<DcMotor>) {
         // Defensive copies
         this.mainMotors = mainMotors.toList()
-        this.servos = servos.toList()
     }
 
     private fun powerMotors(newPower: Double) {
         mainMotors.forEach { it.power = newPower }
     }
 
-    private fun powerServos(newPower: Double) {
-        servos.forEach { it.power = newPower }
-    }
-
     fun intake() {
         powerMotors(MOTOR_POWER)
-        powerServos(SERVO_POWER)
     }
 
     fun outtake() {
         powerMotors(-MOTOR_POWER)
-        powerServos(-SERVO_POWER)
     }
 
     fun stop() {
         powerMotors(0.0)
-        powerServos(0.0)
     }
 
     fun update() {}
