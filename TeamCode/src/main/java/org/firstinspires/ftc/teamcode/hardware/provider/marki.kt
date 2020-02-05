@@ -95,8 +95,8 @@ object MarkIHardwareProvider {
 
     @JvmStatic
     fun makeAutoClaws(hardwareMap: HardwareMap): MarkIAutoClaws {
-        val right = hardwareMap.getServo("rear_clamp_left")
-        val left = hardwareMap.getServo("rear_clamp_right")
+        val right = hardwareMap.getServo("auto_claw_left")
+        val left = hardwareMap.getServo("auto_claw_right")
 
         right.direction = Servo.Direction.REVERSE
 
