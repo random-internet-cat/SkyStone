@@ -133,10 +133,10 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfig, va
             }
 
             override var localizer: Localizer =
-                if (localizationConfig is MecanumNoWheelEncoders)
-                    localizationConfig.localizer
-                else
-                    MecanumLocalizer(this, useExternalHeading = localizationConfig.useExternalHeading)
+                when (localizationConfig) {
+                    is MecanumNoWheelEncoders -> localizationConfig.localizer
+                    is MecanumUseWheelEncoders -> MecanumLocalizer(this, useExternalHeading = localizationConfig.useExternalHeading)
+                }
 
             private fun rrOrderedMotors() = drivetrain.run { listOf(frontLeft, backLeft, backRight, frontRight) }
 
