@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.units.times
 import kotlin.math.PI
 
 @Config
-object MarkIOdomtetryConstants {
+object MarkIOdometryConstants {
     @JvmField
     public var PARALLEL_DISTANCE_IN: Double = 14.5
 

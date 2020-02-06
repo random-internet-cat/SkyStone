@@ -4,18 +4,14 @@ import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.util.Angle
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.MovingStatistics
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc
-import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase
-import org.firstinspires.ftc.teamcode.hardware.MarkIDrivetrain
-import org.firstinspires.ftc.teamcode.hardware.MarkIOdomtetryConstants
+import org.firstinspires.ftc.teamcode.hardware.MarkIOdometryConstants
 import org.firstinspires.ftc.teamcode.hardware.drive.*
 import org.firstinspires.ftc.teamcode.hardware.drive.constants.MarkIDriveConstants
-import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.firstinspires.ftc.teamcode.hardware.provider.makeMarkIDrive
 import org.firstinspires.ftc.teamcode.util.getIMU
 import org.firstinspires.ftc.teamcode.util.roadrunner.RRAnglePoint
@@ -82,7 +78,7 @@ class ParallelOdoPodTuner : LinearOpMode() {
                 drive.update()
             }
 
-            val trackWidth = Inches(MarkIOdomtetryConstants.PARALLEL_DISTANCE_IN) * (imuHeadingAccumulator / odoHeadingAccumulator)
+            val trackWidth = Inches(MarkIOdometryConstants.PARALLEL_DISTANCE_IN) * (imuHeadingAccumulator / odoHeadingAccumulator)
             trackWidthStats.add(Inches(trackWidth).raw)
 
             sleep(DELAY)

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.provider
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -20,11 +19,10 @@ import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.RobotPosition
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.*
-import org.firstinspires.ftc.teamcode.util.units.Millimeters
 
 object MarkIHardwareProvider {
     private fun odometryPodTicksToPosition(motor: DcMotor): Distance {
-        return MarkIOdomtetryConstants.ODO_POD_CIRCUMFERENCE * (motor.currentPosition.toDouble() / MarkIOdomtetryConstants.POD_TICKS_PER_REV.toDouble())
+        return MarkIOdometryConstants.ODO_POD_CIRCUMFERENCE * (motor.currentPosition.toDouble() / MarkIOdometryConstants.POD_TICKS_PER_REV.toDouble())
     }
 
     @JvmStatic
@@ -48,13 +46,13 @@ object MarkIHardwareProvider {
             backRight = TypedMotorEx(backRight.withoutEncoderAccess(), externalGearing = externalGearing)
         )
 
-        val odoParallelDistance = MarkIOdomtetryConstants.PARALLEL_DISTANCE_IN
-        val odoParallelFwdDist = Inches(MarkIOdomtetryConstants.PARALLEL_FORWARD_DISTANCE_IN)
+        val odoParallelDistance = MarkIOdometryConstants.PARALLEL_DISTANCE_IN
+        val odoParallelFwdDist = Inches(MarkIOdometryConstants.PARALLEL_FORWARD_DISTANCE_IN)
 
         val podDescs = listOf(
             OdoPodDesc(RobotPosition(odoParallelFwdDist, Inches(-1 * odoParallelDistance / 2.0), DegreesPoint(0.0)).roadrunner(), frontRight),
             OdoPodDesc(RobotPosition(odoParallelFwdDist, Inches(odoParallelDistance / 2.0), DegreesPoint(0)).roadrunner(), frontLeft),
-            OdoPodDesc(RobotPosition(Inches(MarkIOdomtetryConstants.BACK_DISTANCE_IN), Distance.zero(), DegreesPoint(90.0)).roadrunner(), backLeft)
+            OdoPodDesc(RobotPosition(Inches(MarkIOdometryConstants.BACK_DISTANCE_IN), Distance.zero(), DegreesPoint(90.0)).roadrunner(), backLeft)
         )
 
         val drive = MecanumDrive(MecanumNoWheelEncoders(object : ThreeTrackingWheelLocalizer(
