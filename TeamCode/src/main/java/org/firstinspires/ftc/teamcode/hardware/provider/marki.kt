@@ -23,10 +23,8 @@ import org.firstinspires.ftc.teamcode.util.units.*
 import org.firstinspires.ftc.teamcode.util.units.Millimeters
 
 object MarkIHardwareProvider {
-    private val ODO_POD_CIRCUMFERENCE = Millimeters(35)
-
     private fun odometryPodTicksToPosition(motor: DcMotor): Distance {
-        return ODO_POD_CIRCUMFERENCE * (motor.currentPosition / motor.motorType.ticksPerRev)
+        return MarkIOdomtetryConstants.ODO_POD_CIRCUMFERENCE * (motor.currentPosition.toDouble() / MarkIOdomtetryConstants.POD_TICKS_PER_REV.toDouble())
     }
 
     @JvmStatic
@@ -50,15 +48,12 @@ object MarkIHardwareProvider {
             backRight = TypedMotorEx(backRight.withoutEncoderAccess(), externalGearing = externalGearing)
         )
 
-        data class OdoPodDesc(val pose: Pose2d, val motor: DcMotor) {
-            constructor(pose: RobotPosition, motor: DcMotor) : this(pose.roadrunner(), motor)
-        }
-
         val odoParallelDistance = MarkIOdomtetryConstants.PARALLEL_DISTANCE_IN
+        val odoParallelFwdDist = Inches(MarkIOdomtetryConstants.PARALLEL_FORWARD_DISTANCE_IN)
 
         val podDescs = listOf(
-            OdoPodDesc(RobotPosition(Distance.zero(), Inches(odoParallelDistance / 2.0), DegreesPoint(0.0)).roadrunner(), frontRight),
-            OdoPodDesc(RobotPosition(Distance.zero(), Inches(-1 * odoParallelDistance / 2.0), DegreesPoint(0.0)).roadrunner(), frontLeft),
+            OdoPodDesc(RobotPosition(odoParallelFwdDist, Inches(-1 * odoParallelDistance / 2.0), DegreesPoint(0.0)).roadrunner(), frontRight),
+            OdoPodDesc(RobotPosition(odoParallelFwdDist, Inches(odoParallelDistance / 2.0), DegreesPoint(0)).roadrunner(), frontLeft),
             OdoPodDesc(RobotPosition(Inches(MarkIOdomtetryConstants.BACK_DISTANCE_IN), Distance.zero(), DegreesPoint(90.0)).roadrunner(), backLeft)
         )
 
