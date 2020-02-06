@@ -41,7 +41,7 @@ class ParallelOdoPodTuner : LinearOpMode() {
         telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry)
 
         val imu = IMUHeadingProvider(hardwareMap.getIMU())
-        val drive = makeMarkIDrive(hardwareMap).also { it.brakeOnZeroPower(); it.enableEncoders() }.roadrunner()
+        val drive = makeMarkIDrive(hardwareMap).roadrunner()
         // TODO: if you haven't already, set the localizer to something that doesn't depend on
         // drive encoders for computing the heading
 
