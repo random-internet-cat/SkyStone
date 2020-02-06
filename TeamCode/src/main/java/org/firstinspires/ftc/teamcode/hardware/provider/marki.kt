@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware.provider
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer
+import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
@@ -12,9 +15,20 @@ import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationM
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.intake_flippers.MarkIIntakeFlippers
 import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws
+import org.firstinspires.ftc.teamcode.hardware.drive.motors.withoutEncoderAccess
 import org.firstinspires.ftc.teamcode.util.*
+import org.firstinspires.ftc.teamcode.util.roadrunner.RobotPosition
+import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
+import org.firstinspires.ftc.teamcode.util.units.*
+import org.firstinspires.ftc.teamcode.util.units.Millimeters
 
 object MarkIHardwareProvider {
+    private val ODO_POD_CIRCUMFERENCE = Millimeters(35)
+
+    private fun odometryPodTicksToPosition(motor: DcMotor): Distance {
+        return ODO_POD_CIRCUMFERENCE * (motor.currentPosition / motor.motorType.ticksPerRev)
+    }
+
     @JvmStatic
     fun makeDrive(hardwareMap: HardwareMap): MarkIDrivetrain {
         val imu = hardwareMap.getIMU()
@@ -30,14 +44,32 @@ object MarkIHardwareProvider {
         val externalGearing = 1.0
 
         val drivetrain = MecanumDrivetrain(
-            frontLeft = TypedMotorEx(frontLeft, externalGearing = externalGearing),
-            frontRight = TypedMotorEx(frontRight, externalGearing = externalGearing),
-            backLeft = TypedMotorEx(backLeft, externalGearing = externalGearing),
-            backRight = TypedMotorEx(backRight, externalGearing = externalGearing)
+            frontLeft = TypedMotorEx(frontLeft.withoutEncoderAccess(), externalGearing = externalGearing),
+            frontRight = TypedMotorEx(frontRight.withoutEncoderAccess(), externalGearing = externalGearing),
+            backLeft = TypedMotorEx(backLeft.withoutEncoderAccess(), externalGearing = externalGearing),
+            backRight = TypedMotorEx(backRight.withoutEncoderAccess(), externalGearing = externalGearing)
         )
 
-        val drive = MecanumDrive(MecanumUseWheelEncoders(MecanumUseHeadingProvider(IMUHeadingProvider(imu))), MarkIDriveConstants, drivetrain)
-        drive.enableEncoders()
+        data class OdoPodDesc(val pose: Pose2d, val motor: DcMotor) {
+            constructor(pose: RobotPosition, motor: DcMotor) : this(pose.roadrunner(), motor)
+        }
+
+        val odoParallelDistance = MarkIOdomtetryConstants.PARALLEL_DISTANCE_IN
+
+        val podDescs = listOf(
+            OdoPodDesc(RobotPosition(Distance.zero(), Inches(odoParallelDistance / 2.0), DegreesPoint(0.0)).roadrunner(), frontRight),
+            OdoPodDesc(RobotPosition(Distance.zero(), Inches(-1 * odoParallelDistance / 2.0), DegreesPoint(0.0)).roadrunner(), frontLeft),
+            OdoPodDesc(RobotPosition(Inches(MarkIOdomtetryConstants.BACK_DISTANCE_IN), Distance.zero(), DegreesPoint(90.0)).roadrunner(), backLeft)
+        )
+
+        val drive = MecanumDrive(MecanumNoWheelEncoders(object : ThreeTrackingWheelLocalizer(
+            podDescs.map { it.pose }
+        ) {
+            override fun getWheelPositions(): List<Double> {
+                return podDescs.map { odometryPodTicksToPosition(it.motor).roadrunner().raw }
+            }
+        }), MarkIDriveConstants, drivetrain)
+
         drive.brakeOnZeroPower()
 
         return drive
