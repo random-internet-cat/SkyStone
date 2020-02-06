@@ -140,9 +140,6 @@ class MarkITeleop : LinearOpMode() {
         val maxVel = driveConfig.maxVelocity().roadrunner()
         val intake = hardware.intake
 
-        drive.enableEncoders()
-        drive.brakeOnZeroPower()
-
         waitForStart()
 
         while (opModeIsActive()) {
