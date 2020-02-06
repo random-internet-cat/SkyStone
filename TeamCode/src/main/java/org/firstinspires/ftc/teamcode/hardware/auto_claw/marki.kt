@@ -15,18 +15,18 @@ data class MarkIAutoClaws(val leftClaw: Servo, val rightClaw: Servo, val leftCla
         // Claw
 
         @JvmField
-        public var CLAW_STONE_POSITION: Double = 0.0
+        public var CLAW_STONE_POSITION: Double = 0.025
 
         @JvmField
-        public var CLAW_RELEASE_POSITION: Double = 0.7
+        public var CLAW_RELEASE_POSITION: Double = 0.18
 
         // Clamp
 
         @JvmField
-        public var CLAMP_GRAB_POSITION: Double = 0.0
+        public var CLAMP_GRAB_POSITION: Double = 0.99
 
         @JvmField
-        public var CLAMP_UNCLAMP_POSITION: Double = 0.7
+        public var CLAMP_UNCLAMP_POSITION: Double = 0.87
     }
 
     // Clamp
@@ -59,13 +59,13 @@ data class MarkIAutoClaws(val leftClaw: Servo, val rightClaw: Servo, val leftCla
 
     private fun moveClawRight(newPosition: Double) { rightClaw.position = newPosition }
 
-    fun alignLeft() { moveClawLeft(CLAMP_GRAB_POSITION) }
+    fun alignLeft() { moveClawLeft(CLAW_STONE_POSITION) }
 
-    fun retractLeft() { moveClawLeft(CLAMP_UNCLAMP_POSITION) }
+    fun retractLeft() { moveClawLeft(CLAW_RELEASE_POSITION) }
 
-    fun alignRight() { moveClawRight(CLAMP_GRAB_POSITION) }
+    fun alignRight() { moveClawRight(CLAW_STONE_POSITION) }
 
-    fun retractRight() { moveClawRight(CLAMP_UNCLAMP_POSITION) }
+    fun retractRight() { moveClawRight(CLAW_RELEASE_POSITION) }
 
     fun alignBoth() {
         alignLeft()
