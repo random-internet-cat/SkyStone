@@ -37,6 +37,8 @@ object MarkIHardwareProvider {
         frontRight.setReversed()
         backRight.setReversed()
 
+        listOf(frontLeft, frontRight, backLeft, backRight).forEach { it.resetEncoder() }
+
         val externalGearing = 1.0
 
         val drivetrain = MecanumDrivetrain(
