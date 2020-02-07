@@ -149,18 +149,18 @@ public abstract class AutoBase extends LinearOpMode {
 
         handleFirstStone(hardware, drive, quarryState);
 
-        checkInterrupted();
-
-        handleFoundation(hardware, drive);
-
-        checkInterrupted();
-
-        handleSecondStone(hardware, drive, quarryState);
-
-        log("Parking");
-        park(drive);
-        log("Parked");
-
-        checkInterrupted();
+        //checkInterrupted();
+        //
+        //handleFoundation(hardware, drive);
+        //
+        //checkInterrupted();
+        //
+        //handleSecondStone(hardware, drive, quarryState);
+        //
+        //log("Parking");
+        //park(drive);
+        //log("Parked");
+        //
+        //checkInterrupted();
     }
 }

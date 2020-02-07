@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
+import com.acmerobotics.roadrunner.path.heading.HeadingInterpolator;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
@@ -101,12 +103,29 @@ public abstract class SidedAutoBase extends AutoBase {
         drive.followTrajectorySync(drive.trajectoryBuilder().setReversed(isReversed).splineTo(pose).build());
     }
 
+    private void splineToInternal(RRMecanumDriveBase drive, boolean isReversed, Pose2d pose, HeadingInterpolator interpolator) {
+        log((isReversed ? "Reverse" : "Forward") + "-splining to: " + formatPose(pose));
+        drive.followTrajectorySync(drive.trajectoryBuilder().setReversed(isReversed).splineTo(pose, interpolator).build());
+    }
+
+    private void splineToInternalConstantHeading(RRMecanumDriveBase drive, boolean isReversed, Pose2d pose, double heading) {
+        splineToInternal(drive, isReversed, pose, new ConstantInterpolator(heading));
+    }
+
     private void splineToReversed(RRMecanumDriveBase drive, Pose2d pose) {
         splineToInternal(drive, true, pose);
     }
 
     private void splineToForward(RRMecanumDriveBase drive, Pose2d pose) {
         splineToInternal(drive, false, pose);
+    }
+
+    private void splineToForwardConstantHeading(RRMecanumDriveBase drive, Pose2d pose, double heading) {
+        splineToInternalConstantHeading(drive, false, pose, heading);
+    }
+
+    private void splineToReversedConstantHeading(RRMecanumDriveBase drive, Pose2d pose, double heading) {
+        splineToInternalConstantHeading(drive, true, pose, heading);
     }
 
     private void turnToHeading(RRMecanumDriveBase drive, double heading) {
@@ -201,6 +220,12 @@ public abstract class SidedAutoBase extends AutoBase {
         releaseClawsForStone(hardware.getAutoClaws());
     }
 
+    private void moveToFirstStone(RRMecanumDriveBase drive, QuarryState quarryState) {
+        drive.followTrajectorySync(drive.trajectoryBuilder().strafeTo());
+
+        splineToForwardConstantHeading(drive, firstStoneGrabPosition(quarryState), headingTowardsFoundationWall());
+    }
+
     @Override
     protected void handleFirstStone(MarkIHardware hardware, RRMecanumDriveBase drive, QuarryState quarryState) throws InterruptedException {
         log("Preparing to grab first stone");
@@ -210,26 +235,26 @@ public abstract class SidedAutoBase extends AutoBase {
         checkInterrupted();
 
         log("Moving to grab first stone");
-        splineToForward(drive, firstStoneGrabPosition(quarryState));
+        moveToFirstStone(drive, quarryState);
         log("Moved to grab first stone");
-
-        checkInterrupted();
-
-        log("Collecting first stone");
-        collectFirstStone(hardware, quarryState);
-        log("Collected first stone");
-
-        checkInterrupted();
-
-        log("Moving to release first stone");
-        moveToReleaseFirstStone(drive, quarryState);
-        log("Moved to release first stone");
-
-        checkInterrupted();
-
-        log("Releasing stone");
-        releaseStone(hardware);
-        log("Released stone");
+        //
+        //checkInterrupted();
+        //
+        //log("Collecting first stone");
+        //collectFirstStone(hardware, quarryState);
+        //log("Collected first stone");
+        //
+        //checkInterrupted();
+        //
+        //log("Moving to release first stone");
+        //moveToReleaseFirstStone(drive, quarryState);
+        //log("Moved to release first stone");
+        //
+        //checkInterrupted();
+        //
+        //log("Releasing stone");
+        //releaseStone(hardware);
+        //log("Released stone");
     }
 
     private Pose2d secondStoneGrabPosition(QuarryState quarryState) {
