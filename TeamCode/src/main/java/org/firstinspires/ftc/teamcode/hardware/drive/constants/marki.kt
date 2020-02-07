@@ -29,7 +29,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
     }
 
     @JvmField
-    public var _TRACK_WIDTH_IN: Double = 19.0
+    public var _TRACK_WIDTH_IN: Double = 15.82
 
     override fun trackWidth(): RRDistance {
         return Inches(_TRACK_WIDTH_IN).roadrunner()
