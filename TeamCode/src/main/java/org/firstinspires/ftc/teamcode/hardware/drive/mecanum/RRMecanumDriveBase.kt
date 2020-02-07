@@ -140,7 +140,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
         brake()
     }
 
-    fun update() {
+    fun update(updateDashboard: Boolean = true) {
         updatePoseEstimate()
 
         val currentPose = poseEstimate
@@ -217,7 +217,7 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
             }
         }
 
-        dashboard.sendTelemetryPacket(packet)
+        if (updateDashboard) dashboard.sendTelemetryPacket(packet)
     }
 
     fun waitForIdle() {
