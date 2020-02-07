@@ -13,13 +13,13 @@ import kotlin.math.PI
 @Config
 object MarkIOdometryConstants {
     @JvmField
-    public var PARALLEL_DISTANCE_IN: Double = 14.5
+    public var PARALLEL_DISTANCE_IN: Double = 15.4
 
     @JvmField
     public var PARALLEL_FORWARD_DISTANCE_IN: Double = 2.5
 
     @JvmField
-    public var BACK_DISTANCE_IN: Double = -6.0
+    public var BACK_DISTANCE_IN: Double = -6.25
 
     public val ODO_POD_CIRCUMFERENCE = Millimeters(38) * PI
     public const val POD_TICKS_PER_REV = 1440
