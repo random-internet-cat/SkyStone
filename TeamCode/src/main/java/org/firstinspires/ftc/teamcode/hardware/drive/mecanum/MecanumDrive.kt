@@ -174,7 +174,7 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfig, va
 
     fun roadrunner() = roadrunnerValue
 
-    fun update() = roadrunner().update()
+    fun update(updateDashboard: Boolean = true) = roadrunner().update(updateDashboard = updateDashboard)
 }
 
 fun MecanumDrive.mecanumDrive(x: RRVelocity, y: RRVelocity, turn: RRAngularVelocity) {

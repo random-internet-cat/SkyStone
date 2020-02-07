@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws
 typealias MarkIDrivetrain = MecanumDrive
 
 data class MarkIHardware(val drive: MarkIDrivetrain, val arm: MarkIArm, val intake: MarkIIntake, val intakeFlippers: MarkIIntakeFlippers, val foundationMover: MarkIFoundationMover, val autoClaws: MarkIAutoClaws) {
-    fun update() {
-        drive.update()
+    fun update(updateDashboard: Boolean = true) {
+        drive.update(updateDashboard = updateDashboard)
         arm.update()
         intake.update()
         intakeFlippers.update()
