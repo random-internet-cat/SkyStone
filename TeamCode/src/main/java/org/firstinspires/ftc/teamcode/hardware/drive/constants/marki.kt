@@ -77,7 +77,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
         data class UseFeedforward(val characterization: DcMotorCharacterization) : PIDOrFeedforward()
     }
 
-    private val PID_OR_FEEDFORWARD: PIDOrFeedforward = PIDOrFeedforward.UseFeedforward(DcMotorCharacterization(kV = 0.59, kA = 0.00393, kStatic = 0.11092))
+    private val PID_OR_FEEDFORWARD: PIDOrFeedforward = PIDOrFeedforward.UseFeedforward(DcMotorCharacterization(0.5, kA = 0.00727, kStatic = 0.10650))
 
     override fun pidOrFeedforward(): MecanumPIDOrFeedForward {
         return when (PID_OR_FEEDFORWARD) {
