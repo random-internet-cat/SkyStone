@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.provider
 
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer
+import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
@@ -52,16 +53,21 @@ object MarkIHardwareProvider {
         val odoParallelFwdDist = Inches(MarkIOdometryConstants.PARALLEL_FORWARD_DISTANCE_IN)
 
         val podDescs = listOf(
-            OdoPodDesc(RobotPosition(odoParallelFwdDist, Inches(-1 * odoParallelDistance / 2.0), DegreesPoint(0.0)).roadrunner(), frontRight),
             OdoPodDesc(RobotPosition(odoParallelFwdDist, Inches(odoParallelDistance / 2.0), DegreesPoint(0)).roadrunner(), frontLeft),
             OdoPodDesc(RobotPosition(Inches(MarkIOdometryConstants.BACK_DISTANCE_IN), Distance.zero(), DegreesPoint(90.0)).roadrunner(), backLeft)
         )
 
-        val drive = MecanumDrive(MecanumNoWheelEncoders(object : ThreeTrackingWheelLocalizer(
+        val drive = MecanumDrive(MecanumNoWheelEncoders(object : TwoTrackingWheelLocalizer(
             podDescs.map { it.pose }
         ) {
             override fun getWheelPositions(): List<Double> {
                 return podDescs.map { odometryPodTicksToPosition(it.motor).roadrunner().raw }
+            }
+
+            private val headingProvider = IMUHeadingProvider(imu)
+
+            override fun getHeading(): Double {
+                return headingProvider.currentHeading().roadrunner().raw
             }
         }), MarkIDriveConstants, drivetrain)
 
