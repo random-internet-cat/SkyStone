@@ -93,7 +93,7 @@ sealed class MecanumLocalizationConfig(val useWheelEncoders: Boolean) {
     abstract fun currentHeading(): Heading
 }
 
-class MecanumNoWheelEncoders(val localizer: ThreeTrackingWheelLocalizer) : MecanumLocalizationConfig(false) {
+class MecanumNoWheelEncoders(val localizer: Localizer) : MecanumLocalizationConfig(false) {
     override val useExternalHeading: Boolean = false
     override fun currentHeading(): Heading = throw BadHeadingAccessException()
 }
