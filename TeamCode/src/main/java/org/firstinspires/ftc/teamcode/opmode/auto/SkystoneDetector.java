@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.opmode.auto.AutoBase;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -14,7 +13,7 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
@@ -24,30 +23,29 @@ import java.util.List;
 public class SkystoneDetector {
     private AutoBase.SkystoneRelativePos SkystonePosition = AutoBase.SkystoneRelativePos.RIGHT;
 
-    private OpenCvCamera phoneCam;
+    private OpenCvCamera webcam;
 
     private Telemetry telemetry;
 
     public AutoBase.SkystoneRelativePos getPosition(HardwareMap hardwareMap, Telemetry newTelmetry, boolean nearBlueTape) {
         telemetry = newTelmetry;
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
 
-        phoneCam.openCameraDevice();
+        webcam.openCameraDevice();
 
         if (nearBlueTape) {
-            phoneCam.setPipeline(new Pipeline(new double[]{3.0 / 7, 11.0 / 14}, true));
+            webcam.setPipeline(new Pipeline(new double[]{0.35, 0.7}));
         } else {
-            phoneCam.setPipeline(new Pipeline(new double[]{0.4, 0.6}, false));
+            webcam.setPipeline(new Pipeline(new double[]{0.4, 0.75}));
         }
 
-        phoneCam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+        webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
 
         pause(500);
 
-        phoneCam.closeCameraDevice();
+        webcam.closeCameraDevice();
 
         return SkystonePosition;
     }
@@ -72,11 +70,9 @@ public class SkystoneDetector {
          */
 
         double[] fractionalDistances;
-        boolean isBlueSide;
 
-        Pipeline(double[] distanceValues, boolean blueSide) {
+        Pipeline(double[] distanceValues) {
             fractionalDistances = distanceValues;
-            isBlueSide = blueSide;
         }
 
         @Override
@@ -105,8 +101,8 @@ public class SkystoneDetector {
 
                 Rect bounder = Imgproc.boundingRect(contours.get(i));
                 double contourArea = Imgproc.contourArea(contours.get(i));
-
-                if (contourArea > 20000) {
+                //Average is 60K
+                if (contourArea > 40000) {
 
                     Imgproc.rectangle(input, bounder, new Scalar(255, 0, 0), 10);
                     Mat newMask = new Mat();
@@ -119,8 +115,8 @@ public class SkystoneDetector {
                     Imgproc.findContours(newMask, contours2, hierarchy2, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
                     for (int j = 0; j < contours2.size(); j++) {
-
-                        if (Imgproc.contourArea(contours2.get(j)) > 10000) {
+                        //Average is 15K
+                        if (Imgproc.contourArea(contours2.get(j)) > 8500) {
 
                             Imgproc.drawContours(originalCrop, contours2, j, new Scalar(0, 255, 0), 10);
 
@@ -130,23 +126,11 @@ public class SkystoneDetector {
                             Imgproc.circle(input, new Point(cX, cY), 10, new Scalar(0, 0, 255), 10);
 
                             if (Imgproc.moments(contours2.get(j)).get_m10() / Imgproc.moments(contours2.get(j)).get_m00() < fractionalDistances[0] * bounder.width) {
-                                if (isBlueSide) {
-                                    SkystonePosition = AutoBase.SkystoneRelativePos.LEFT;
-                                } else {
-                                    SkystonePosition = AutoBase.SkystoneRelativePos.RIGHT;
-                                }
+                                SkystonePosition = AutoBase.SkystoneRelativePos.LEFT;
                             } else if (Imgproc.moments(contours2.get(j)).get_m10() / Imgproc.moments(contours2.get(j)).get_m00() < fractionalDistances[1] * bounder.width) {
-                                if (isBlueSide) {
-                                    SkystonePosition = AutoBase.SkystoneRelativePos.MIDDLE;
-                                } else {
-                                    SkystonePosition = AutoBase.SkystoneRelativePos.LEFT;
-                                }
+                                SkystonePosition = AutoBase.SkystoneRelativePos.MIDDLE;
                             } else {
-                                if (isBlueSide) {
-                                    SkystonePosition = AutoBase.SkystoneRelativePos.RIGHT;
-                                } else {
-                                    SkystonePosition = AutoBase.SkystoneRelativePos.MIDDLE;
-                                }
+                                SkystonePosition = AutoBase.SkystoneRelativePos.RIGHT;
                             }
                         }
 
