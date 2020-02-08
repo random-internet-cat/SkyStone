@@ -64,7 +64,7 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     private void setupHardware(MarkIHardware hardware) {
-        hardware.getAutoClaws().releaseBoth();
+        hardware.getAutoClaws().hideBoth();
         hardware.getFoundationMover().moveBothToOutOfTheWay();
     }
 

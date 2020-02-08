@@ -28,13 +28,16 @@ public class RedAuto extends SidedAutoBase {
     }
 
     @Override
+    protected void prepareToGrabStone(MarkIAutoClaws claws) { claws.alignLeft(); claws.releaseLeft(); }
+
+    @Override
     protected void clampClawsForStone(MarkIAutoClaws claws) {
-        claws.clampRight();
+        claws.clampLeft();
     }
 
     @Override
     protected void releaseClawsForStone(MarkIAutoClaws claws) {
-        claws.releaseRight();
+        claws.releaseLeft();
     }
 
     @Override
