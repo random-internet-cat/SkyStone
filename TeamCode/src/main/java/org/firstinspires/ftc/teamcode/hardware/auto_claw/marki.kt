@@ -15,10 +15,13 @@ data class MarkIAutoClaws(val leftClaw: Servo, val rightClaw: Servo, val leftCla
         // Claw
 
         @JvmField
-        public var CLAW_STONE_POSITION: Double = 0.025
+        public var CLAW_STONE_POSITION: Double = 0.01
 
         @JvmField
-        public var CLAW_RELEASE_POSITION: Double = 0.18
+        public var CLAW_RETRACT_POSITION: Double = 0.18
+
+        @JvmField
+        public var CLAW_HIDDEN_POSITION: Double = 0.3
 
         // Clamp
 
@@ -33,7 +36,7 @@ data class MarkIAutoClaws(val leftClaw: Servo, val rightClaw: Servo, val leftCla
 
     private fun moveClampLeft(newPosition: Double) { leftClamp.position = newPosition }
 
-    private fun moveClampRight(newPosition: Double) { rightClamp.position = newPosition }
+    private fun moveClampRight(newPosition: Double) { rightClamp.position = newPosition - 0.325 } // why is this offset necessary? who knows!
 
     fun clampLeft() { moveClampLeft(CLAMP_GRAB_POSITION) }
 
@@ -57,15 +60,19 @@ data class MarkIAutoClaws(val leftClaw: Servo, val rightClaw: Servo, val leftCla
 
     private fun moveClawLeft(newPosition: Double) { leftClaw.position = newPosition }
 
-    private fun moveClawRight(newPosition: Double) { rightClaw.position = newPosition }
+    private fun moveClawRight(newPosition: Double) { rightClaw.position = newPosition + .325 } // why is this offset necessary? who knows!
 
     fun alignLeft() { moveClawLeft(CLAW_STONE_POSITION) }
 
-    fun retractLeft() { moveClawLeft(CLAW_RELEASE_POSITION) }
+    fun retractLeft() { moveClawLeft(CLAW_RETRACT_POSITION) }
+
+    fun hideLeft() { moveClawLeft(CLAW_HIDDEN_POSITION) }
 
     fun alignRight() { moveClawRight(CLAW_STONE_POSITION) }
 
-    fun retractRight() { moveClawRight(CLAW_RELEASE_POSITION) }
+    fun retractRight() { moveClawRight(CLAW_RETRACT_POSITION) }
+
+    fun hideRight() { moveClawRight(CLAW_HIDDEN_POSITION)}
 
     fun alignBoth() {
         alignLeft()
@@ -75,6 +82,16 @@ data class MarkIAutoClaws(val leftClaw: Servo, val rightClaw: Servo, val leftCla
     fun retractBoth() {
         retractLeft()
         retractRight()
+    }
+
+    fun hideBoth() {
+        // claw
+        hideLeft()
+        hideRight()
+
+        // clamp
+        clampLeft()
+        clampRight()
     }
 
     fun update() {}

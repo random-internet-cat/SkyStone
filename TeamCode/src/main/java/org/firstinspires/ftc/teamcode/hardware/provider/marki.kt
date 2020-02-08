@@ -130,11 +130,11 @@ object MarkIHardwareProvider {
     fun makeAutoClaws(hardwareMap: HardwareMap): MarkIAutoClaws {
         val leftClaw = hardwareMap.getServo("auto_claw_left")
         val rightClaw = hardwareMap.getServo("auto_claw_right")
-        val leftClamp = hardwareMap.getServo("auto_clamp_right");
-        val rightClamp = hardwareMap.getServo("auto_clamp_left");
+        val leftClamp = hardwareMap.getServo("auto_clamp_left");
+        val rightClamp = hardwareMap.getServo("auto_clamp_right");
 
         leftClaw.direction = Servo.Direction.REVERSE
-        leftClaw.direction = Servo.Direction.REVERSE
+        rightClamp.direction = Servo.Direction.REVERSE //don't ask, this works
 
         return MarkIAutoClaws(leftClaw = leftClaw, rightClaw = rightClaw, leftClamp = leftClamp, rightClamp = rightClamp)
     }
