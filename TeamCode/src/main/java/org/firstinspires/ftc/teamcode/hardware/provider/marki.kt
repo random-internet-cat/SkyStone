@@ -77,7 +77,7 @@ object MarkIHardwareProvider {
 
     @JvmStatic
     fun makeArmHorizontal(hardwareMap: HardwareMap): MarkIArm.HorizontalControl {
-        val motor = hardwareMap.getMotor("horizontal")
+        val motor = hardwareMap.getMotorEx("horizontal")
         return MarkIArm.HorizontalControl(motor)
     }
 

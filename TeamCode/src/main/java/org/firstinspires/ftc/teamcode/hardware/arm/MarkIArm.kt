@@ -2,13 +2,15 @@ package org.firstinspires.ftc.teamcode.hardware.arm
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.util.*
+import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 import org.firstinspires.ftc.teamcode.util.units.*
 import kotlin.math.abs
 
 data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
-    data class HorizontalControl(val motor: DcMotor) {
+    data class HorizontalControl(val motor: DcMotorEx) {
         companion object {
             private const val MOTOR_POWER = 1.0
             private const val MIN_ENCODER_VALUE = 10
@@ -47,6 +49,12 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             motor.mode = DcMotor.RunMode.RUN_TO_POSITION
             motor.targetPosition = MIN_ENCODER_VALUE
             motor.power = MOTOR_POWER
+        }
+
+        fun pid(): PIDCoefficients = motor.pid(DcMotor.RunMode.RUN_USING_ENCODER)
+
+        fun setPID(pid: PIDCoefficients) {
+            motor.setPID(DcMotor.RunMode.RUN_USING_ENCODER, pid)
         }
 
         fun stop() {
