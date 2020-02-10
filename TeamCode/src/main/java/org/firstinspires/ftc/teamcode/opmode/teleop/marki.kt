@@ -120,7 +120,7 @@ class MarkITeleop : LinearOpMode() {
         when {
 
             // Retract horizontal & vertical
-            gamepad.a -> {
+            gamepad.b -> {
                 if (!_armMotionLastTick) {
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
                     horizontal.moveIn()
