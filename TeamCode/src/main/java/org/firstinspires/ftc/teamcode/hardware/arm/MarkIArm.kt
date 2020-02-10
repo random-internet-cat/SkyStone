@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.units.*
+import kotlin.math.abs
 
 data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
     data class HorizontalControl(val motor: DcMotor) {
@@ -54,8 +55,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
 
         fun update() {
             // Check to turn off RunToPosition and reinstate manual control if target has been reached
-            if (motor.mode == DcMotor.RunMode.RUN_TO_POSITION
-                    && kotlin.math.abs(motor.targetPosition - motor.currentPosition) <= TO_POSITION_TOLERANCE) {
+            if (motor.mode == DcMotor.RunMode.RUN_TO_POSITION && abs(motor.targetPosition - motor.currentPosition) <= TO_POSITION_TOLERANCE) {
                 motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             }
         }
