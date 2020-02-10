@@ -123,7 +123,7 @@ class MarkITeleop : LinearOpMode() {
             gamepad.b -> {
                 if (!_armMotionLastTick) {
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
-                    horizontal.moveIn()
+                    horizontal.moveAllTheWayIn()
                 }
             }
 
