@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
+import org.firstinspires.ftc.teamcode.util.roadrunner.PIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.units.*
 import kotlin.math.abs
 
@@ -51,10 +52,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             motor.power = MOTOR_POWER
         }
 
-        fun pid(): PIDCoefficients = motor.pid(DcMotor.RunMode.RUN_USING_ENCODER)
+        fun pidf(): PIDFCoefficients = motor.pidf(DcMotor.RunMode.RUN_USING_ENCODER)
 
-        fun setPID(pid: PIDCoefficients) {
-            motor.setPID(DcMotor.RunMode.RUN_USING_ENCODER, pid)
+        fun setPIDF(pidf: PIDFCoefficients) {
+            motor.setPIDF(DcMotor.RunMode.RUN_USING_ENCODER, pidf)
         }
 
         fun stop() {
