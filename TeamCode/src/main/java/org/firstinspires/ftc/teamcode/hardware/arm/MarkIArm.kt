@@ -9,9 +9,11 @@ import org.firstinspires.ftc.teamcode.util.units.*
 data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
     data class HorizontalControl(val motor: DcMotor) {
         companion object {
-            private const val MOTOR_POWER = 0.8
+            private const val MOTOR_POWER = 1.0
             private const val MIN_ENCODER_VALUE = 10
             private const val MAX_ENCODER_VALUE = 1245
+
+            private const val TO_POSITION_TOLERANCE = 2
         }
 
         init {
@@ -19,13 +21,15 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         }
 
         private fun power(rawPower: Double) {
-            val wouldExceedRetract = rawPower < 0 && motor.currentPosition <= MIN_ENCODER_VALUE
-            val wouldExceedExtend = rawPower > 0 && motor.currentPosition >= MAX_ENCODER_VALUE
-            val wouldExceedLimit = wouldExceedRetract || wouldExceedExtend
+            if (motor.mode != DcMotor.RunMode.RUN_TO_POSITION) {
+                val wouldExceedRetract = rawPower < 0 && motor.currentPosition <= MIN_ENCODER_VALUE
+                val wouldExceedExtend = rawPower > 0 && motor.currentPosition >= MAX_ENCODER_VALUE
+                val wouldExceedLimit = wouldExceedRetract || wouldExceedExtend
 
-            val adjustedPower = if (wouldExceedLimit) 0.0 else rawPower
+                val adjustedPower = if (wouldExceedLimit) 0.0 else rawPower
 
-            motor.power = adjustedPower
+                motor.power = adjustedPower
+            }
         }
 
         private fun power(power: Int) = power(power.toDouble())
@@ -38,18 +42,30 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             power(-MOTOR_POWER)
         }
 
+        fun moveAllTheWayIn() {
+            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+            motor.targetPosition = MIN_ENCODER_VALUE
+            motor.power = MOTOR_POWER
+        }
+
         fun stop() {
             power(0)
         }
 
-        fun update() {}
+        fun update() {
+            // Check to turn off RunToPosition and reinstate manual control if target has been reached
+            if (motor.mode == DcMotor.RunMode.RUN_TO_POSITION
+                    && kotlin.math.abs(motor.targetPosition - motor.currentPosition) <= TO_POSITION_TOLERANCE) {
+                motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            }
+        }
     }
 
     @Config("MarkIArm VerticalControl")
     data class VerticalControl(private val motor: DcMotor) {
         companion object {
             private const val MANUAL_MOTOR_POWER = 0.6
-            private const val AUTOMATIC_MOTOR_POWER = 0.8
+            private const val AUTOMATIC_MOTOR_POWER = 1.0
 
             @JvmField
             public var _COLLECT_TICKS: Int = 120
