@@ -25,15 +25,15 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         }
 
         private fun power(rawPower: Double) {
-            if (motor.mode != DcMotor.RunMode.RUN_TO_POSITION) {
-                val wouldExceedRetract = rawPower < 0 && motor.currentPosition <= MIN_ENCODER_VALUE
-                val wouldExceedExtend = rawPower > 0 && motor.currentPosition >= MAX_ENCODER_VALUE
-                val wouldExceedLimit = wouldExceedRetract || wouldExceedExtend
+            switchToManual()
 
-                val adjustedPower = if (wouldExceedLimit) 0.0 else rawPower
+            val wouldExceedRetract = rawPower < 0 && motor.currentPosition <= MIN_ENCODER_VALUE
+            val wouldExceedExtend = rawPower > 0 && motor.currentPosition >= MAX_ENCODER_VALUE
+            val wouldExceedLimit = wouldExceedRetract || wouldExceedExtend
 
-                motor.power = adjustedPower
-            }
+            val adjustedPower = if (wouldExceedLimit) 0.0 else rawPower
+
+            motor.power = adjustedPower
         }
 
         private fun power(power: Int) = power(power.toDouble())
@@ -58,14 +58,30 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             motor.setPIDF(DcMotor.RunMode.RUN_USING_ENCODER, pidf)
         }
 
+        private fun isAutomatic() = motor.mode == DcMotor.RunMode.RUN_TO_POSITION
+        private fun isManual() = !isAutomatic()
+
+        private fun switchToManual() {
+            motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        }
+
         fun stop() {
             power(0)
         }
 
+        fun stopIfManual() {
+            if (isManual()) stop()
+        }
+
+        private fun isWithinTolerance(): Boolean {
+            check(isAutomatic())
+            return abs(motor.targetPosition - motor.currentPosition) <= TO_POSITION_TOLERANCE
+        }
+
         fun update() {
             // Check to turn off RunToPosition and reinstate manual control if target has been reached
-            if (motor.mode == DcMotor.RunMode.RUN_TO_POSITION && abs(motor.targetPosition - motor.currentPosition) <= TO_POSITION_TOLERANCE) {
-                motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            if (isAutomatic() && isWithinTolerance()) {
+                switchToManual()
             }
         }
     }

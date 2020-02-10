@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws
 import org.firstinspires.ftc.teamcode.hardware.drive.motors.withoutEncoderAccess
 import org.firstinspires.ftc.teamcode.util.*
+import org.firstinspires.ftc.teamcode.util.roadrunner.PIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.roadrunner.RobotPosition
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.*
@@ -78,7 +79,7 @@ object MarkIHardwareProvider {
     @JvmStatic
     fun makeArmHorizontal(hardwareMap: HardwareMap): MarkIArm.HorizontalControl {
         val motor = hardwareMap.getMotorEx("horizontal")
-        return MarkIArm.HorizontalControl(motor)
+        return MarkIArm.HorizontalControl(motor).apply { setPIDF(PIDFCoefficients(9.0, 3.0, 0.0, 12.0)) }
     }
 
     @JvmStatic

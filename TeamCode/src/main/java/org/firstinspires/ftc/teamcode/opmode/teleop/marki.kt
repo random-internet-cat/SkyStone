@@ -112,7 +112,7 @@ class MarkITeleop : LinearOpMode() {
         when {
             gamepad.left_trigger > 0.1 -> horizontal.moveOut()
             gamepad.right_trigger > 0.1 -> horizontal.moveIn()
-            else -> horizontal.stop()
+            else -> horizontal.stopIfManual()
         }
     }
 
