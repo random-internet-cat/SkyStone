@@ -17,7 +17,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             private const val MIN_ENCODER_VALUE = 10
             private const val MAX_ENCODER_VALUE = 1245
 
-            private const val TO_POSITION_TOLERANCE = 2
+            private const val TO_POSITION_TOLERANCE = 4
         }
 
         init {
