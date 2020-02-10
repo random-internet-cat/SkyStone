@@ -116,6 +116,20 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
+    private fun handleFullOuttakeInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl, horizontal: MarkIArm.HorizontalControl) {
+        when {
+
+            // Retract horizontal & vertical
+            gamepad.a -> {
+                if (!_armMotionLastTick) {
+                    vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
+                    horizontal.moveIn()
+                }
+            }
+
+        }
+    }
+
     private fun handleArmClampInputs(gamepad: Gamepad, clamp: MarkIArm.Clamp) {
         when {
             gamepad.a -> clamp.close()
@@ -126,6 +140,7 @@ class MarkITeleop : LinearOpMode() {
     private fun handleArmInputs(gamepad: Gamepad, arm: MarkIArm) {
         handleArmHorizontalInputs(gamepad, arm.horizontal)
         handleArmVerticalInputs(gamepad, arm.vertical)
+        handleFullOuttakeInputs(gamepad, arm.vertical, arm.horizontal)
         handleArmClampInputs(gamepad, arm.clamp)
     }
 
@@ -141,6 +156,8 @@ class MarkITeleop : LinearOpMode() {
         val intake = hardware.intake
 
         waitForStart()
+
+        hardware.autoClaws.hideBoth()
 
         while (opModeIsActive()) {
             handleDriveInputs(gamepad1, drive, maxDriveRPM = maxDriveRPM.roadrunner(), maxVel = maxVel.roadrunner())
