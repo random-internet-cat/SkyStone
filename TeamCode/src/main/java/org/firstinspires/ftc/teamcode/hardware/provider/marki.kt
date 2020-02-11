@@ -43,34 +43,14 @@ object MarkIHardwareProvider {
         val externalGearing = 1.0
 
         val drivetrain = MecanumDrivetrain(
-            frontLeft = TypedMotorEx(frontLeft.withoutEncoderAccess(), externalGearing = externalGearing),
-            frontRight = TypedMotorEx(frontRight.withoutEncoderAccess(), externalGearing = externalGearing),
-            backLeft = TypedMotorEx(backLeft.withoutEncoderAccess(), externalGearing = externalGearing),
-            backRight = TypedMotorEx(backRight.withoutEncoderAccess(), externalGearing = externalGearing)
+            frontLeft = TypedMotorEx(frontLeft, externalGearing = externalGearing),
+            frontRight = TypedMotorEx(frontRight, externalGearing = externalGearing),
+            backLeft = TypedMotorEx(backLeft, externalGearing = externalGearing),
+            backRight = TypedMotorEx(backRight, externalGearing = externalGearing)
         )
 
-        val odoParallelDistance = MarkIOdometryConstants.PARALLEL_DISTANCE_IN
-        val odoParallelFwdDist = Inches(MarkIOdometryConstants.PARALLEL_FORWARD_DISTANCE_IN)
-
-        val podDescs = listOf(
-            OdoPodDesc(RobotPosition(odoParallelFwdDist, Inches(odoParallelDistance / 2.0), DegreesPoint(0)).roadrunner(), frontLeft),
-            OdoPodDesc(RobotPosition(Inches(MarkIOdometryConstants.BACK_DISTANCE_IN), Distance.zero(), DegreesPoint(90.0)).roadrunner(), backLeft)
-        )
-
-        val drive = MecanumDrive(MecanumNoWheelEncoders(object : TwoTrackingWheelLocalizer(
-            podDescs.map { it.pose }
-        ) {
-            override fun getWheelPositions(): List<Double> {
-                return podDescs.map { odometryPodTicksToPosition(it.motor).roadrunner().raw }
-            }
-
-            private val headingProvider = IMUHeadingProvider(imu)
-
-            override fun getHeading(): Double {
-                return headingProvider.currentHeading().roadrunner().raw
-            }
-        }), MarkIDriveConstants, drivetrain)
-
+        val drive = MecanumDrive(MecanumUseWheelEncoders(MecanumUseHeadingProvider(IMUHeadingProvider(imu))), MarkIDriveConstants, drivetrain)
+        drive.enableEncoders()
         drive.brakeOnZeroPower()
 
         return drive
