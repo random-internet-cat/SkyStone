@@ -11,12 +11,12 @@ class MarkIFoundationMover(left: Servo, right: Servo) : BaseFoundationMover(left
 }) {
     companion object {
         @JvmField
-        public var GRAB_POSITION: Double = 1.0
+        public var GRAB_POSITION: Double = 0.66
 
         @JvmField
         public var IN_THE_WAY_POSITION: Double = 0.0
 
         @JvmField
-        public var OUT_OF_THE_WAY_POSITION: Double = 0.66
+        public var OUT_OF_THE_WAY_POSITION: Double = 1.0
     }
 }
