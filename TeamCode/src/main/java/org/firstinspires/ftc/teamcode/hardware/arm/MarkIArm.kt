@@ -242,6 +242,9 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             moveToCurrentState()
         }
 
+        fun moveToCollect() = moveToState(State.CollectState)
+        fun moveToPlace(height: Int) = moveToState(State.PlaceBlockState(height))
+
         fun isMovingToState(): Boolean {
             check(isAutomatic)
             check(motor.mode == DcMotor.RunMode.RUN_TO_POSITION)
