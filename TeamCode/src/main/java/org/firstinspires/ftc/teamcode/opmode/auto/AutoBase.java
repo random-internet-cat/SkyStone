@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
+import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
 import org.firstinspires.ftc.teamcode.hardware.provider.MarkIHardwareProvider;
 
@@ -13,9 +14,9 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 
 @Config
 public abstract class AutoBase extends LinearOpMode {
-    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -33;
-    public static double _STONE_MIDDLE_X_IN = -42;
-    public static double _STONE_CLOSE_TO_WALL_X_IN = -51;
+    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -21;
+    public static double _STONE_MIDDLE_X_IN = -28;
+    public static double _STONE_CLOSE_TO_WALL_X_IN = -47;
 
     public static double _CORRESPONDING_STONE_DISTANCE_IN = 30;
 
@@ -66,6 +67,7 @@ public abstract class AutoBase extends LinearOpMode {
     private void setupHardware(MarkIHardware hardware) {
         hardware.getAutoClaws().hideBoth();
         hardware.getFoundationMover().moveBothToOutOfTheWay();
+        hardware.getArm().getVertical().moveToCollect();
     }
 
     protected abstract void turnTowardsWall(RRMecanumDriveBase drive);
@@ -81,8 +83,8 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     protected abstract void prepareToGrabFoundation(MarkIHardware hardware);
-    protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive);
-    protected abstract void moveFoundationToBuildingZone(RRMecanumDriveBase drive);
+    protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState);
+    protected abstract void moveFoundationToBuildingZoneAndRetractArm(RRMecanumDriveBase drive, MarkIArm arm);
     protected abstract void park(RRMecanumDriveBase drive);
 
     protected final void log(String message) {
@@ -90,19 +92,21 @@ public abstract class AutoBase extends LinearOpMode {
         telemetry.update();
     }
 
-    protected abstract void handleFirstStone(MarkIHardware hardware, RRMecanumDriveBase drive, QuarryState quarryState) throws InterruptedException;
-    protected abstract void handleSecondStone(MarkIHardware hardware, RRMecanumDriveBase drive, QuarryState quarryState) throws InterruptedException;
+    protected abstract void handleFirstStone(MarkIHardware hardware, QuarryState quarryState) throws InterruptedException;
+    protected abstract void handleSecondStone(MarkIHardware hardware, QuarryState quarryState) throws InterruptedException;
 
-    private void handleFoundation(MarkIHardware hardware, RRMecanumDriveBase drive) throws InterruptedException {
-        log("Preparing to grab foundation");
-        prepareToGrabFoundation(hardware);
-        log("Prepared to grab foundation");
+    private void handleFoundation(MarkIHardware hardware, QuarryState quarryState) throws InterruptedException {
+        RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
+
+        log("Moving to grab foundation");
+        moveToGrabFoundation(drive, quarryState);
+        log("Moved to grab foundation");
 
         checkInterrupted();
 
-        log("Moving to grab foundation");
-        moveToGrabFoundation(drive);
-        log("Moved to grab foundation");
+        log("Preparing to grab foundation");
+        prepareToGrabFoundation(hardware);
+        log("Prepared to grab foundation");
 
         checkInterrupted();
 
@@ -113,7 +117,7 @@ public abstract class AutoBase extends LinearOpMode {
         checkInterrupted();
 
         log("Moving foundation to depot");
-        moveFoundationToBuildingZone(drive);
+        moveFoundationToBuildingZoneAndRetractArm(drive, hardware.getArm());
         log("Moved foundation to depot");
 
         checkInterrupted();
@@ -147,20 +151,20 @@ public abstract class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
-        handleFirstStone(hardware, drive, quarryState);
+        handleFirstStone(hardware, quarryState);
 
-        //checkInterrupted();
-        //
-        //handleFoundation(hardware, drive);
-        //
-        //checkInterrupted();
+        checkInterrupted();
+
+        handleFoundation(hardware, quarryState);
+
+        checkInterrupted();
         //
         //handleSecondStone(hardware, drive, quarryState);
         //
-        //log("Parking");
-        //park(drive);
-        //log("Parked");
-        //
-        //checkInterrupted();
+        log("Parking");
+        park(drive);
+        log("Parked");
+
+        checkInterrupted();
     }
 }

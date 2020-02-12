@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
 import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws;
 
 import java.util.Objects;
@@ -28,16 +29,16 @@ public class RedAuto extends SidedAutoBase {
     }
 
     @Override
-    protected void prepareToGrabStone(MarkIAutoClaws claws) { claws.alignLeft(); claws.releaseLeft(); }
+    protected void prepareToGrabStone(MarkIHardware hardware) {}
 
     @Override
-    protected void clampClawsForStone(MarkIAutoClaws claws) {
-        claws.clampLeft();
+    protected double grabStoneCurveHeading() {
+        return degHeading(135);
     }
 
     @Override
-    protected void releaseClawsForStone(MarkIAutoClaws claws) {
-        claws.releaseLeft();
+    protected double grabStoneHeading() {
+        return degHeading(150);
     }
 
     @Override
