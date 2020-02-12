@@ -46,10 +46,18 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             power(-MOTOR_POWER)
         }
 
-        fun moveAllTheWayIn() {
+        private fun moveToPosition(encoderPosition: EncoderPosition) {
             motor.mode = DcMotor.RunMode.RUN_TO_POSITION
-            motor.targetPosition = MIN_ENCODER_VALUE
+            motor.targetPosition = encoderPosition.raw
             motor.power = MOTOR_POWER
+        }
+
+        fun moveAllTheWayIn() {
+            moveToPosition(EncoderPosition(MIN_ENCODER_VALUE))
+        }
+
+        fun moveAllTheWayOut() {
+            moveToPosition(EncoderPosition(MAX_ENCODER_VALUE))
         }
 
         fun pidf(): PIDFCoefficients = motor.pidf(DcMotor.RunMode.RUN_USING_ENCODER)
