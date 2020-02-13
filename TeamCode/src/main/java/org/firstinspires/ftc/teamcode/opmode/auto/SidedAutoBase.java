@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm;
 import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws;
+import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake;
 
 import kotlin.Unit;
@@ -240,7 +241,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
         checkInterrupted();
 
-        sleep(1500 /* ms */);
+        sleep(750 /* ms */);
         intake.stop();
         hardware.getArm().getClamp().close();
     }
@@ -298,34 +299,37 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     @Override
-    protected final void prepareToGrabFoundation(MarkIHardware hardware) {
-        log("Outtaking stone");
+    protected final void grabFoundation(MarkIHardware hardware) {
         MarkIArm arm = hardware.getArm();
+        MarkIFoundationMover mover = hardware.getFoundationMover();
 
-        arm.getClamp().close();
-        arm.getVertical().moveToPlace(1);
-        arm.getHorizontal().moveAllTheWayOut();
-
-        sleep(1500 /* ms */);
-
-        log("Outtook stone");
-
-        log("Retracting outtake");
+        log("Dropping stone and settings movers to grab");
         arm.getClamp().open();
+        mover.grab();
 
-        sleep(1000 /* ms */);
+        sleep( 400 /* ms */);
 
+        log("Stone dropped & movers in grab position");
+
+        log("Retracting horizontal");
         arm.getHorizontal().moveAllTheWayIn();
-        sleep(500);
-        log("Retracted outtake");
     }
 
     @Override
-    protected final void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState) {
+    protected final void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
                                         //.splineTo(releaseFirstStonePreMiddleStopPosition(quarryState))
                                         .splineTo(releaseFirstStoneMiddleStopPosition(quarryState))
+                                        .addMarker(2 /*seconds*/, new Function0<Unit>() {
+                                            @Override
+                                            public Unit invoke() {
+                                                arm.getClamp().close();
+                                                arm.getVertical().moveToPlace(1);
+                                                arm.getHorizontal().moveAllTheWayOut();
+                                                return Unit.INSTANCE;
+                                            }
+                                        })
                                         .splineTo(new Pose2d(grabFoundationPosition(), headingTowardsHomeWall()))
                                         .build());
     }
@@ -347,7 +351,7 @@ public abstract class SidedAutoBase extends AutoBase {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
                                         .forward(inches(-MOVE_FOUNDATION_TO_BUILDING_ZONE_REVERSE_DISTANCE_IN))
-                                        .addMarker(1.5 /*seconds*/, new Function0<Unit>() {
+                                        .addMarker(0.5 /*seconds*/, new Function0<Unit>() {
                                             @Override
                                             public Unit invoke() {
                                                 arm.getVertical().moveToCollect();

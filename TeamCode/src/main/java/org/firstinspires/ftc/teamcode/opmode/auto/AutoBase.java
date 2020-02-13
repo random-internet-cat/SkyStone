@@ -74,16 +74,16 @@ public abstract class AutoBase extends LinearOpMode {
 
     private void grabFoundation(MarkIFoundationMover foundationMover) {
         foundationMover.grabBoth();
-        sleep(1500 /* ms */);
+        sleep(500 /* ms */);
     }
 
     private void releaseFoundation(MarkIFoundationMover foundationMover) {
         foundationMover.moveBothToOutOfTheWay();
-        sleep(1500 /* ms */);
+        sleep(500 /* ms */);
     }
 
-    protected abstract void prepareToGrabFoundation(MarkIHardware hardware);
-    protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState);
+    protected abstract void grabFoundation(MarkIHardware hardware);
+    protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm);
     protected abstract void moveFoundationToBuildingZoneAndRetractArm(RRMecanumDriveBase drive, MarkIArm arm);
     protected abstract void park(RRMecanumDriveBase drive);
 
@@ -99,20 +99,14 @@ public abstract class AutoBase extends LinearOpMode {
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
         log("Moving to grab foundation");
-        moveToGrabFoundation(drive, quarryState);
+        moveToGrabFoundation(drive, quarryState, hardware.getArm());
         log("Moved to grab foundation");
 
         checkInterrupted();
 
-        log("Preparing to grab foundation");
-        prepareToGrabFoundation(hardware);
-        log("Prepared to grab foundation");
-
-        checkInterrupted();
-
-        log("Grabbing foundation");
-        grabFoundation(hardware.getFoundationMover());
-        log("Grabbed foundation");
+        log("Grab foundation and outtake stone");
+        grabFoundation(hardware);
+        log("Grabbed foundation and outtook stone");
 
         checkInterrupted();
 
