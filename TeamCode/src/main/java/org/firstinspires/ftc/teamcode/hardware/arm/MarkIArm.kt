@@ -17,8 +17,33 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             private const val MIN_ENCODER_VALUE = 10
             private const val MAX_ENCODER_VALUE = 1245
 
-            private const val TO_POSITION_TOLERANCE = 4
+            private const val MOVE_OUT_OVERSHOOT = 5
         }
+
+        private enum class AutomaticState {
+            IN {
+                override val targetPosition: EncoderPosition
+                    get() = EncoderPosition(MIN_ENCODER_VALUE)
+
+                override fun isWithinTolerance(motor: DcMotor): Boolean {
+                    return motor.currentPosition <= MIN_ENCODER_VALUE
+                }
+            },
+            OUT {
+                override val targetPosition: EncoderPosition
+                    get() = EncoderPosition(MAX_ENCODER_VALUE + MOVE_OUT_OVERSHOOT)
+
+                override fun isWithinTolerance(motor: DcMotor): Boolean {
+                    return motor.currentPosition >= MAX_ENCODER_VALUE
+                }
+            }
+            ;
+
+            abstract val targetPosition: EncoderPosition
+            abstract fun isWithinTolerance(motor: DcMotor): Boolean
+        }
+
+        private var automaticState: AutomaticState? = null
 
         init {
             motor.resetEncoder()
@@ -48,19 +73,14 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             power(-MOTOR_POWER)
         }
 
-        private fun moveToPosition(encoderPosition: EncoderPosition) {
+        private fun moveToState(newState: AutomaticState) {
             motor.mode = DcMotor.RunMode.RUN_TO_POSITION
-            motor.targetPosition = encoderPosition.raw
+            automaticState = newState
             motor.power = MOTOR_POWER
         }
 
-        fun moveAllTheWayIn() {
-            moveToPosition(EncoderPosition(MIN_ENCODER_VALUE))
-        }
-
-        fun moveAllTheWayOut() {
-            moveToPosition(EncoderPosition(MAX_ENCODER_VALUE))
-        }
+        fun moveAllTheWayIn() = moveToState(AutomaticState.IN)
+        fun moveAllTheWayOut() = moveToState(AutomaticState.OUT)
 
         fun pidf(): PIDFCoefficients = motor.pidf(DcMotor.RunMode.RUN_USING_ENCODER)
 
@@ -68,10 +88,13 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             motor.setPIDF(DcMotor.RunMode.RUN_USING_ENCODER, pidf)
         }
 
-        private fun isAutomatic() = motor.mode == DcMotor.RunMode.RUN_TO_POSITION
+        private fun isAutomatic() = automaticState != null
         private fun isManual() = !isAutomatic()
 
+        private fun checkAutomatic() = automaticState ?: throw IllegalStateException()
+
         private fun switchToManual() {
+            automaticState = null
             motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         }
 
@@ -84,8 +107,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         }
 
         private fun isWithinTolerance(): Boolean {
-            check(isAutomatic())
-            return abs(motor.targetPosition - motor.currentPosition) <= TO_POSITION_TOLERANCE
+            val automaticState = checkAutomatic()
+            return automaticState.isWithinTolerance(motor)
         }
 
         fun update() {
