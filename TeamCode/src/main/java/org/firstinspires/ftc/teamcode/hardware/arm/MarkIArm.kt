@@ -74,6 +74,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         }
 
         private fun moveToState(newState: AutomaticState) {
+            motor.targetPosition = newState.targetPosition.raw
             motor.mode = DcMotor.RunMode.RUN_TO_POSITION
             automaticState = newState
             motor.power = MOTOR_POWER
