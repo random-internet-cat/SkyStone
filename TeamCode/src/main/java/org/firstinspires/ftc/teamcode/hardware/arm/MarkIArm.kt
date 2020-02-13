@@ -24,7 +24,9 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             motor.resetEncoder()
         }
 
-        private fun power(rawPower: Double) {
+        fun power(rawPower: Double) {
+            check(-1 <= rawPower && rawPower <= 1)
+
             switchToManual()
 
             val wouldExceedRetract = rawPower < 0 && motor.currentPosition <= MIN_ENCODER_VALUE
