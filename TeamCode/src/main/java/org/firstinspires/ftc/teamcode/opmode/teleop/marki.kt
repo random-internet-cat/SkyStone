@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.RRAngularVelocity
 import org.firstinspires.ftc.teamcode.util.roadrunner.RRVelocity
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
 import org.firstinspires.ftc.teamcode.util.units.times
+import kotlin.math.abs
 import kotlin.math.withSign
 
 @TeleOp
@@ -109,9 +110,15 @@ class MarkITeleop : LinearOpMode() {
     }
 
     private fun handleArmHorizontalInputs(gamepad: Gamepad, horizontal: MarkIArm.HorizontalControl) {
+        // right stick for (small) adjustments
+        val manualPower = gamepad.right_stick_y.toDouble()
+        if (abs(manualPower) > 0.1) horizontal.power(manualPower)
+
+        // triggers for max and min presets
         when {
-            gamepad.left_trigger > 0.1 -> horizontal.moveOut()
-            gamepad.right_trigger > 0.1 -> horizontal.moveIn()
+            gamepad.left_trigger > 0.1 -> horizontal.moveAllTheWayOut()
+            gamepad.right_trigger > 0.1 -> horizontal.moveAllTheWayIn()
+
             else -> horizontal.stopIfManual()
         }
     }
