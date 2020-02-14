@@ -50,4 +50,10 @@ public class RedAuto extends SidedAutoBase {
     protected double headingTowardsHomeWall() {
         return degHeading(270);
     }
+
+    @Override
+    protected double sidedAngle(double angle) {
+        return -angle;
+    }
+
 }

@@ -51,4 +51,9 @@ public class BlueAuto extends SidedAutoBase {
     protected double headingTowardsHomeWall() {
         return degHeading(90);
     }
+
+    @Override
+    protected double sidedAngle(double angle) {
+        return angle;
+    }
 }

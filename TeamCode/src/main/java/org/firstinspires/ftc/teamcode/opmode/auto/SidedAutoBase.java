@@ -18,6 +18,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
 import static java.lang.Math.PI;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.ofHeading;
@@ -92,6 +93,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     protected abstract double headingTowardsFoundationWall();
     protected abstract double headingTowardsHomeWall();
+    protected abstract double sidedAngle(double angle);
 
     private double headingAwayFromHomeWall() {
         return oppositeHeading(headingTowardsHomeWall());
@@ -241,7 +243,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
         checkInterrupted();
 
-        sleep(750 /* ms */);
+        sleep(1500 /* ms */);
         intake.stop();
         hardware.getArm().getClamp().close();
     }
@@ -291,8 +293,8 @@ public abstract class SidedAutoBase extends AutoBase {
 
     //protected abstract void collectSecondStone(MarkIHardware hardware, QuarryState quarryState);
 
-    public static double GRAB_FOUNDATION_X_IN = 41.5;
-    public static double GRAB_FOUNDATION_Y_IN = 27;
+    public static double GRAB_FOUNDATION_X_IN = 42.5;
+    public static double GRAB_FOUNDATION_Y_IN = 30.0;
 
     private Vector2d grabFoundationPosition() {
         return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
@@ -321,7 +323,7 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .setReversed(true)
                                         //.splineTo(releaseFirstStonePreMiddleStopPosition(quarryState))
                                         .splineTo(releaseFirstStoneMiddleStopPosition(quarryState))
-                                        .addMarker(2 /*seconds*/, new Function0<Unit>() {
+                                        .addMarker(1.8 /*seconds*/, new Function0<Unit>() {
                                             @Override
                                             public Unit invoke() {
                                                 arm.getClamp().close();
@@ -334,35 +336,26 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .build());
     }
 
-    public static double MOVE_FOUNDATION_TO_BUILDING_ZONE_REVERSE_DISTANCE_IN = 12;
-    public static double ALIGN_FOUNDATION_X_IN = 28;
-    public static double ALIGN_FOUNDATION_Y_IN = 51;
-
-    private Pose2d alignFoundationPosition() {
-        return new Pose2d(sidedInchesVector(ALIGN_FOUNDATION_X_IN, ALIGN_FOUNDATION_Y_IN), headingTowardsDepotWall());
-    }
+    public static double FOUNDATION_TURN_ALIGN_ANGLE = 17.0;
+    public static double FOUNDATION_BACKOUT_INCHES = 29.0;
 
     @Override
     protected final void moveFoundationToBuildingZoneAndRetractArm(RRMecanumDriveBase drive, final MarkIArm arm) {
-        // Spline to make foundation horizontal
-        splineToForward(drive, alignFoundationPosition());
 
-        log("Reversing");
+        //Partial turn
+        turnToHeading(drive, headingTowardsHomeWall() + degHeading(sidedAngle(FOUNDATION_TURN_ALIGN_ANGLE)));
+
+        //Move forward a bit
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .setReversed(true)
-                                        .forward(inches(-MOVE_FOUNDATION_TO_BUILDING_ZONE_REVERSE_DISTANCE_IN))
-                                        .addMarker(0.5 /*seconds*/, new Function0<Unit>() {
-                                            @Override
-                                            public Unit invoke() {
-                                                arm.getVertical().moveToCollect();
-                                                return Unit.INSTANCE;
-                                            }
-                                        })
-                                        .build());
+                                    .forward(inches(FOUNDATION_BACKOUT_INCHES)).build());
+        arm.getVertical().moveToCollect();
+
+        //Finish off the turn to get the foundation into position
+        turnToHeading(drive, headingTowardsDepotWall());
     }
 
     public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 47;
+    public static double PARK_Y_IN = 40;
 
     private Vector2d parkPosition() {
         return sidedInchesVector(PARK_X_IN, PARK_Y_IN);
