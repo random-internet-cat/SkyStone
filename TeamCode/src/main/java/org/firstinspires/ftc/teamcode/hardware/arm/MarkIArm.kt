@@ -153,6 +153,17 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             abstract val nextUp: State?
             abstract val position: EncoderPosition
 
+            object ZeroState : State() {
+                override val nextDown: State? get() = null
+                override val nextUp: State? get() = CollectState
+                override val position: EncoderPosition
+                    get() = EncoderPosition(0)
+
+                override fun toString(): String {
+                    return "ZeroState"
+                }
+            }
+
             object CollectState : State() {
                 override val nextDown: State? get() = null
                 override val nextUp: State? get() = PlaceBlockState(MIN_BLOCK_HEIGHT)
@@ -265,6 +276,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             val currentState = currentAutomaticState()
             require(currentState != null) { "Request to move to state in manual mode" }
             moveToPosition(currentState.position)
+        }
+
+        public fun moveToZero() {
+            moveToState(State.ZeroState)
         }
 
         private fun moveToCurrentStateIfAutomatic() {
