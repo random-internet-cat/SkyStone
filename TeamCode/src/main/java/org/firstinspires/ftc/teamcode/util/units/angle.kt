@@ -99,6 +99,13 @@ inline fun cot(angle: RadiansPoint) = 1 / tan(angle.raw)
 inline fun sec(angle: RadiansPoint) = 1 / cos(angle.raw)
 inline fun csc(angle: RadiansPoint) = 1 / sin(angle.raw)
 
+inline fun sin(angle: Radians) = sin(angle.raw)
+inline fun cos(angle: Radians) = cos(angle.raw)
+inline fun tan(angle: Radians) = tan(angle.raw)
+inline fun cot(angle: Radians) = 1 / tan(angle.raw)
+inline fun sec(angle: Radians) = 1 / cos(angle.raw)
+inline fun csc(angle: Radians) = 1 / sin(angle.raw)
+
 inline class DegreesPoint(val raw: RawAngle) : AnglePoint {
     inline override fun toRadians(): RadiansPoint {
         return RadiansPoint(degToRad(raw))
@@ -152,3 +159,10 @@ fun tan(angle: AnglePoint) = tan(angle.toRadians())
 fun cot(angle: AnglePoint) = cot(angle.toRadians())
 fun sec(angle: AnglePoint) = sec(angle.toRadians())
 fun csc(angle: AnglePoint) = sec(angle.toRadians())
+
+fun sin(angle: Angle) = sin(angle.toRadians())
+fun cos(angle: Angle) = cos(angle.toRadians())
+fun tan(angle: Angle) = tan(angle.toRadians())
+fun cot(angle: Angle) = cot(angle.toRadians())
+fun sec(angle: Angle) = sec(angle.toRadians())
+fun csc(angle: Angle) = csc(angle.toRadians())
