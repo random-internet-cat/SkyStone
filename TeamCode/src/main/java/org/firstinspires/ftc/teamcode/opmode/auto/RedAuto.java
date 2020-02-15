@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
-import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws;
+import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU;
+import org.firstinspires.ftc.teamcode.util.Hardware_mapKt;
 
+import java.io.File;
 import java.util.Objects;
 
 import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
@@ -52,8 +57,7 @@ public class RedAuto extends SidedAutoBase {
     }
 
     @Override
-    protected double sidedAngle(double angle) {
-        return -angle;
+    protected double foundationAlignHeading() {
+        return headingTowardsHomeWall() - degHeading(FOUNDATION_TURN_ALIGN_ANGLE);
     }
-
 }

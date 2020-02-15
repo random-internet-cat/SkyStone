@@ -2,13 +2,21 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
+import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU;
+import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake;
 import org.firstinspires.ftc.teamcode.hardware.provider.MarkIHardwareProvider;
+import org.firstinspires.ftc.teamcode.util.Hardware_mapKt;
+
+import java.io.File;
 
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 
@@ -52,7 +60,13 @@ public abstract class AutoBase extends LinearOpMode {
         ;
     }
 
-    protected abstract QuarryState readQuarryState();
+    protected abstract QuarryState readQuarryState(SkystoneDetector detector);
+    protected abstract void saveGyroDataSided(RRMecanumDriveBase drive);
+
+    private final void resetIMU() {
+        InternalIMU imu = Hardware_mapKt.getIMU(hardwareMap, "imu");
+        imu.reset();
+    }
 
     protected final void checkInterrupted() throws InterruptedException {
         if (isStopRequested() || Thread.currentThread().isInterrupted()) throw new InterruptedException();
@@ -65,7 +79,6 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     private void setupHardware(MarkIHardware hardware) {
-        hardware.getAutoClaws().hideBoth();
         hardware.getFoundationMover().moveBothToOutOfTheWay();
         hardware.getArm().getVertical().moveToCollect();
     }
@@ -83,7 +96,7 @@ public abstract class AutoBase extends LinearOpMode {
     }
 
     protected abstract void grabFoundation(MarkIHardware hardware);
-    protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm);
+    protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm, final MarkIIntake intake);
     protected abstract void moveFoundationToBuildingZoneAndRetractArm(RRMecanumDriveBase drive, MarkIArm arm);
     protected abstract void park(RRMecanumDriveBase drive);
 
@@ -99,7 +112,7 @@ public abstract class AutoBase extends LinearOpMode {
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
         log("Moving to grab foundation");
-        moveToGrabFoundation(drive, quarryState, hardware.getArm());
+        moveToGrabFoundation(drive, quarryState, hardware.getArm(), hardware.getIntake());
         log("Moved to grab foundation");
 
         checkInterrupted();
@@ -127,6 +140,7 @@ public abstract class AutoBase extends LinearOpMode {
 
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
+        SkystoneDetector detector = new SkystoneDetector(hardwareMap);
 
         setupDrive(drive);
         setupHardware(hardware);
@@ -135,12 +149,14 @@ public abstract class AutoBase extends LinearOpMode {
 
         waitForStart();
 
+        resetIMU();
+
         checkInterrupted();
 
         log("Starting!");
 
         log("Reading quarry state");
-        QuarryState quarryState = readQuarryState();
+        QuarryState quarryState = readQuarryState(detector);
         log("Read quarry state, got: " + quarryState);
 
         checkInterrupted();

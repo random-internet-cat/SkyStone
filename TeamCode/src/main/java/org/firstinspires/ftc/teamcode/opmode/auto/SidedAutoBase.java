@@ -6,13 +6,18 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.acmerobotics.roadrunner.path.heading.HeadingInterpolator;
 import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm;
-import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
+import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU;
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake;
+import org.firstinspires.ftc.teamcode.util.Hardware_mapKt;
+
+import java.io.File;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -73,9 +78,8 @@ public abstract class SidedAutoBase extends AutoBase {
         return inchesVector(x, sideY(y));
     }
 
-    protected final SkystoneRelativePos readQuarryRelative() {
-        SkystoneDetector detector = new SkystoneDetector();
-        return detector.getPosition(hardwareMap, telemetry, /*nearBlueTape=*/ sideColor == SideColor.BLUE);
+    protected final SkystoneRelativePos readQuarryRelative(SkystoneDetector detector) {
+        return detector.getPosition(telemetry, /*nearBlueTape=*/ sideColor == SideColor.BLUE);
     }
 
     protected abstract QuarryState mapQuarryState(SkystoneRelativePos relativePos);
@@ -83,9 +87,9 @@ public abstract class SidedAutoBase extends AutoBase {
     public static int FORCED_QUARRY_STATE = -1;
 
     @Override
-    protected QuarryState readQuarryState() {
+    protected QuarryState readQuarryState(SkystoneDetector detector) {
         if (FORCED_QUARRY_STATE == -1) {
-            return mapQuarryState(readQuarryRelative());
+            return mapQuarryState(readQuarryRelative(detector));
         } else {
             return QuarryState.values()[FORCED_QUARRY_STATE];
         }
@@ -93,7 +97,12 @@ public abstract class SidedAutoBase extends AutoBase {
 
     protected abstract double headingTowardsFoundationWall();
     protected abstract double headingTowardsHomeWall();
-    protected abstract double sidedAngle(double angle);
+
+    @Override
+    protected final void saveGyroDataSided(RRMecanumDriveBase drive) {
+        File gyroAutoHeadingFile = AppUtil.getInstance().getSettingsFile("gyroAutoHeading.txt");
+        ReadWriteFile.writeFile(gyroAutoHeadingFile, String.valueOf(drive.getLocalizer().getPoseEstimate().getHeading()));
+    }
 
     private double headingAwayFromHomeWall() {
         return oppositeHeading(headingTowardsHomeWall());
@@ -222,9 +231,16 @@ public abstract class SidedAutoBase extends AutoBase {
         splineToReversed(drive, releaseSecondStonePosition(quarryState));
     }
 
-    private void moveToFirstStone(RRMecanumDriveBase drive, QuarryState quarryState) {
+    private void moveToFirstStone(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIIntake intake) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(false)
+                                        .addMarker(1.0 /*seconds*/, new Function0<Unit>() {
+                                            @Override
+                                            public Unit invoke() {
+                                                intake.intake();
+                                                return Unit.INSTANCE;
+                                            }
+                                        })
                                         .splineTo(firstStoneGrabCurvePosition(quarryState))
                                         .splineTo(firstStoneGrabPosition(quarryState))
                                         .build());
@@ -235,17 +251,11 @@ public abstract class SidedAutoBase extends AutoBase {
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
         MarkIIntake intake = hardware.getIntake();
 
-        intake.intake();
-
         log("Moving to grab first stone");
-        moveToFirstStone(drive, quarryState);
+        moveToFirstStone(drive, quarryState, intake);
         log("Moved to grab first stone");
 
         checkInterrupted();
-
-        sleep(1500 /* ms */);
-        intake.stop();
-        hardware.getArm().getClamp().close();
     }
 
     private Pose2d secondStoneGrabPosition(QuarryState quarryState) {
@@ -318,12 +328,21 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     @Override
-    protected final void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm) {
+    protected final void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm, final MarkIIntake intake) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
-                                        //.splineTo(releaseFirstStonePreMiddleStopPosition(quarryState))
                                         .splineTo(releaseFirstStoneMiddleStopPosition(quarryState))
-                                        .addMarker(1.8 /*seconds*/, new Function0<Unit>() {
+                                        // Stopping intake
+                                        .addMarker(1.3 /*seconds*/, new Function0<Unit>() {
+                                            @Override
+                                            public Unit invoke() {
+                                                intake.stop();
+                                                arm.getClamp().close();
+                                                return Unit.INSTANCE;
+                                            }
+                                        })
+                                        // Position stone to be deposited
+                                        .addMarker(1.9 /*seconds*/, new Function0<Unit>() {
                                             @Override
                                             public Unit invoke() {
                                                 arm.getClamp().close();
@@ -339,16 +358,20 @@ public abstract class SidedAutoBase extends AutoBase {
     public static double FOUNDATION_TURN_ALIGN_ANGLE = 17.0;
     public static double FOUNDATION_BACKOUT_INCHES = 29.0;
 
+    protected abstract double foundationAlignHeading();
+
     @Override
     protected final void moveFoundationToBuildingZoneAndRetractArm(RRMecanumDriveBase drive, final MarkIArm arm) {
 
         //Partial turn
-        turnToHeading(drive, headingTowardsHomeWall() + degHeading(sidedAngle(FOUNDATION_TURN_ALIGN_ANGLE)));
+        turnToHeading(drive, foundationAlignHeading());
 
         //Move forward a bit
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                     .forward(inches(FOUNDATION_BACKOUT_INCHES)).build());
-        arm.getVertical().moveToCollect();
+
+        // Zero out arm : necessary to perform in auto so we have a "fresh start" for TeleOp
+        arm.getVertical().moveToZero();
 
         //Finish off the turn to get the foundation into position
         turnToHeading(drive, headingTowardsDepotWall());

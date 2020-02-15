@@ -24,16 +24,16 @@ public class SkystoneDetector {
     private AutoBase.SkystoneRelativePos SkystonePosition = AutoBase.SkystoneRelativePos.RIGHT;
 
     private OpenCvCamera webcam;
-
     private Telemetry telemetry;
 
-    public AutoBase.SkystoneRelativePos getPosition(HardwareMap hardwareMap, Telemetry newTelmetry, boolean nearBlueTape) {
-        telemetry = newTelmetry;
-
-
+    public SkystoneDetector(HardwareMap hardwareMap) {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
 
         webcam.openCameraDevice();
+    }
+
+    public AutoBase.SkystoneRelativePos getPosition(Telemetry newTelmetry, boolean nearBlueTape) {
+        telemetry = newTelmetry;
 
         if (nearBlueTape) {
             webcam.setPipeline(new Pipeline(new double[]{0.35, 0.7}));

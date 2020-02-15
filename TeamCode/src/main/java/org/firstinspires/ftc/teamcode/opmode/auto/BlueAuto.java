@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
-import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
 
 import java.util.Objects;
@@ -53,7 +52,7 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     @Override
-    protected double sidedAngle(double angle) {
-        return angle;
+    protected double foundationAlignHeading() {
+        return headingTowardsHomeWall() + degHeading(FOUNDATION_TURN_ALIGN_ANGLE);
     }
 }
