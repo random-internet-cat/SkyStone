@@ -168,7 +168,6 @@ class MarkITeleop : LinearOpMode() {
 
         waitForStart()
 
-        hardware.autoClaws.hideBoth()
         arm.vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
         arm.clamp.open()
 
