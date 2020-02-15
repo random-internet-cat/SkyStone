@@ -13,9 +13,13 @@ import org.openftc.revextensions2.ExpansionHubEx
 private typealias RawIMU = BNO055IMU
 
 class InternalIMU(private val imu: RawIMU) {
-    private var angles: Orientation
+    private var angles: Orientation = Orientation()
 
     init {
+        reset()
+    }
+
+    fun reset() {
         val parameters = BNO055IMU.Parameters()
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC
@@ -24,7 +28,7 @@ class InternalIMU(private val imu: RawIMU) {
 
         imu.initialize(parameters)
 
-        angles = Orientation()
+        update()
     }
 
     public fun update() {
