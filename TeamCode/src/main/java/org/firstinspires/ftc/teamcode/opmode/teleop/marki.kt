@@ -112,14 +112,18 @@ class MarkITeleop : LinearOpMode() {
     private fun handleArmHorizontalInputs(gamepad: Gamepad, horizontal: MarkIArm.HorizontalControl) {
         // right stick for (small) adjustments
         val manualPower = gamepad.right_stick_y.toDouble()
-        if (abs(manualPower) > 0.1) horizontal.power(manualPower)
+        val useManual = abs(manualPower) > 0.1
 
-        // triggers for max and min presets
-        when {
-            gamepad.left_trigger > 0.1 -> horizontal.moveAllTheWayOut()
-            gamepad.right_trigger > 0.1 -> horizontal.moveAllTheWayIn()
+        if (useManual) {
+            horizontal.power(manualPower)
+        } else {
+            // triggers for max and min presets
+            when {
+                gamepad.left_trigger > 0.1 -> horizontal.moveAllTheWayOut()
+                gamepad.right_trigger > 0.1 -> horizontal.moveAllTheWayIn()
 
-            else -> horizontal.stopIfManual()
+                else -> horizontal.stopIfManual()
+            }
         }
     }
 
