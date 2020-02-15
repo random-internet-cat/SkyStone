@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import android.media.MediaPlayer;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm;
@@ -136,6 +139,8 @@ public abstract class AutoBase extends LinearOpMode {
 
     @Override
     public final void runOpMode() throws InterruptedException {
+        MediaPlayer moskauPlayer = MediaPlayer.create(hardwareMap.appContext, R.raw.moskau);
+
         log("Initializing...");
 
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
@@ -148,6 +153,8 @@ public abstract class AutoBase extends LinearOpMode {
         log("Initialized. Waiting for start.");
 
         waitForStart();
+
+        moskauPlayer.start();
 
         resetIMU();
 
@@ -176,5 +183,7 @@ public abstract class AutoBase extends LinearOpMode {
         log("Parked");
 
         checkInterrupted();
+
+        moskauPlayer.stop();
     }
 }
