@@ -5,17 +5,19 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.*
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
-import org.firstinspires.ftc.teamcode.hardware.drive.brakeOnZeroPower
-import org.firstinspires.ftc.teamcode.hardware.drive.enableEncoders
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
+import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.provider.makeMarkIHardware
 import org.firstinspires.ftc.teamcode.util.cutoffToZero
+import org.firstinspires.ftc.teamcode.util.getIMU
 import org.firstinspires.ftc.teamcode.util.roadrunner.RRAngularVelocity
 import org.firstinspires.ftc.teamcode.util.roadrunner.RRVelocity
 import org.firstinspires.ftc.teamcode.util.roadrunner.roadrunner
-import org.firstinspires.ftc.teamcode.util.units.times
+import org.firstinspires.ftc.teamcode.util.units.*
 import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.hypot
 import kotlin.math.withSign
 
 @TeleOp
@@ -40,6 +42,27 @@ class MarkITeleop : LinearOpMode() {
         _slowPressedLastTick = slowButtonIsPressed
 
         return _isSlow
+    }
+
+    private fun handleDriveFieldOrientedInputs(gamepad: Gamepad, drive: MecanumDrive, imu: InternalIMU, maxDriveRPM: RRAngularVelocity, maxVel: RRVelocity) {
+        val isSlowMode = shouldDriveSlow(gamepad)
+        val slowFactor = if (isSlowMode) 0.3 else 1.0
+
+        // Field orienting the drive
+        val inputFieldAngle = RadiansPoint(atan2(gamepad.left_stick_x * -1, gamepad.left_stick_y * -1))
+
+        val robotRelativeAngle = inputFieldAngle - imu.heading()
+
+        val velocityMagnitude = driveInputRamp(hypot(gamepad.left_stick_x, gamepad.left_stick_y).coerceAtMost(1.0f))
+
+        // Applying input ramp, max velocity, and slowness to the input
+        val x = cos(robotRelativeAngle) * velocityMagnitude * maxVel * slowFactor
+        val y = sin(robotRelativeAngle) * velocityMagnitude * maxVel * slowFactor
+
+        // Apply max velocity, cutoff, and slowness to turning
+        val turn = (gamepad.right_stick_x * -1).toDouble().cutoffToZero() * maxDriveRPM * slowFactor
+
+        drive.mecanumDrive(x = x, y = y, turn = turn)
     }
 
     private fun handleDriveInputs(gamepad: Gamepad, drive: MecanumDrive, maxDriveRPM: RRAngularVelocity, maxVel: RRVelocity) {
@@ -127,7 +150,7 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
-    private fun handleFullOuttakeInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl, horizontal: MarkIArm.HorizontalControl) {
+    private fun handleFullOuttakeInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl, horizontal: MarkIArm.HorizontalControl, clamp: MarkIArm.Clamp) {
         when {
 
             // Retract horizontal & vertical
@@ -135,6 +158,7 @@ class MarkITeleop : LinearOpMode() {
                 if (!_armMotionLastTick) {
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
                     horizontal.moveAllTheWayIn()
+                    clamp.open()
                 }
             }
 
@@ -151,7 +175,7 @@ class MarkITeleop : LinearOpMode() {
     private fun handleArmInputs(gamepad: Gamepad, arm: MarkIArm) {
         handleArmHorizontalInputs(gamepad, arm.horizontal)
         handleArmVerticalInputs(gamepad, arm.vertical)
-        handleFullOuttakeInputs(gamepad, arm.vertical, arm.horizontal)
+        handleFullOuttakeInputs(gamepad, arm.vertical, arm.horizontal, arm.clamp)
         handleArmClampInputs(gamepad, arm.clamp)
     }
 
@@ -165,21 +189,25 @@ class MarkITeleop : LinearOpMode() {
         val maxDriveRPM = driveConfig.maxDriveRPM().roadrunner()
         val maxVel = driveConfig.maxVelocity().roadrunner()
         val intake = hardware.intake
+        val imu = hardwareMap.getIMU()
 
         waitForStart()
 
-        hardware.autoClaws.hideBoth()
         arm.vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
         arm.clamp.open()
 
         while (opModeIsActive()) {
-            handleDriveInputs(gamepad1, drive, maxDriveRPM = maxDriveRPM.roadrunner(), maxVel = maxVel.roadrunner())
+            imu.update()
+
+            //handleDriveInputs(gamepad1, drive, maxDriveRPM = maxDriveRPM.roadrunner(), maxVel = maxVel.roadrunner())
+            handleDriveFieldOrientedInputs(gamepad1, drive, imu, maxDriveRPM = maxDriveRPM.roadrunner(), maxVel = maxVel.roadrunner())
             handleFoundationMoverInputs(gamepad1, foundationMover)
             handleIntakeInputs(gamepad1, intake)
             handleArmInputs(gamepad2, arm = arm)
 
             telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
             telemetry.addData("Is slow", _isSlow)
+            telemetry.addData("imu heading", imu.heading())
             telemetry.update()
             hardware.update()
         }
