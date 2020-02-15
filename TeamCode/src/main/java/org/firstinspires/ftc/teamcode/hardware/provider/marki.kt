@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.hardware.drive.constants.MarkIDriveConstan
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
-import org.firstinspires.ftc.teamcode.hardware.auto_claw.MarkIAutoClaws
 import org.firstinspires.ftc.teamcode.hardware.drive.motors.withoutEncoderAccess
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDFCoefficients
@@ -97,26 +96,12 @@ object MarkIHardwareProvider {
     }
 
     @JvmStatic
-    fun makeAutoClaws(hardwareMap: HardwareMap): MarkIAutoClaws {
-        val leftClaw = hardwareMap.getServo("auto_claw_left")
-        val rightClaw = hardwareMap.getServo("auto_claw_right")
-        val leftClamp = hardwareMap.getServo("auto_clamp_left");
-        val rightClamp = hardwareMap.getServo("auto_clamp_right");
-
-        leftClaw.direction = Servo.Direction.REVERSE
-        rightClamp.direction = Servo.Direction.REVERSE //don't ask, this works
-
-        return MarkIAutoClaws(leftClaw = leftClaw, rightClaw = rightClaw, leftClamp = leftClamp, rightClamp = rightClamp)
-    }
-
-    @JvmStatic
     fun makeHardware(hardwareMap: HardwareMap): MarkIHardware {
         return MarkIHardware(
             makeDrive(hardwareMap),
             makeArm(hardwareMap),
             makeIntake(hardwareMap),
-            makeFoundationMover(hardwareMap),
-            makeAutoClaws(hardwareMap)
+            makeFoundationMover(hardwareMap)
         )
     }
 }
