@@ -329,22 +329,20 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm, final MarkIIntake intake) {
+        Pose2d middleStopPos = releaseFirstStoneMiddleStopPosition(quarryState);
+        Vector2d startArmMovementPos = new Vector2d(
+            middleStopPos.getX() + inches(12),
+            middleStopPos.getY()
+        );
+
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
                                         .splineTo(releaseFirstStoneMiddleStopPosition(quarryState))
-                                        // Stopping intake
-                                        .addMarker(1.3 /*seconds*/, new Function0<Unit>() {
+                                        // Position stone to be deposited
+                                        .addMarker(startArmMovementPos, new Function0<Unit>() {
                                             @Override
                                             public Unit invoke() {
                                                 intake.stop();
-                                                arm.getClamp().close();
-                                                return Unit.INSTANCE;
-                                            }
-                                        })
-                                        // Position stone to be deposited
-                                        .addMarker(1.9 /*seconds*/, new Function0<Unit>() {
-                                            @Override
-                                            public Unit invoke() {
                                                 arm.getClamp().close();
                                                 arm.getVertical().moveToPlace(1);
                                                 arm.getHorizontal().moveAllTheWayOut();
