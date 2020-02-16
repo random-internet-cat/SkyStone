@@ -22,7 +22,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
     public var GEAR_RATIO: Double = 1.0
 
     @JvmField
-    public var _WHEEL_RADIUS_IN: Double = 2.0
+    public var _WHEEL_RADIUS_IN: Double = 1.9266
 
     fun wheelRadius(): RRDistance {
         return Inches(_WHEEL_RADIUS_IN).roadrunner()
