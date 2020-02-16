@@ -164,7 +164,7 @@ public abstract class SidedAutoBase extends AutoBase {
         turnToHeading(drive, headingTowardsHomeWall());
     }
 
-    public static double GRAB_STONE_Y_POS_IN = 32;
+    public static double GRAB_STONE_Y_POS_IN = 30;
 
     private double grabStoneYPos() {
         return ySidedInches(GRAB_STONE_Y_POS_IN);
@@ -172,7 +172,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     public static double STONE_GRAB_OFFSET_IN = 0;
 
-    public static double STONE_CURVE_OFFSET_IN = 7;
+    public static double STONE_CURVE_OFFSET_IN = 5;
 
     protected abstract double grabStoneCurveHeading();
 
