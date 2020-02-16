@@ -5,42 +5,49 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.util.*
-import org.firstinspires.ftc.teamcode.util.roadrunner.PIDCoefficients
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.units.*
-import kotlin.math.abs
 
 data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
     data class HorizontalControl(val motor: DcMotorEx) {
         companion object {
-            private const val MOTOR_POWER = 1.0
+            private const val MOTOR_POWER = 0.9
             private const val MIN_ENCODER_VALUE = 10
-            private const val MAX_ENCODER_VALUE = 1245
+            private const val MAX_ENCODER_VALUE = 1255
 
             private const val MOVE_OUT_OVERSHOOT = 5
         }
 
         private enum class AutomaticState {
             IN {
-                override val targetPosition: EncoderPosition
-                    get() = EncoderPosition(MIN_ENCODER_VALUE)
+                override fun runOnMotor(motor: DcMotor) {
+                    motor.power = 0.0
+                    motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
 
-                override fun isWithinTolerance(motor: DcMotor): Boolean {
+                    if (motor.currentPosition >= MIN_ENCODER_VALUE) {
+                        motor.power = -1 * MOTOR_POWER
+                    }
+                }
+
+                override fun shouldStopRunning(motor: DcMotor): Boolean {
                     return motor.currentPosition <= MIN_ENCODER_VALUE
                 }
             },
             OUT {
-                override val targetPosition: EncoderPosition
-                    get() = EncoderPosition(MAX_ENCODER_VALUE + MOVE_OUT_OVERSHOOT)
+                override fun runOnMotor(motor: DcMotor) {
+                    motor.power = MOTOR_POWER
+                    motor.targetPosition = MAX_ENCODER_VALUE + MOVE_OUT_OVERSHOOT
+                    motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+                }
 
-                override fun isWithinTolerance(motor: DcMotor): Boolean {
+                override fun shouldStopRunning(motor: DcMotor): Boolean {
                     return motor.currentPosition >= MAX_ENCODER_VALUE
                 }
             }
             ;
 
-            abstract val targetPosition: EncoderPosition
-            abstract fun isWithinTolerance(motor: DcMotor): Boolean
+            abstract fun runOnMotor(motor: DcMotor)
+            abstract fun shouldStopRunning(motor: DcMotor): Boolean
         }
 
         private var automaticState: AutomaticState? = null
@@ -74,10 +81,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         }
 
         private fun moveToState(newState: AutomaticState) {
-            motor.targetPosition = newState.targetPosition.raw
-            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+            newState.runOnMotor(motor)
             automaticState = newState
-            motor.power = MOTOR_POWER
         }
 
         fun moveAllTheWayIn() = moveToState(AutomaticState.IN)
@@ -107,14 +112,15 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             if (isManual()) stop()
         }
 
-        private fun isWithinTolerance(): Boolean {
+        private fun shouldStopAutomatic(): Boolean {
             val automaticState = checkAutomatic()
-            return automaticState.isWithinTolerance(motor)
+            return automaticState.shouldStopRunning(motor)
         }
 
         fun update() {
             // Check to turn off RunToPosition and reinstate manual control if target has been reached
-            if (isAutomatic() && isWithinTolerance()) {
+            if (isAutomatic() && shouldStopAutomatic()) {
+                stop()
                 switchToManual()
             }
         }
@@ -127,7 +133,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             private const val AUTOMATIC_MOTOR_POWER = 1.0
 
             @JvmField
-            public var _COLLECT_TICKS: Int = 120
+            public var _COLLECT_TICKS: Int = 0
 
             @JvmField
             public var _STAGE0_TICKS: Int = 370
