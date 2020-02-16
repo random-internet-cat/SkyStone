@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.*
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
-import org.firstinspires.ftc.teamcode.hardware.drive.brakeOnZeroPower
-import org.firstinspires.ftc.teamcode.hardware.drive.enableEncoders
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.provider.makeMarkIHardware
@@ -109,7 +107,7 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
-    private fun handleArmHorizontalInputs(gamepad: Gamepad, horizontal: MarkIArm.HorizontalControl) {
+    private fun handleArmHorizontalAndClampInputs(gamepad: Gamepad, horizontal: MarkIArm.HorizontalControl, clamp: MarkIArm.Clamp) {
         // right stick for (small) adjustments
         val manualPower = gamepad.right_stick_y.toDouble()
         val useManual = abs(manualPower) > 0.1
@@ -120,14 +118,18 @@ class MarkITeleop : LinearOpMode() {
             // triggers for max and min presets
             when {
                 gamepad.left_trigger > 0.1 -> horizontal.moveAllTheWayOut()
-                gamepad.right_trigger > 0.1 -> horizontal.moveAllTheWayIn()
+
+                gamepad.right_trigger > 0.1 -> {
+                    horizontal.moveAllTheWayIn()
+                    clamp.open()
+                }
 
                 else -> horizontal.stopIfManual()
             }
         }
     }
 
-    private fun handleFullOuttakeInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl, horizontal: MarkIArm.HorizontalControl) {
+    private fun handleFullOuttakeInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl, horizontal: MarkIArm.HorizontalControl, clamp: MarkIArm.Clamp) {
         when {
 
             // Retract horizontal & vertical
@@ -135,13 +137,14 @@ class MarkITeleop : LinearOpMode() {
                 if (!_armMotionLastTick) {
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
                     horizontal.moveAllTheWayIn()
+                    clamp.open()
                 }
             }
 
         }
     }
 
-    private fun handleArmClampInputs(gamepad: Gamepad, clamp: MarkIArm.Clamp) {
+    private fun handleArmClampSpecificInputs(gamepad: Gamepad, clamp: MarkIArm.Clamp) {
         when {
             gamepad.a -> clamp.close()
             gamepad.x -> clamp.open()
@@ -149,10 +152,10 @@ class MarkITeleop : LinearOpMode() {
     }
 
     private fun handleArmInputs(gamepad: Gamepad, arm: MarkIArm) {
-        handleArmHorizontalInputs(gamepad, arm.horizontal)
+        handleArmHorizontalAndClampInputs(gamepad, arm.horizontal, arm.clamp)
         handleArmVerticalInputs(gamepad, arm.vertical)
-        handleFullOuttakeInputs(gamepad, arm.vertical, arm.horizontal)
-        handleArmClampInputs(gamepad, arm.clamp)
+        handleFullOuttakeInputs(gamepad, arm.vertical, arm.horizontal, arm.clamp)
+        handleArmClampSpecificInputs(gamepad, arm.clamp)
     }
 
     override fun runOpMode() {
