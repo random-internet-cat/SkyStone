@@ -29,7 +29,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
     }
 
     @JvmField
-    public var _TRACK_WIDTH_IN: Double = 15.82
+    public var _TRACK_WIDTH_IN: Double = 14.44
 
     override fun trackWidth(): RRDistance {
         return Inches(_TRACK_WIDTH_IN).roadrunner()
@@ -57,7 +57,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
     fun wheelCircumference() = (wheelRadius() * TWO_PI).roadrunner()
     fun distancePerRev() = ((wheelCircumference() * GEAR_RATIO) / Revolutions(1.0)).roadrunner()
 
-    private val BASE_CONSTRAINTS = DriveConstraints(Feet(5) / Seconds(1), Inches(20) / Seconds(1) / Seconds(1), RevolutionsPerSecond(0.5), DegreesPerSecondSquared(180))
+    private val BASE_CONSTRAINTS = DriveConstraints(Feet(4) / Seconds(1), Inches(30) / Seconds(1) / Seconds(1), RevolutionsPerSecond(0.5), DegreesPerSecondSquared(180))
 
     override fun baseConstraints(): DriveConstraints {
         return BASE_CONSTRAINTS
@@ -77,9 +77,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
         data class UseFeedforward(val characterization: DcMotorCharacterization) : PIDOrFeedforward()
     }
 
-    private val PID_OR_FEEDFORWARD: PIDOrFeedforward = PIDOrFeedforward.UsePID(PIDCoefficients(28.0, 12.0, 7.0)) //TODO: EDIT THESE CONSTANTS
-    // Option: (P: 1.17, I: .117, D: 0)
-    // Other option: (P: 33, I: 0, D: 7)
+    private val PID_OR_FEEDFORWARD: PIDOrFeedforward = PIDOrFeedforward.UsePID(PIDCoefficients(34.0, 0.0, 13.0))
 
     override fun pidOrFeedforward(): MecanumPIDOrFeedForward {
         return when (PID_OR_FEEDFORWARD) {
