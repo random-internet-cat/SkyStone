@@ -63,6 +63,7 @@ public abstract class AutoBase extends LinearOpMode {
         ;
     }
 
+    protected abstract SkystoneDetector setupDetector();
     protected abstract QuarryState readQuarryState(SkystoneDetector detector);
     protected abstract void saveGyroDataSided(RRMecanumDriveBase drive);
 
@@ -145,7 +146,7 @@ public abstract class AutoBase extends LinearOpMode {
 
         MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
-        SkystoneDetector detector = new SkystoneDetector(hardwareMap);
+        SkystoneDetector detector = setupDetector();
 
         setupDrive(drive);
         setupHardware(hardware);

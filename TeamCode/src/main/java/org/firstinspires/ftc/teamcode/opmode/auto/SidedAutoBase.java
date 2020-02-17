@@ -78,8 +78,13 @@ public abstract class SidedAutoBase extends AutoBase {
         return inchesVector(x, sideY(y));
     }
 
+    @Override
+    protected SkystoneDetector setupDetector() {
+        return new SkystoneDetector(hardwareMap, telemetry, sideColor == SideColor.BLUE);
+    }
+
     protected final SkystoneRelativePos readQuarryRelative(SkystoneDetector detector) {
-        return detector.getPosition(telemetry, /*nearBlueTape=*/ sideColor == SideColor.BLUE);
+        return detector.getPosition();
     }
 
     protected abstract QuarryState mapQuarryState(SkystoneRelativePos relativePos);
