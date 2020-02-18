@@ -215,7 +215,7 @@ public abstract class SidedAutoBase extends AutoBase {
         );
     }
 
-    public static double RELEASE_FIRST_STONE_PREMIDDLE_STOP_X = -12;
+    /*public static double RELEASE_FIRST_STONE_PREMIDDLE_STOP_X = -12;
     public static double RELEASE_FIRST_STONE_PREMIDDLE_STOP_Y = 40;
 
     private Pose2d releaseFirstStonePreMiddleStopPosition(QuarryState quarryState) {
@@ -223,7 +223,7 @@ public abstract class SidedAutoBase extends AutoBase {
             sidedInchesVector(RELEASE_FIRST_STONE_PREMIDDLE_STOP_X, RELEASE_FIRST_STONE_PREMIDDLE_STOP_Y),
             headingTowardsDepotWall()
         );
-    }
+    }*/
 
     private Pose2d releaseSecondStonePosition(QuarryState quarryState) {
         return new Pose2d(
@@ -343,6 +343,14 @@ public abstract class SidedAutoBase extends AutoBase {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .setReversed(true)
                                         .splineTo(releaseFirstStoneMiddleStopPosition(quarryState))
+                                        .addMarker(1.5, new Function0<Unit>() {
+                                            @Override
+                                            public Unit invoke() {
+                                                intake.stop();
+                                                arm.getClamp().close();
+                                                return Unit.INSTANCE;
+                                            }
+                                        })
                                         // Position stone to be deposited
                                         .addMarker(startArmMovementPos, new Function0<Unit>() {
                                             @Override

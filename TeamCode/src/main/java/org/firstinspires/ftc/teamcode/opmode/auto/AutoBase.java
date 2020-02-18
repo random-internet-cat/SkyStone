@@ -25,9 +25,9 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 
 @Config
 public abstract class AutoBase extends LinearOpMode {
-    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -21;
-    public static double _STONE_MIDDLE_X_IN = -28;
-    public static double _STONE_CLOSE_TO_WALL_X_IN = -47;
+    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -28;
+    public static double _STONE_MIDDLE_X_IN = -36;
+    public static double _STONE_CLOSE_TO_WALL_X_IN = -44;
 
     public static double _CORRESPONDING_STONE_DISTANCE_IN = 30;
 
@@ -72,8 +72,13 @@ public abstract class AutoBase extends LinearOpMode {
         imu.reset();
     }
 
+    MediaPlayer songPlayer = null;
+
     protected final void checkInterrupted() throws InterruptedException {
-        if (isStopRequested() || Thread.currentThread().isInterrupted()) throw new InterruptedException();
+        if (isStopRequested() || Thread.currentThread().isInterrupted()) {
+            if (songPlayer != null) { songPlayer.stop(); }
+            throw new InterruptedException();
+        }
     }
 
     protected abstract Pose2d startPosition();
@@ -140,7 +145,7 @@ public abstract class AutoBase extends LinearOpMode {
 
     @Override
     public final void runOpMode() throws InterruptedException {
-        MediaPlayer moskauPlayer = MediaPlayer.create(hardwareMap.appContext, R.raw.moskau);
+        songPlayer = MediaPlayer.create(hardwareMap.appContext, R.raw.moskau);
 
         log("Initializing...");
 
@@ -151,13 +156,11 @@ public abstract class AutoBase extends LinearOpMode {
         setupDrive(drive);
         setupHardware(hardware);
 
+        songPlayer.start();
+
         log("Initialized. Waiting for start.");
 
         waitForStart();
-
-        moskauPlayer.start();
-
-        resetIMU();
 
         checkInterrupted();
 
@@ -185,6 +188,6 @@ public abstract class AutoBase extends LinearOpMode {
 
         checkInterrupted();
 
-        moskauPlayer.stop();
+        songPlayer.stop();
     }
 }

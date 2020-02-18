@@ -38,12 +38,12 @@ public class RedAuto extends SidedAutoBase {
 
     @Override
     protected double grabStoneCurveHeading() {
-        return degHeading(135);
+        return degHeading(120);
     }
 
     @Override
     protected double grabStoneHeading() {
-        return degHeading(150);
+        return degHeading(120);
     }
 
     @Override
