@@ -121,7 +121,9 @@ class MarkITeleop : LinearOpMode() {
 
                 gamepad.right_trigger > 0.1 -> {
                     horizontal.moveAllTheWayIn()
-                    clamp.open()
+                    if (!horizontal.closeToIn()) {
+                        clamp.open()
+                    }
                 }
 
                 else -> horizontal.stopIfManual()

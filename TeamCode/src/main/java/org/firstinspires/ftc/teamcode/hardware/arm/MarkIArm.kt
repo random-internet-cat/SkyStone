@@ -80,6 +80,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             power(-MOTOR_POWER)
         }
 
+        fun closeToIn() : Boolean {
+            return (kotlin.math.abs(motor.currentPosition - MIN_ENCODER_VALUE) <= 20)
+        }
+
         private fun moveToState(newState: AutomaticState) {
             newState.runOnMotor(motor)
             automaticState = newState
@@ -152,7 +156,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         sealed class State {
             companion object {
                 private const val MIN_BLOCK_HEIGHT = 0
-                private const val MAX_BLOCK_HEIGHT = 5
+                private const val MAX_BLOCK_HEIGHT = 7
             }
 
             abstract val nextDown: State?
@@ -163,7 +167,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
                 override val nextDown: State? get() = null
                 override val nextUp: State? get() = CollectState
                 override val position: EncoderPosition
-                    get() = EncoderPosition(0)
+                    get() = EncoderPosition(MIN_ENCODER_TICKS)
 
                 override fun toString(): String {
                     return "ZeroState"
