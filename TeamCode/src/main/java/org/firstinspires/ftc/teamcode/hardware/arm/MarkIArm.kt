@@ -146,7 +146,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             public var _PER_STAGE_TICKS: Int = 690
 
             private const val MIN_ENCODER_TICKS = 10
-            private const val MAX_ENCODER_TICKS = 3650
+            private const val MAX_ENCODER_TICKS = 4720
 
             private val COLLECT_POSITION get() = EncoderPosition(_COLLECT_TICKS)
             private val STAGE0_POSITION get() = EncoderPosition(_STAGE0_TICKS)
