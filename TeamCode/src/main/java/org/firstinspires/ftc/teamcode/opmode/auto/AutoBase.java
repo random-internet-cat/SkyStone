@@ -25,9 +25,9 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 
 @Config
 public abstract class AutoBase extends LinearOpMode {
-    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -28;
-    public static double _STONE_MIDDLE_X_IN = -36;
-    public static double _STONE_CLOSE_TO_WALL_X_IN = -44;
+    public static double _STONE_CLOSE_TO_BRIDGES_X_IN = -22;
+    public static double _STONE_MIDDLE_X_IN = -30;
+    public static double _STONE_CLOSE_TO_WALL_X_IN = -38;
 
     public static double _CORRESPONDING_STONE_DISTANCE_IN = 30;
 
@@ -90,6 +90,7 @@ public abstract class AutoBase extends LinearOpMode {
     private void setupHardware(MarkIHardware hardware) {
         hardware.getFoundationMover().moveBothToOutOfTheWay();
         hardware.getArm().getVertical().moveToCollect();
+        hardware.getArm().getClamp().open();
     }
 
     protected abstract void turnTowardsWall(RRMecanumDriveBase drive);

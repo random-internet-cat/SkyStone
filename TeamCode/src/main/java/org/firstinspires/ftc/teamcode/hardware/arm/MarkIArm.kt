@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.units.*
 data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
     data class HorizontalControl(val motor: DcMotorEx) {
         companion object {
-            private const val MOTOR_POWER = 0.9
+            private const val MOTOR_POWER = 0.8
             private const val MIN_ENCODER_VALUE = 10
             private const val MAX_ENCODER_VALUE = 1255
 

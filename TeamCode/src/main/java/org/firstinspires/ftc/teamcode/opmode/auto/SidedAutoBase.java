@@ -206,7 +206,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double RELEASE_FIRST_STONE_MIDDLE_STOP_X = 0;
-    public static double RELEASE_FIRST_STONE_MIDDLE_STOP_Y = 40;
+    public static double RELEASE_FIRST_STONE_MIDDLE_STOP_Y = 43;
 
     private Pose2d releaseFirstStoneMiddleStopPosition(QuarryState quarryState) {
         return new Pose2d(
@@ -309,7 +309,7 @@ public abstract class SidedAutoBase extends AutoBase {
     //protected abstract void collectSecondStone(MarkIHardware hardware, QuarryState quarryState);
 
     public static double GRAB_FOUNDATION_X_IN = 42.5;
-    public static double GRAB_FOUNDATION_Y_IN = 30.0;
+    public static double GRAB_FOUNDATION_Y_IN = 35.5;
 
     private Vector2d grabFoundationPosition() {
         return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
@@ -367,7 +367,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double FOUNDATION_TURN_ALIGN_ANGLE = 17.0;
-    public static double FOUNDATION_BACKOUT_INCHES = 29.0;
+    public static double FOUNDATION_BACKOUT_INCHES = 32.0;
 
     protected abstract double foundationAlignHeading();
 
@@ -389,7 +389,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 40;
+    public static double PARK_Y_IN = 45;
 
     private Vector2d parkPosition() {
         return sidedInchesVector(PARK_X_IN, PARK_Y_IN);

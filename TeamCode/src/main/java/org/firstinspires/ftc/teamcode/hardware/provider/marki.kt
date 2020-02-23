@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.hardware.*
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
+import org.firstinspires.ftc.teamcode.hardware.capstone_dropper.MarkICapstoneDropper
 import org.firstinspires.ftc.teamcode.hardware.drive.*
 import org.firstinspires.ftc.teamcode.hardware.drive.constants.MarkIDriveConstants
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
@@ -96,12 +97,20 @@ object MarkIHardwareProvider {
     }
 
     @JvmStatic
+    fun makeCapstoneDropper(hardwareMap: HardwareMap) : MarkICapstoneDropper {
+        val capstoneDropper = hardwareMap.getServo("cap_mech")
+
+        return MarkICapstoneDropper(capstoneDropper)
+    }
+
+    @JvmStatic
     fun makeHardware(hardwareMap: HardwareMap): MarkIHardware {
         return MarkIHardware(
             makeDrive(hardwareMap),
             makeArm(hardwareMap),
             makeIntake(hardwareMap),
-            makeFoundationMover(hardwareMap)
+            makeFoundationMover(hardwareMap),
+            makeCapstoneDropper(hardwareMap)
         )
     }
 }

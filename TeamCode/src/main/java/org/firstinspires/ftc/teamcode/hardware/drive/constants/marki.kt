@@ -29,7 +29,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
     }
 
     @JvmField
-    public var _TRACK_WIDTH_IN: Double = 13.66
+    public var _TRACK_WIDTH_IN: Double = 15.74
 
     override fun trackWidth(): RRDistance {
         return Inches(_TRACK_WIDTH_IN).roadrunner()
@@ -48,7 +48,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
         return TRANSLATIONAL_PID
     }
 
-    private val HEADING_PID = PIDCoefficients(1.0, 0.0, 0.0)
+    private val HEADING_PID = PIDCoefficients(1.5, 0.0, 0.0)
 
     override fun headingPID(): PIDCoefficients {
         return HEADING_PID
@@ -77,7 +77,7 @@ object MarkIDriveConstants : MecanumDriveConfig {
         data class UseFeedforward(val characterization: DcMotorCharacterization) : PIDOrFeedforward()
     }
 
-    private val PID_OR_FEEDFORWARD: PIDOrFeedforward = PIDOrFeedforward.UsePID(PIDCoefficients(33.0, 0.0, 13.0))
+    private val PID_OR_FEEDFORWARD: PIDOrFeedforward = PIDOrFeedforward.UsePID(PIDCoefficients(38.0, 0.0, 14.0))
 
     override fun pidOrFeedforward(): MecanumPIDOrFeedForward {
         return when (PID_OR_FEEDFORWARD) {
