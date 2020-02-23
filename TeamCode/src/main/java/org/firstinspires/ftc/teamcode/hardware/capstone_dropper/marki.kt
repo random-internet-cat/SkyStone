@@ -13,6 +13,6 @@ class MarkICapstoneDropper(dropper: Servo) : BaseCapstoneDropper(dropper, object
         public var IN_THE_WAY_POSITION: Double = 0.0
 
         @JvmField
-        public var OUT_OF_THE_WAY_POSITION: Double = 1.0
+        public var OUT_OF_THE_WAY_POSITION: Double = 0.36
     }
 }

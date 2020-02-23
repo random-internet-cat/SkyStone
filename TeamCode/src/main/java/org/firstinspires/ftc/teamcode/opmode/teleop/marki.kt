@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.*
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
+import org.firstinspires.ftc.teamcode.hardware.capstone_dropper.MarkICapstoneDropper
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.provider.makeMarkIHardware
@@ -153,6 +154,13 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
+    private fun handleCapstoneDropperInputs(gamepad: Gamepad, dropper: MarkICapstoneDropper) {
+        when {
+            gamepad.dpad_right -> dropper.moveInWay()
+            gamepad.dpad_left -> dropper.moveOutOfWay()
+        }
+    }
+
     private fun handleArmInputs(gamepad: Gamepad, arm: MarkIArm) {
         handleArmHorizontalAndClampInputs(gamepad, arm.horizontal, arm.clamp)
         handleArmVerticalInputs(gamepad, arm.vertical)
@@ -170,6 +178,7 @@ class MarkITeleop : LinearOpMode() {
         val maxDriveRPM = driveConfig.maxDriveRPM().roadrunner()
         val maxVel = driveConfig.maxVelocity().roadrunner()
         val intake = hardware.intake
+        val capstoneDropper = hardware.capstoneDropper
 
         waitForStart()
 
@@ -181,6 +190,7 @@ class MarkITeleop : LinearOpMode() {
             handleFoundationMoverInputs(gamepad1, foundationMover)
             handleIntakeInputs(gamepad1, intake)
             handleArmInputs(gamepad2, arm = arm)
+            handleCapstoneDropperInputs(gamepad2, capstoneDropper)
 
             telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
             telemetry.addData("Is slow", _isSlow)
