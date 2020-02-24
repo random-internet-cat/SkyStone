@@ -63,9 +63,12 @@ object MarkIDriveConstants : MecanumDriveConfig {
         return BASE_CONSTRAINTS
     }
 
+    @JvmField
+    public var MOTOR_KF: Double = 32767.toDouble() / ticksPerSecond().raw.toDouble()
+
     // Per https://github.com/acmerobotics/road-runner-quickstart/commit/2c4968515de06f094afc0d51fb3c564c3ab32b3d
     private fun pidMotorKF(): Double {
-        return 32767.toDouble() / ticksPerSecond().raw.toDouble()
+        return MOTOR_KF
     }
 
     private fun pidKV(): Double {
