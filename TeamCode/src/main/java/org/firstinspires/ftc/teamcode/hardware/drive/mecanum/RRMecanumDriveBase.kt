@@ -251,8 +251,10 @@ abstract class RRMecanumDriveBase(drivetrainConfig: MecanumDrivetrainConfig, pid
 
 
     abstract fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients
+    abstract fun getPIDFCoefficients(runMode: DcMotor.RunMode): PIDFCoefficients
 
     abstract fun setPIDCoefficients(runMode: DcMotor.RunMode, coefficients: PIDCoefficients)
+    abstract fun setPIDFCoefficients(runMode: DcMotor.RunMode, coefficients: PIDFCoefficients)
 }
 
 fun RRMecanumDriveBase.setCurrentPosition(position: PositionVector) {

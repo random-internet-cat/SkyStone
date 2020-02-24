@@ -115,8 +115,13 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfig, va
             override fun getPIDCoefficients(runMode: DcMotor.RunMode): PIDCoefficients {
                 requirePID()
 
-                val coeffs = drivetrain.frontLeft.motor.getPIDFCoefficients(runMode)
-                return PIDCoefficients(coeffs.p, coeffs.i, coeffs.d)
+                return drivetrain.frontLeft.motor.pid(runMode)
+            }
+
+            override fun getPIDFCoefficients(runMode: DcMotor.RunMode): PIDFCoefficients {
+                requirePID()
+
+                return drivetrain.frontLeft.motor.pidf(runMode)
             }
 
             override fun setPIDCoefficients(runMode: DcMotor.RunMode, coefficients: PIDCoefficients) {
@@ -125,6 +130,14 @@ class MecanumDrive(private val localizationConfig: MecanumLocalizationConfig, va
 
                 forEachMotor {
                     setPIDF(runMode, coefficients.kP, coefficients.kI, coefficients.kD, kF)
+                }
+            }
+
+            override fun setPIDFCoefficients(runMode: DcMotor.RunMode, coefficients: PIDFCoefficients) {
+                requirePID()
+
+                forEachMotor {
+                    setPIDF(runMode, coefficients)
                 }
             }
 
