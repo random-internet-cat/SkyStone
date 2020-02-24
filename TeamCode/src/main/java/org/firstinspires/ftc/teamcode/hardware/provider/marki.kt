@@ -64,7 +64,7 @@ object MarkIHardwareProvider {
 
     @JvmStatic
     fun makeArmVertical(hardwareMap: HardwareMap): MarkIArm.VerticalControl {
-        val motor = hardwareMap.getMotor("vertical")
+        val motor = hardwareMap.getMotorEx("vertical")
         motor.setReversed()
         motor.brakeOnZeroPower()
         motor.enableEncoder()
