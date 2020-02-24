@@ -318,6 +318,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         fun update() {
             moveToCurrentStateIfAutomatic()
         }
+
+        fun encoderPosition() = motor.encoderPosition()
     }
 
     @Config
