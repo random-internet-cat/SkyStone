@@ -309,7 +309,7 @@ public abstract class SidedAutoBase extends AutoBase {
     //protected abstract void collectSecondStone(MarkIHardware hardware, QuarryState quarryState);
 
     public static double GRAB_FOUNDATION_X_IN = 42.5;
-    public static double GRAB_FOUNDATION_Y_IN = 35.5;
+    public static double GRAB_FOUNDATION_Y_IN = 34.5;
 
     private Vector2d grabFoundationPosition() {
         return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
