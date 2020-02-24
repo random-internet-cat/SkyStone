@@ -134,7 +134,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
     @Config("MarkIArm VerticalControl")
     data class VerticalControl(private val motor: DcMotorEx) {
         companion object {
-            private const val MANUAL_MOTOR_POWER = 0.6
+            private const val MANUAL_MOTOR_POWER = 0.8
             private const val AUTOMATIC_MOTOR_POWER = 0.9
 
             @JvmField
