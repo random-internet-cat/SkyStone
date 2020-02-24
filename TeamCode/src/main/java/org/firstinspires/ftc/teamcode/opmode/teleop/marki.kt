@@ -118,9 +118,9 @@ class MarkITeleop : LinearOpMode() {
         } else {
             // triggers for max and min presets
             when {
-                gamepad.left_trigger > 0.1 -> horizontal.moveAllTheWayOut()
+                gamepad.right_trigger > 0.1 -> horizontal.moveAllTheWayOut()
 
-                gamepad.right_trigger > 0.1 -> {
+                gamepad.left_trigger > 0.1 -> {
                     horizontal.moveAllTheWayIn()
                     if (!horizontal.closeToIn()) {
                         clamp.open()
@@ -136,7 +136,7 @@ class MarkITeleop : LinearOpMode() {
         when {
 
             // Retract horizontal & vertical
-            gamepad.b -> {
+            gamepad.x -> {
                 if (!_armMotionLastTick) {
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
                     horizontal.moveAllTheWayIn()
@@ -149,8 +149,8 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleArmClampSpecificInputs(gamepad: Gamepad, clamp: MarkIArm.Clamp) {
         when {
-            gamepad.a -> clamp.close()
-            gamepad.x -> clamp.open()
+            gamepad.b -> clamp.close()
+            gamepad.a -> clamp.open()
         }
     }
 
