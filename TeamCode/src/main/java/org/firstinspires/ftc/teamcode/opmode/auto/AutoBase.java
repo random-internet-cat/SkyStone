@@ -148,49 +148,50 @@ public abstract class AutoBase extends LinearOpMode {
     public final void runOpMode() throws InterruptedException {
         songPlayer = MediaPlayer.create(hardwareMap.appContext, R.raw.moskau);
 
-        log("Initializing...");
+        try (SkystoneDetector detector = setupDetector()) {
+            log("Initializing...");
 
-        MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
-        RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
-        SkystoneDetector detector = setupDetector();
+            MarkIHardware hardware = MarkIHardwareProvider.makeHardware(hardwareMap);
+            RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
 
-        setupDrive(drive);
-        setupHardware(hardware);
+            setupDrive(drive);
+            setupHardware(hardware);
 
-        songPlayer.start();
+            songPlayer.start();
 
-        log("Initialized. Waiting for start.");
+            log("Initialized. Waiting for start.");
 
-        waitForStart();
+            waitForStart();
 
-        checkInterrupted();
+            checkInterrupted();
 
-        log("Starting!");
+            log("Starting!");
 
-        log("Reading quarry state");
-        QuarryState quarryState = readQuarryState(detector);
-        log("Read quarry state, got: " + quarryState);
+            log("Reading quarry state");
+            QuarryState quarryState = readQuarryState(detector);
+            log("Read quarry state, got: " + quarryState);
 
-        detector.close();
+            detector.close();
 
-        checkInterrupted();
+            checkInterrupted();
 
-        handleFirstStone(hardware, quarryState);
+            handleFirstStone(hardware, quarryState);
 
-        checkInterrupted();
+            checkInterrupted();
 
-        handleFoundation(hardware, quarryState);
+            handleFoundation(hardware, quarryState);
 
-        checkInterrupted();
-        //
-        //handleSecondStone(hardware, drive, quarryState);
-        //
-        log("Parking");
-        park(drive);
-        log("Parked");
+            checkInterrupted();
+            //
+            //handleSecondStone(hardware, drive, quarryState);
+            //
+            log("Parking");
+            park(drive);
+            log("Parked");
 
-        checkInterrupted();
+            checkInterrupted();
 
-        songPlayer.stop();
+            songPlayer.stop();
+        }
     }
 }
