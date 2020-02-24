@@ -114,7 +114,7 @@ class MarkITeleop : LinearOpMode() {
         val useManual = abs(manualPower) > 0.1
 
         if (useManual) {
-            horizontal.power(manualPower * .8)
+            horizontal.power(-manualPower * .8)
         } else {
             // triggers for max and min presets
             when {
@@ -136,7 +136,7 @@ class MarkITeleop : LinearOpMode() {
         when {
 
             // Retract horizontal & vertical
-            gamepad.x -> {
+            gamepad.y -> {
                 if (!_armMotionLastTick) {
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
                     horizontal.moveAllTheWayIn()
@@ -149,8 +149,8 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleArmClampSpecificInputs(gamepad: Gamepad, clamp: MarkIArm.Clamp) {
         when {
-            gamepad.b -> clamp.close()
-            gamepad.a -> clamp.open()
+            gamepad.x -> clamp.close()
+            gamepad.b -> clamp.open()
         }
     }
 
