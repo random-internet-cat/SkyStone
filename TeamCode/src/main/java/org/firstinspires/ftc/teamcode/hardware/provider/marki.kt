@@ -59,7 +59,7 @@ object MarkIHardwareProvider {
     @JvmStatic
     fun makeArmHorizontal(hardwareMap: HardwareMap): MarkIArm.HorizontalControl {
         val motor = hardwareMap.getMotorEx("horizontal")
-        return MarkIArm.HorizontalControl(motor).apply { setPIDF(PIDFCoefficients(12.0, 3.0, 0.0, 5.0)) }
+        return MarkIArm.HorizontalControl(motor).apply { setPIDF(PIDFCoefficients(12.0, 0.11, 0.0, 4.0)) }
     }
 
     @JvmStatic

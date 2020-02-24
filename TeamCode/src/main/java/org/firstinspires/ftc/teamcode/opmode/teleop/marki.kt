@@ -114,7 +114,7 @@ class MarkITeleop : LinearOpMode() {
         val useManual = abs(manualPower) > 0.1
 
         if (useManual) {
-            horizontal.power(manualPower)
+            horizontal.power(manualPower * .8)
         } else {
             // triggers for max and min presets
             when {
@@ -194,6 +194,7 @@ class MarkITeleop : LinearOpMode() {
 
             telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
             telemetry.addData("Is slow", _isSlow)
+            telemetry.addData("Horizontal ticks", arm.horizontal.motor.currentPosition)
             telemetry.update()
             hardware.update()
         }

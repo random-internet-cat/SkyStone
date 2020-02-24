@@ -13,9 +13,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         companion object {
             private const val MOTOR_POWER = 0.8
             private const val MIN_ENCODER_VALUE = 10
-            private const val MAX_ENCODER_VALUE = 1255
 
-            private const val MOVE_OUT_OVERSHOOT = 5
+            private const val MAX_ENCODER_VALUE = 1200
+
+            private const val MOVE_OUT_OVERSHOOT = 5;
         }
 
         private enum class AutomaticState {
