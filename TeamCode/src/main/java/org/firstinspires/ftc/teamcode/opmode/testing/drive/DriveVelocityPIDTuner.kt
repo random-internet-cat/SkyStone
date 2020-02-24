@@ -59,35 +59,47 @@ class DriveVelocityPIDTuner : LinearOpMode() {
         val pidVar = CustomVariable()
         pidVar.putVariable("kP", BasicVariable(object : ValueProvider<Double> {
             override fun get(): Double? {
-                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kP
+                return drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kP
             }
 
             override fun set(value: Double?) {
-                val coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER)
-                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                                         PIDCoefficients(value!!, coeffs.kI, coeffs.kD))
+                val coeffs = drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER)
+                drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+                                          coeffs.copy(kP = value!!))
             }
         }))
         pidVar.putVariable("kI", BasicVariable(object : ValueProvider<Double> {
             override fun get(): Double? {
-                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kI
+                return drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kI
             }
 
             override fun set(value: Double?) {
-                val coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER)
-                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                                         PIDCoefficients(coeffs.kP, value!!, coeffs.kD))
+                val coeffs = drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER)
+                drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+                                          coeffs.copy(kI = value!!))
             }
         }))
         pidVar.putVariable("kD", BasicVariable(object : ValueProvider<Double> {
             override fun get(): Double? {
-                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kD
+                return drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kD
             }
 
             override fun set(value: Double?) {
-                val coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER)
-                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                                         PIDCoefficients(coeffs.kP, coeffs.kI, value!!))
+                val coeffs = drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER)
+                drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+                                          coeffs.copy(kD = value!!))
+            }
+        }))
+
+        pidVar.putVariable("kF", BasicVariable(object : ValueProvider<Double> {
+            override fun get(): Double {
+                return drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kF
+            }
+
+            override fun set(value: Double?) {
+                val coeffs = drive.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER)
+                drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+                                          coeffs.copy(kF = value!!))
             }
         }))
 
