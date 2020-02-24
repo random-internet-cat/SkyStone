@@ -77,7 +77,7 @@ public class WebcamExample extends LinearOpMode
         //BLUE SIDE: 0.35, 0.7
         //RED SIDE: 0.4, 0.75
 
-        webcam.setPipeline(new SamplePipeline(new double[]{0.4, 0.75}));
+        webcam.setPipeline(new SamplePipeline(new double[]{0.4, 0.8}));
 
         webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
 

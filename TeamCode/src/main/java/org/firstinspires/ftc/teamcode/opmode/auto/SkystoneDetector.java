@@ -27,13 +27,13 @@ public class SkystoneDetector {
     private Telemetry telemetry;
     private Thread t;
 
-    public SkystoneDetector(HardwareMap hardwareMap, Telemetry newTelemetry, boolean nearBlueTape) {
+    public SkystoneDetector(HardwareMap hardwareMap, Telemetry newTelemetry, boolean blueSide) {
         telemetry = newTelemetry;
 
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
 
 
-        if (nearBlueTape) {
+        if (blueSide) {
             webcam.setPipeline(new Pipeline(new double[]{0.35, 0.7}));
         } else {
             webcam.setPipeline(new Pipeline(new double[]{0.4, 0.75}));
