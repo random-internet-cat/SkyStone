@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.acmerobotics.roadrunner.path.heading.HeadingInterpolator;
 import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
+import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -32,6 +33,8 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.sub;
 
 @Config
 public abstract class SidedAutoBase extends AutoBase {
+    private final DriveConstraints FAST_CONSTRAINTS = AutoConstraintsKt.AUTO_FAST_CONSTRAINTS;
+
     enum SideYSign {
         POSITIVE(1),
         NEGATIVE(-1)
