@@ -25,13 +25,15 @@ public class SkystoneDetector {
 
     private OpenCvCamera webcam;
     private Telemetry telemetry;
-    private Thread t;
 
-    public SkystoneDetector(HardwareMap hardwareMap, Telemetry newTelemetry, boolean blueSide) {
-        telemetry = newTelemetry;
-
+    public SkystoneDetector(HardwareMap hardwareMap) {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
 
+        webcam.openCameraDevice();
+    }
+
+    public AutoBase.SkystoneRelativePos getPosition(Telemetry newTelmetry, boolean blueSide) {
+        telemetry = newTelmetry;
 
         if (blueSide) {
             webcam.setPipeline(new Pipeline(new double[]{0.35, 0.7}));
@@ -39,32 +41,11 @@ public class SkystoneDetector {
             webcam.setPipeline(new Pipeline(new double[]{0.4, 0.75}));
         }
 
-        t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                webcam.openCameraDevice();
-                webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-            }
-        });
-        t.start();
-    }
+        webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
 
-    public AutoBase.SkystoneRelativePos getPosition() {
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        pause(500);
 
-        pause(100);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                webcam.stopStreaming();
-                webcam.closeCameraDevice();
-            }
-        }).start();
+        webcam.closeCameraDevice();
 
         return SkystonePosition;
     }
