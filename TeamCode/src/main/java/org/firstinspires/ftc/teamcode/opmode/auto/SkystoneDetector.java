@@ -40,7 +40,13 @@ class SkystoneDetectorPipeline extends OpenCvPipeline {
         fractionalDistances = distanceValues;
     }
 
+    boolean hasValue = false;
     AutoBase.SkystoneRelativePos skystonePosition = null;
+
+    private void setPosition(AutoBase.SkystoneRelativePos position) {
+        hasValue = true;
+        skystonePosition = position;
+    }
 
     @Override
     public Mat processFrame(Mat input) {
@@ -93,11 +99,11 @@ class SkystoneDetectorPipeline extends OpenCvPipeline {
                         Imgproc.circle(input, new Point(cX, cY), 10, new Scalar(0, 0, 255), 10);
 
                         if (Imgproc.moments(contours2.get(j)).get_m10() / Imgproc.moments(contours2.get(j)).get_m00() < fractionalDistances[0] * bounder.width) {
-                            skystonePosition = AutoBase.SkystoneRelativePos.LEFT;
+                            setPosition(AutoBase.SkystoneRelativePos.LEFT);
                         } else if (Imgproc.moments(contours2.get(j)).get_m10() / Imgproc.moments(contours2.get(j)).get_m00() < fractionalDistances[1] * bounder.width) {
-                            skystonePosition = AutoBase.SkystoneRelativePos.MIDDLE;
+                            setPosition(AutoBase.SkystoneRelativePos.MIDDLE);
                         } else {
-                            skystonePosition = AutoBase.SkystoneRelativePos.RIGHT;
+                            setPosition(AutoBase.SkystoneRelativePos.RIGHT);
                         }
                     }
 
@@ -105,7 +111,7 @@ class SkystoneDetectorPipeline extends OpenCvPipeline {
             }
         }
 
-        telemetry.addData("Position", skystonePosition.name());
+        if (hasPosition()) telemetry.addData("Position", position().name());
         telemetry.update();
         return input;
     }
