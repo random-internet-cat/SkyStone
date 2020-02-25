@@ -29,7 +29,7 @@ public abstract class AutoBase extends LinearOpMode {
     public static double _STONE_MIDDLE_X_IN = -30;
     public static double _STONE_CLOSE_TO_WALL_X_IN = -38;
 
-    public static double _CORRESPONDING_STONE_DISTANCE_IN = 30;
+    public static double _CORRESPONDING_STONE_DISTANCE_IN = -24;
 
     public enum QuarryState {
         CLOSE_TO_BRIDGES {
@@ -182,9 +182,9 @@ public abstract class AutoBase extends LinearOpMode {
             handleFoundation(hardware, quarryState);
 
             checkInterrupted();
-            //
-            //handleSecondStone(hardware, drive, quarryState);
-            //
+
+            handleSecondStone(hardware, quarryState);
+
             log("Parking");
             park(drive);
             log("Parked");

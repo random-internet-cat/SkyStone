@@ -37,13 +37,13 @@ public class RedAuto extends SidedAutoBase {
     protected void prepareToGrabStone(MarkIHardware hardware) {}
 
     @Override
-    protected double grabStoneCurveHeading() {
+    protected double grabFirstStoneHeading() {
         return degHeading(120);
     }
 
     @Override
-    protected double grabStoneHeading() {
-        return degHeading(120);
+    protected double grabSecondStoneHeading() {
+        return degHeading(150);
     }
 
     @Override

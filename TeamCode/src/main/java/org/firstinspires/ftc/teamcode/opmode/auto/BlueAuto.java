@@ -32,13 +32,13 @@ public class BlueAuto extends SidedAutoBase {
     protected void prepareToGrabStone(MarkIHardware hardware) {}
 
     @Override
-    protected double grabStoneCurveHeading() {
+    protected double grabFirstStoneHeading() {
         return degHeading(240);
     }
 
     @Override
-    protected double grabStoneHeading() {
-        return degHeading(240);
+    protected double grabSecondStoneHeading() {
+        return degHeading(210);
     }
 
     @Override

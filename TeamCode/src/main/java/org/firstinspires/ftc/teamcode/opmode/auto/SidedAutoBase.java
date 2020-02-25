@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.acmerobotics.roadrunner.path.heading.HeadingInterpolator;
-import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -14,9 +13,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.RRMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.MarkIHardware;
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm;
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.MarkIFoundationMover;
-import org.firstinspires.ftc.teamcode.hardware.imu.InternalIMU;
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake;
-import org.firstinspires.ftc.teamcode.util.Hardware_mapKt;
 
 import java.io.File;
 
@@ -24,7 +21,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
 import static java.lang.Math.PI;
-import static org.firstinspires.ftc.teamcode.util.RRUnits.degHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.ofHeading;
@@ -159,7 +155,8 @@ public abstract class SidedAutoBase extends AutoBase {
         drive.turnSync(sub(ofHeading(heading), ofHeading(drive.getPoseEstimate().getHeading())));
     }
 
-    protected abstract double grabStoneHeading();
+    protected abstract double grabFirstStoneHeading();
+    protected abstract double grabSecondStoneHeading();
 
     @Override
     protected final Pose2d startPosition() {
@@ -172,29 +169,33 @@ public abstract class SidedAutoBase extends AutoBase {
         turnToHeading(drive, headingTowardsHomeWall());
     }
 
-    public static double GRAB_STONE_Y_POS_IN = 30;
+    public static double GRAB_FIRST_STONE_Y_POS_IN = 30;
 
-    private double grabStoneYPos() {
-        return ySidedInches(GRAB_STONE_Y_POS_IN);
+    private double grabFirstStoneYPos() {
+        return ySidedInches(GRAB_FIRST_STONE_Y_POS_IN);
+    }
+
+    public static double GRAB_SECOND_STONE_Y_POS_IN = 28;
+
+    private double grabSecondStoneYPos() {
+        return ySidedInches(GRAB_SECOND_STONE_Y_POS_IN);
     }
 
     public static double STONE_GRAB_OFFSET_IN = 0;
 
     public static double STONE_CURVE_OFFSET_IN = 5;
 
-    protected abstract double grabStoneCurveHeading();
-
     private Pose2d firstStoneGrabCurvePosition(QuarryState quarryState) {
-        double heading = grabStoneCurveHeading();
+        double heading = grabFirstStoneHeading();
         double headingDiff = heading - headingTowardsDepotWall();
-        return new Pose2d(quarryState.firstXPosition() + Math.cos(headingDiff) * inches(STONE_CURVE_OFFSET_IN), grabStoneYPos() + Math.sin(headingDiff) * inches(STONE_CURVE_OFFSET_IN), grabStoneCurveHeading());
+        return new Pose2d(quarryState.firstXPosition() + Math.cos(headingDiff) * inches(STONE_CURVE_OFFSET_IN), grabFirstStoneYPos() + Math.sin(headingDiff) * inches(STONE_CURVE_OFFSET_IN), heading);
     }
 
     protected Pose2d firstStoneGrabPosition(QuarryState quarryState) {
         return new Pose2d(
             quarryState.firstXPosition() + inches(STONE_GRAB_OFFSET_IN),
-            grabStoneYPos(),
-            grabStoneHeading()
+            grabFirstStoneYPos(),
+            grabFirstStoneHeading()
         );
     }
 
@@ -269,42 +270,121 @@ public abstract class SidedAutoBase extends AutoBase {
     private Pose2d secondStoneGrabPosition(QuarryState quarryState) {
         return new Pose2d(
             quarryState.secondXPosition() + inches(STONE_GRAB_OFFSET_IN),
-            grabStoneYPos(),
-            grabStoneHeading()
+            grabSecondStoneYPos(),
+            grabSecondStoneHeading()
         );
     }
 
+    private Pose2d secondStoneMidpointPosition() {
+        return new Pose2d(
+            skybridgeMiddlePosition(),
+            headingTowardsDepotWall()
+        );
+    }
+
+    private Pose2d secondStoneBeforeGrabPosition(QuarryState quarryState) {
+        double heading = grabSecondStoneHeading();
+        double headingDiff = heading - headingTowardsDepotWall();
+        return new Pose2d(quarryState.secondXPosition() + Math.cos(headingDiff) * inches(STONE_CURVE_OFFSET_IN), grabSecondStoneYPos() + Math.sin(headingDiff) * inches(STONE_CURVE_OFFSET_IN), heading);
+    }
+
     private void moveToGrabSecondStone(RRMecanumDriveBase drive, QuarryState quarryState) {
-        splineToForward(drive, secondStoneGrabPosition(quarryState));
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .splineTo(secondStoneMidpointPosition())
+                                        .splineTo(secondStoneBeforeGrabPosition(quarryState))
+                                        .splineTo(secondStoneGrabPosition(quarryState))
+                                        .build());
+    }
+
+    private Pose2d depositSecondStoneMidpointPosition() {
+        return new Pose2d(
+            skybridgeMiddlePosition(),
+            headingTowardsDepotWall()
+        );
+    }
+
+    public static double DEPOSIT_SECOND_STONE_X_IN = 36;
+    public static double DEPOSIT_SECOND_STONE_Y_IN = 48;
+
+    private Pose2d depositSecondStonePosition() {
+        return new Pose2d(sidedInchesVector(DEPOSIT_SECOND_STONE_X_IN, DEPOSIT_SECOND_STONE_Y_IN), headingTowardsDepotWall());
+    }
+
+    private void moveToDepositSecondStone(final MarkIHardware hardware) {
+        RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
+        final MarkIArm arm = hardware.getArm();
+
+        Pose2d middleStopPos = depositSecondStoneMidpointPosition();
+
+        Vector2d startArmMovementPos = new Vector2d(
+            middleStopPos.getX() + inches(12),
+            middleStopPos.getY()
+        );
+
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                                        .setReversed(true)
+                                        .splineTo(middleStopPos)
+                                        .splineTo(depositSecondStonePosition())
+                                        .addMarker(1.5 /* seconds */, new Function0<Unit>() {
+                                            @Override
+                                            public Unit invoke() {
+                                                arm.getClamp().close();
+                                                return Unit.INSTANCE;
+                                            }
+                                        })
+                                        .addMarker(startArmMovementPos, new Function0<Unit>() {
+                                            @Override
+                                            public Unit invoke() {
+                                                arm.getClamp().close();
+                                                arm.getVertical().moveToPlace(1);
+                                                arm.getHorizontal().moveAllTheWayOut();
+                                                return Unit.INSTANCE;
+                                            }
+                                        })
+                                        .build());
     }
 
     @Override
     protected void handleSecondStone(MarkIHardware hardware, QuarryState quarryState) throws InterruptedException {
-        //log("Preparing to grab second stone");
-        //prepareToGrabStone(hardware);
-        //log("Prepared to grab second stone");
-        //
-        //checkInterrupted();
-        //
-        //log("Moving to grab second stone");
-        //moveToGrabSecondStone(drive, quarryState);
-        //log("Moved to grab second stone");
-        //
-        //checkInterrupted();
-        //
-        //log("Collecting second stone");
-        //collectSecondStone(hardware, quarryState);
-        //log("Collected second stone");
-        //
-        //checkInterrupted();
-        //
-        //log("Moving to release second stone");
-        //moveToReleaseSecondStone(drive, quarryState);
-        //log("Moved to release second stone");
-        //
-        //log("Releasing stone");
-        //releaseStone(hardware);
-        //log("Released stone");
+        RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
+        MarkIArm arm = hardware.getArm();
+        MarkIIntake intake = hardware.getIntake();
+
+        log("Enabling intake");
+        intake.intake();
+        log("Enabled intake");
+
+        checkInterrupted();
+
+        log("Moving to grab second stone");
+        moveToGrabSecondStone(drive, quarryState);
+        log("Moved to grab second stone");
+
+        checkInterrupted();
+
+        log("Moving to deposit second stone");
+        moveToDepositSecondStone(hardware);
+        log("Moved to deposit second stone");
+
+        checkInterrupted();
+
+        log("Disabling intake");
+        intake.stop();
+        log("Disabled intake");
+
+        checkInterrupted();
+
+        log("Releasing second stone");
+        arm.getClamp().open();
+        log("Released second stone");
+
+        sleep(1500);
+
+        log("Retracting arm");
+        arm.getClamp().open();
+        arm.getVertical().moveToCollect();
+        arm.getHorizontal().moveAllTheWayIn();
+        log("Retracted arm");
     }
 
     protected abstract void prepareToGrabStone(MarkIHardware hardware);
@@ -312,7 +392,7 @@ public abstract class SidedAutoBase extends AutoBase {
     //protected abstract void collectSecondStone(MarkIHardware hardware, QuarryState quarryState);
 
     public static double GRAB_FOUNDATION_X_IN = 42.5;
-    public static double GRAB_FOUNDATION_Y_IN = 34.5;
+    public static double GRAB_FOUNDATION_Y_IN = 31.5;
 
     private Vector2d grabFoundationPosition() {
         return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
@@ -391,11 +471,15 @@ public abstract class SidedAutoBase extends AutoBase {
         turnToHeading(drive, headingTowardsDepotWall());
     }
 
-    public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 45;
+    public static double SKYBRIDGE_MID_X_IN = 0;
+    public static double SKYBRIDGE_MID_Y_IN = 45;
+
+    private Vector2d skybridgeMiddlePosition() {
+        return sidedInchesVector(SKYBRIDGE_MID_X_IN, SKYBRIDGE_MID_Y_IN);
+    }
 
     private Vector2d parkPosition() {
-        return sidedInchesVector(PARK_X_IN, PARK_Y_IN);
+        return skybridgeMiddlePosition();
     }
 
     @Override
