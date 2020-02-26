@@ -17,7 +17,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             const val MAX_ENCODER_VALUE = 1260
             const val CLEAR_STACK_ENCODER_VALUE = MAX_ENCODER_VALUE + 50
 
-            private const val MOVE_OUT_OVERSHOOT = 5
+            private const val MOVE_OUT_OVERSHOOT = 20
         }
 
         private enum class AutomaticState {
