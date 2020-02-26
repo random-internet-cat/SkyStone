@@ -165,6 +165,8 @@ class HorizontalArmPIDTuner : LinearOpMode() {
         while (opModeIsActive()) {
             handleArmInputs(gamepad1, horizontalArm)
 
+            telemetry.addData("Encoder position", horizontalArm.encoderPosition().raw)
+
             telemetry.update()
             hardware.update(updateDashboard = false)
         }
