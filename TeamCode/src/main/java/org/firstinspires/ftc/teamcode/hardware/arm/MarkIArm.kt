@@ -135,6 +135,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             return automaticState.shouldStopRunning(motor)
         }
 
+        fun encoderPosition() = motor.encoderPosition()
+
         fun update() {
             // Check to turn off RunToPosition and reinstate manual control if target has been reached
             if (isAutomatic() && shouldStopAutomatic()) {
