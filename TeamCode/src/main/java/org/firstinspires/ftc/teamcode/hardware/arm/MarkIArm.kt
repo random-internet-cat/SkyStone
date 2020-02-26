@@ -14,9 +14,10 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             private const val MOTOR_POWER = 0.8
             private const val MIN_ENCODER_VALUE = 10
 
-            private const val MAX_ENCODER_VALUE = 1350
+            const val MAX_ENCODER_VALUE = 1260
+            const val CLEAR_STACK_ENCODER_VALUE = MAX_ENCODER_VALUE + 50
 
-            private const val MOVE_OUT_OVERSHOOT = 5;
+            private const val MOVE_OUT_OVERSHOOT = 5
         }
 
         private enum class AutomaticState {
@@ -43,6 +44,17 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
 
                 override fun shouldStopRunning(motor: DcMotor): Boolean {
                     return motor.currentPosition >= MAX_ENCODER_VALUE
+                }
+            },
+            CLEAR {
+                override fun runOnMotor(motor: DcMotor) {
+                    motor.power = MOTOR_POWER
+                    motor.targetPosition = CLEAR_STACK_ENCODER_VALUE + MOVE_OUT_OVERSHOOT
+                    motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+                }
+
+                override fun shouldStopRunning(motor: DcMotor): Boolean {
+                    return motor.currentPosition >= CLEAR_STACK_ENCODER_VALUE
                 }
             }
             ;
@@ -92,6 +104,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
 
         fun moveAllTheWayIn() = moveToState(AutomaticState.IN)
         fun moveAllTheWayOut() = moveToState(AutomaticState.OUT)
+        fun moveToClearStack() = moveToState(AutomaticState.CLEAR)
 
         fun pidf(): PIDFCoefficients = motor.pidf(DcMotor.RunMode.RUN_USING_ENCODER)
 
@@ -225,8 +238,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         private val isManual get() = _mutableIsManual
         private val isAutomatic get() = !isManual
 
-        private fun manuallyMoveWithPower(logicalPower: Double) {
-            val uncheckedRawPower = -logicalPower
+        fun manuallyMoveWithPower(logicalPower: Double) {
+            val uncheckedRawPower = -logicalPower * MANUAL_MOTOR_POWER
 
             val motorPosition = motor.currentPosition
             val exceedsLowerLimit = uncheckedRawPower < 0 && motorPosition < MIN_ENCODER_TICKS
@@ -308,6 +321,29 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
 
         fun moveToCollect() = moveToState(State.CollectState)
         fun moveToPlace(height: Int) = moveToState(State.PlaceBlockState(height))
+
+
+        private fun oneBlockUpPosition() : EncoderPosition {
+            return (motor.encoderPosition() + PER_STAGE_TICKS + EncoderTicks(20))
+        }
+
+        private fun onePresetUpPosition() : State {
+            // Convert current position to a real position, adding 0.1 as a safety measure
+            val realPosPreset =
+                    0.1 + (motor.encoderPosition().raw - STAGE0_POSITION.raw) / PER_STAGE_TICKS.raw
+            return State.PlaceBlockState(kotlin.math.ceil(realPosPreset).toInt() + 1)
+        }
+
+        fun moveToOneBlockUp() = moveToState(onePresetUpPosition())
+        fun canGoOneBlockUp() : Boolean {
+            try {
+                onePresetUpPosition()
+            } catch (e: IllegalArgumentException) {
+                return false
+            }
+            return true
+        }
+
 
         fun isMovingToState(): Boolean {
             check(isAutomatic)

@@ -59,7 +59,7 @@ object MarkIHardwareProvider {
     @JvmStatic
     fun makeArmHorizontal(hardwareMap: HardwareMap): MarkIArm.HorizontalControl {
         val motor = hardwareMap.getMotorEx("horizontal")
-        return MarkIArm.HorizontalControl(motor).apply { setPIDF(PIDFCoefficients(1.17, 0.05, 0.0, 15.0)) }
+        return MarkIArm.HorizontalControl(motor).apply { setPIDF(PIDFCoefficients(12.0, 0.4, 0.0, 16.8)) }
     }
 
     @JvmStatic
@@ -68,8 +68,9 @@ object MarkIHardwareProvider {
         motor.setReversed()
         motor.brakeOnZeroPower()
         motor.enableEncoder()
+        motor.targetPositionTolerance = 10
         return MarkIArm.VerticalControl(motor).apply {
-            setPIDF(PIDFCoefficients(.11, 0.01, 0.0,16.0))
+            setPIDF(PIDFCoefficients(.11, 0.00, 0.0,16.0))
         }
     }
 

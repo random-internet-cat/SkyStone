@@ -93,12 +93,8 @@ class MarkITeleop : LinearOpMode() {
                 _armMotionLastTick = true
             }
 
-            manualDirection > 0.1 -> {
-                vertical.manuallyMoveUp()
-            }
-
-            manualDirection < -0.1 -> {
-                vertical.manuallyMoveDown()
+            abs(manualDirection) > 0.05 -> {
+                vertical.manuallyMoveWithPower(manualDirection.toDouble())
             }
 
             else -> {
@@ -141,6 +137,33 @@ class MarkITeleop : LinearOpMode() {
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
                     horizontal.moveAllTheWayIn()
                     clamp.open()
+                }
+            }
+
+            // Un-clamp, clear stack and full retract if horizontal is somewhat out
+            gamepad.a -> {
+                if (!_armMotionLastTick
+                        && horizontal.motor.currentPosition >= MarkIArm.HorizontalControl.MAX_ENCODER_VALUE * 0.75
+                        && vertical.canGoOneBlockUp()) {
+
+                        // Open clamp if closed
+                        if (clamp.servoPosition() == MarkIArm.Clamp.CLOSED_POSITION) {
+                            clamp.open()
+                            sleep(300)
+                        }
+
+                        // Clear stack with horizontal and rise to next stage
+                        horizontal.moveToClearStack()
+                        vertical.moveToOneBlockUp()
+                        sleep(500)
+
+                        // Retract horizontal all the way in
+                        horizontal.moveAllTheWayIn()
+                        sleep(600)
+
+                        // Retract vertical all the way in, and return control to player while doing so
+                        vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
+
                 }
             }
 
@@ -195,6 +218,7 @@ class MarkITeleop : LinearOpMode() {
             telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
             telemetry.addData("Is slow", _isSlow)
             telemetry.addData("Horizontal ticks", arm.horizontal.motor.currentPosition)
+            telemetry.addData("Vertical ticks", arm.vertical.encoderPosition())
             telemetry.update()
             hardware.update()
         }
