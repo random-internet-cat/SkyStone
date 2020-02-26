@@ -70,7 +70,7 @@ object MarkIHardwareProvider {
         motor.enableEncoder()
         motor.targetPositionTolerance = 10
         return MarkIArm.VerticalControl(motor).apply {
-            setPIDF(PIDFCoefficients(.11, 0.00, 0.0,16.0))
+            setPIDF(PIDFCoefficients(13.0, 0.00, 3.0,18.0))
         }
     }
 
