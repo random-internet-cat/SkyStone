@@ -66,6 +66,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         private var automaticState: AutomaticState? = null
 
         init {
+            motor.brakeOnZeroPower()
             motor.resetEncoder()
         }
 
@@ -230,6 +231,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         public fun currentAutomaticState() = if (!isManual) _state else null
 
         init {
+            motor.brakeOnZeroPower()
             motor.resetEncoder()
             motor.targetPosition = 0
             _state = State.CollectState
