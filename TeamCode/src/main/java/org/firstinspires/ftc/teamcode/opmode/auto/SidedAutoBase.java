@@ -383,16 +383,9 @@ public abstract class SidedAutoBase extends AutoBase {
         openClampAndWait(arm.getClamp());
         log("Released second stone");
 
-        sleep(100);
-
-        log("Retracting arm");
+        log("Retracting horizontal");
 
         arm.getHorizontal().moveAllTheWayIn();
-        sleep(500);
-
-        arm.getVertical().moveToCollect();
-
-        log("Retracted arm");
     }
 
     protected abstract void prepareToGrabStone(MarkIHardware hardware);
@@ -491,7 +484,17 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     @Override
-    protected final void park(RRMecanumDriveBase drive) {
-        splineToForward(drive, new Pose2d(parkPosition(), headingTowardsDepotWall()));
+    protected final void park(RRMecanumDriveBase drive, final MarkIArm arm) {
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                .splineTo(new Pose2d(parkPosition(), headingTowardsDepotWall()))
+                .addMarker(0.6, new Function0<Unit>() {
+                    @Override
+                    public Unit invoke() {
+                        log("Retracting vertical");
+                        arm.getVertical().moveToZero(); // Completely reset arm for teleop
+                        return Unit.INSTANCE;
+                    }
+                })
+                .build());
     }
 }

@@ -125,7 +125,7 @@ public abstract class AutoBase extends LinearOpMode {
     protected abstract void grabFoundation(MarkIHardware hardware);
     protected abstract void moveToGrabFoundation(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIArm arm, final MarkIIntake intake);
     protected abstract void moveFoundationToBuildingZoneAndRetractArm(RRMecanumDriveBase drive, MarkIArm arm);
-    protected abstract void park(RRMecanumDriveBase drive);
+    protected abstract void park(RRMecanumDriveBase drive, final MarkIArm arm);
 
     protected final void log(String message) {
         telemetry.log().add(message);
@@ -201,7 +201,7 @@ public abstract class AutoBase extends LinearOpMode {
             handleSecondStone(hardware, quarryState);
 
             log("Parking");
-            park(drive);
+            park(drive, hardware.getArm());
             log("Parked");
 
             checkInterrupted();
