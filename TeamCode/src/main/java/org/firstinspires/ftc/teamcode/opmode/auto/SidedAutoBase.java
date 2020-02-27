@@ -294,9 +294,17 @@ public abstract class SidedAutoBase extends AutoBase {
         );
     }
 
-    private void moveToGrabSecondStone(RRMecanumDriveBase drive, QuarryState quarryState) {
+    // Now also turns on the intake, saves 3 seconds of intake actuation (can drain battery significantly)
+    private void moveToGrabSecondStone(RRMecanumDriveBase drive, final MarkIIntake intake, QuarryState quarryState) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
                                         .splineTo(secondStoneMidpointPosition())
+                                        .addMarker(3.0 /* seconds */, new Function0<Unit>() {
+                                            @Override
+                                            public Unit invoke() {
+                                                intake.intake();
+                                                return Unit.INSTANCE;
+                                            }
+                                        })
                                         .splineTo(secondStoneBeforeGrabPosition(quarryState))
                                         .splineTo(secondStoneGrabPosition(quarryState))
                                         .build());
@@ -309,7 +317,7 @@ public abstract class SidedAutoBase extends AutoBase {
         );
     }
 
-    public static double DEPOSIT_SECOND_STONE_X_IN = 36;
+    public static double DEPOSIT_SECOND_STONE_X_IN = 38;
     public static double DEPOSIT_SECOND_STONE_Y_IN = 56;
 
     private Pose2d depositSecondStonePosition() {
@@ -357,14 +365,10 @@ public abstract class SidedAutoBase extends AutoBase {
         MarkIArm arm = hardware.getArm();
         MarkIIntake intake = hardware.getIntake();
 
-        log("Enabling intake");
-        intake.intake();
-        log("Enabled intake");
-
         checkInterrupted();
 
         log("Moving to grab second stone");
-        moveToGrabSecondStone(drive, quarryState);
+        moveToGrabSecondStone(drive, intake, quarryState);
         log("Moved to grab second stone");
 
         checkInterrupted();
@@ -375,20 +379,13 @@ public abstract class SidedAutoBase extends AutoBase {
 
         checkInterrupted();
 
-        log("Disabling intake");
-        intake.stop();
-        log("Disabled intake");
-
-        checkInterrupted();
-
         log("Releasing second stone");
-        arm.getClamp().open();
+        openClampAndWait(arm.getClamp());
         log("Released second stone");
 
-        sleep(1500);
+        sleep(100);
 
         log("Retracting arm");
-        openClampAndWait(arm.getClamp());
 
         arm.getHorizontal().moveAllTheWayIn();
         sleep(500);
@@ -461,7 +458,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double FOUNDATION_TURN_ALIGN_ANGLE = 17.0;
-    public static double FOUNDATION_BACKOUT_INCHES = 34.0;
+    public static double FOUNDATION_BACKOUT_INCHES = 32.0;
 
     protected abstract double foundationAlignHeading();
 
