@@ -188,8 +188,6 @@ public abstract class AutoBase extends LinearOpMode {
             QuarryState quarryState = readQuarryState(detector);
             log("Read quarry state, got: " + quarryState);
 
-            detector.close();
-
             checkInterrupted();
 
             handleFirstStone(hardware, quarryState);
