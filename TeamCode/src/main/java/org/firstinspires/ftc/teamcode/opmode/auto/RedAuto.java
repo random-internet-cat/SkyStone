@@ -42,8 +42,12 @@ public class RedAuto extends SidedAutoBase {
     }
 
     @Override
-    protected double grabSecondStoneHeading() {
-        return degHeading(150);
+    protected double grabSecondStoneHeading(QuarryState quarryState) {
+        if (quarryState == QuarryState.CLOSE_TO_WALL) {
+            return degHeading(130); // TODO
+        } else {
+            return degHeading(120);
+        }
     }
 
     @Override

@@ -37,8 +37,12 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     @Override
-    protected double grabSecondStoneHeading() {
-        return degHeading(210);
+    protected double grabSecondStoneHeading(QuarryState quarryState) {
+        if (quarryState == QuarryState.CLOSE_TO_WALL) {
+            return degHeading(230);
+        } else {
+            return degHeading(240);
+        }
     }
 
     @Override

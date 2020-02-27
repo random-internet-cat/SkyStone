@@ -156,7 +156,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     protected abstract double grabFirstStoneHeading();
-    protected abstract double grabSecondStoneHeading();
+    protected abstract double grabSecondStoneHeading(QuarryState quarryState);
 
     @Override
     protected final Pose2d startPosition() {
@@ -181,7 +181,7 @@ public abstract class SidedAutoBase extends AutoBase {
         return ySidedInches(GRAB_SECOND_STONE_Y_POS_IN);
     }
 
-    public static double STONE_GRAB_OFFSET_IN = 0;
+    public static double FIRST_STONE_GRAB_OFFSET_IN = 0;
 
     public static double STONE_CURVE_OFFSET_IN = 5;
 
@@ -193,7 +193,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     protected Pose2d firstStoneGrabPosition(QuarryState quarryState) {
         return new Pose2d(
-            quarryState.firstXPosition() + inches(STONE_GRAB_OFFSET_IN),
+            quarryState.firstXPosition() + inches(FIRST_STONE_GRAB_OFFSET_IN),
             grabFirstStoneYPos(),
             grabFirstStoneHeading()
         );
@@ -269,9 +269,9 @@ public abstract class SidedAutoBase extends AutoBase {
 
     private Pose2d secondStoneGrabPosition(QuarryState quarryState) {
         return new Pose2d(
-            quarryState.secondXPosition() + inches(STONE_GRAB_OFFSET_IN),
+            quarryState.secondXPosition(),
             grabSecondStoneYPos(),
-            grabSecondStoneHeading()
+            grabSecondStoneHeading(quarryState)
         );
     }
 
@@ -283,9 +283,15 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     private Pose2d secondStoneBeforeGrabPosition(QuarryState quarryState) {
-        double heading = grabSecondStoneHeading();
+        double heading = grabSecondStoneHeading(quarryState);
         double headingDiff = heading - headingTowardsDepotWall();
-        return new Pose2d(quarryState.secondXPosition() + Math.cos(headingDiff) * inches(STONE_CURVE_OFFSET_IN), grabSecondStoneYPos() + Math.sin(headingDiff) * inches(STONE_CURVE_OFFSET_IN), heading);
+        double curveOffset = inches(STONE_CURVE_OFFSET_IN);
+
+        return new Pose2d(
+            quarryState.secondXPosition() + Math.cos(headingDiff) * curveOffset,
+            grabSecondStoneYPos() + Math.sin(headingDiff) * curveOffset,
+            heading
+        );
     }
 
     private void moveToGrabSecondStone(RRMecanumDriveBase drive, QuarryState quarryState) {
@@ -304,7 +310,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double DEPOSIT_SECOND_STONE_X_IN = 36;
-    public static double DEPOSIT_SECOND_STONE_Y_IN = 48;
+    public static double DEPOSIT_SECOND_STONE_Y_IN = 56;
 
     private Pose2d depositSecondStonePosition() {
         return new Pose2d(sidedInchesVector(DEPOSIT_SECOND_STONE_X_IN, DEPOSIT_SECOND_STONE_Y_IN), headingTowardsDepotWall());
@@ -328,6 +334,7 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .addMarker(1.5 /* seconds */, new Function0<Unit>() {
                                             @Override
                                             public Unit invoke() {
+                                                hardware.getIntake().stop();
                                                 arm.getClamp().close();
                                                 return Unit.INSTANCE;
                                             }
@@ -381,9 +388,13 @@ public abstract class SidedAutoBase extends AutoBase {
         sleep(1500);
 
         log("Retracting arm");
-        arm.getClamp().open();
-        arm.getVertical().moveToCollect();
+        openClampAndWait(arm.getClamp());
+
         arm.getHorizontal().moveAllTheWayIn();
+        sleep(500);
+
+        arm.getVertical().moveToCollect();
+
         log("Retracted arm");
     }
 
@@ -450,7 +461,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double FOUNDATION_TURN_ALIGN_ANGLE = 17.0;
-    public static double FOUNDATION_BACKOUT_INCHES = 32.0;
+    public static double FOUNDATION_BACKOUT_INCHES = 34.0;
 
     protected abstract double foundationAlignHeading();
 
