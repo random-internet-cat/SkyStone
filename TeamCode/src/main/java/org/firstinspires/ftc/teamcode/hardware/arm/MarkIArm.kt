@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.util.*
 import org.firstinspires.ftc.teamcode.util.roadrunner.PIDFCoefficients
 import org.firstinspires.ftc.teamcode.util.units.*
+import kotlin.math.ceil
 
 data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
     data class HorizontalControl(val motor: DcMotorEx) {
@@ -349,8 +350,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         private fun onePresetUpPosition() : State {
             // Convert current position to a real position, adding 0.1 as a safety measure
             val realPosPreset =
-                    0.1 + (motor.encoderPosition().raw - STAGE0_POSITION.raw) / PER_STAGE_TICKS.raw
-            return State.PlaceBlockState(kotlin.math.ceil(realPosPreset).toInt() + 1)
+                    0.4 + (motor.encoderPosition().raw - STAGE0_POSITION.raw).toDouble() / PER_STAGE_TICKS.raw.toDouble()
+            return State.PlaceBlockState(ceil(realPosPreset).toInt() + 1)
         }
 
         fun moveToOneBlockUp() = moveToState(onePresetUpPosition())
