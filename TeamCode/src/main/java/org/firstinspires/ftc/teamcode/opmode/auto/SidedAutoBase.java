@@ -462,7 +462,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double FOUNDATION_TURN_ALIGN_ANGLE = 17.0;
-    public static double FOUNDATION_BACKOUT_INCHES = 33.0;
+    public static double FOUNDATION_MOVE_FORWARD_IN = 33.0;
 
     protected abstract double foundationAlignHeading();
 
@@ -474,7 +474,8 @@ public abstract class SidedAutoBase extends AutoBase {
 
         //Move forward a bit
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                                    .forward(inches(FOUNDATION_BACKOUT_INCHES)).build());
+                                        .forward(inches(FOUNDATION_MOVE_FORWARD_IN))
+                                        .build());
 
         // Zero out arm : necessary to perform in auto so we have a "fresh start" for TeleOp
         arm.getVertical().moveToZero();
