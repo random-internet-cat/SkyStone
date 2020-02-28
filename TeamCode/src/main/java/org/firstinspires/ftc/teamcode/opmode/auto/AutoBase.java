@@ -24,8 +24,8 @@ public abstract class AutoBase extends LinearOpMode {
     public static double FIRST_STONE_MIDDLE_X_IN = -30;
     public static double FIRST_STONE_CLOSE_TO_WALL_X_IN = -38;
 
-    public static double SECOND_STONE_CLOSE_TO_BRIDGES_X_IN = -48;
-    public static double SECOND_STONE_MIDDLE_X_IN = -56;
+    public static double SECOND_STONE_CLOSE_TO_BRIDGES_X_IN = -47;
+    public static double SECOND_STONE_MIDDLE_X_IN = -55;
     public static double SECOND_STONE_CLOSE_TO_WALL_X_IN = -64;
 
     public enum QuarryState {

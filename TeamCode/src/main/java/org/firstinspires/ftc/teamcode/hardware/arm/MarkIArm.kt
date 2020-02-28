@@ -162,6 +162,9 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
             @JvmField
             public var _PER_STAGE_TICKS: Int = 690
 
+            @JvmField
+            public var _AUTO_SECOND_BLOCK_TICKS = _STAGE0_TICKS + 350
+
             private const val MIN_ENCODER_TICKS = 10
             private const val MAX_ENCODER_TICKS = 4720
 
@@ -199,6 +202,18 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
 
                 override fun toString(): String {
                     return "CollectState"
+                }
+            }
+
+            object AutoSecondBlockState : State() {
+                override val nextDown: State? get() = PlaceBlockState(0)
+                override val nextUp: State? get() = PlaceBlockState(1)
+
+                override val position: EncoderPosition
+                    get() = EncoderPosition(_AUTO_SECOND_BLOCK_TICKS)
+
+                override fun toString(): String {
+                    return "AutoSecondBlockState"
                 }
             }
 
