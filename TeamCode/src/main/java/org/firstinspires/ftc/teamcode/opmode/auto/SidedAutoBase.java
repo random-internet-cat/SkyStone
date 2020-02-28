@@ -226,16 +226,6 @@ public abstract class SidedAutoBase extends AutoBase {
         );
     }
 
-    /*public static double RELEASE_FIRST_STONE_PREMIDDLE_STOP_X = -12;
-    public static double RELEASE_FIRST_STONE_PREMIDDLE_STOP_Y = 40;
-
-    private Pose2d releaseFirstStonePreMiddleStopPosition(QuarryState quarryState) {
-        return new Pose2d(
-            sidedInchesVector(RELEASE_FIRST_STONE_PREMIDDLE_STOP_X, RELEASE_FIRST_STONE_PREMIDDLE_STOP_Y),
-            headingTowardsDepotWall()
-        );
-    }*/
-
     private Pose2d releaseSecondStonePosition(QuarryState quarryState) {
         return new Pose2d(
             sidedInchesVector(RELEASE_STONE_X_IN, RELEASE_STONE_Y_IN),
@@ -395,7 +385,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
         openClampAndWait(arm.getClamp());
 
-        arm.getVertical().moveToPlace(0);
+        arm.getVertical().moveToPlace(1);
         sleep(300);
         log("Released second stone");
 
