@@ -359,6 +359,20 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .build());
     }
 
+    private void depositSecondStone(MarkIHardware hardware) throws InterruptedException {
+        MarkIArm.VerticalControl vertical = hardware.getArm().getVertical();
+        MarkIArm.Clamp clamp = hardware.getArm().getClamp();
+
+        vertical.moveToCollect();
+        sleep(300);
+
+        clamp.open();
+        sleep(300);
+
+        vertical.moveToPlace(1);
+        sleep(300);
+    }
+
     @Override
     protected void handleSecondStone(MarkIHardware hardware, QuarryState quarryState) throws InterruptedException {
         RRMecanumDriveBase drive = hardware.getDrive().roadrunner();
@@ -380,7 +394,13 @@ public abstract class SidedAutoBase extends AutoBase {
         checkInterrupted();
 
         log("Releasing second stone");
+        arm.getVertical().moveToCollect();
+        sleep(300);
+
         openClampAndWait(arm.getClamp());
+
+        arm.getVertical().moveToPlace(1);
+        sleep(300);
         log("Released second stone");
 
         log("Retracting horizontal");
@@ -405,10 +425,15 @@ public abstract class SidedAutoBase extends AutoBase {
         MarkIFoundationMover mover = hardware.getFoundationMover();
 
         log("Dropping stone and settings movers to grab");
+        arm.getVertical().moveToCollect();
+        sleep(300);
+
         arm.getClamp().open();
         mover.grab();
+        sleep(300 /* ms */);
 
-        sleep( 400 /* ms */);
+        arm.getVertical().moveToPlace(1);
+        sleep(300);
 
         log("Stone dropped & movers in grab position");
 
