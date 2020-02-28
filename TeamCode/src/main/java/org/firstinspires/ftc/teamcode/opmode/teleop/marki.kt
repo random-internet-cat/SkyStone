@@ -29,6 +29,7 @@ class MarkITeleop : LinearOpMode() {
     private fun driveInputRamp(joystickInput: Float) = driveInputRamp(joystickInput.toDouble())
 
     private var _isSlow: Boolean = false
+    private var _slowFromIntaking : Boolean = false
     private var _slowPressedLastTick: Boolean = false
 
     private fun shouldDriveSlow(gamepad: Gamepad): Boolean {
@@ -40,7 +41,7 @@ class MarkITeleop : LinearOpMode() {
 
         _slowPressedLastTick = slowButtonIsPressed
 
-        return _isSlow
+        return _isSlow || _slowFromIntaking
     }
 
     private fun handleDriveInputs(gamepad: Gamepad, drive: MecanumDrive, maxDriveRPM: RRAngularVelocity, maxVel: RRVelocity) {
@@ -65,9 +66,15 @@ class MarkITeleop : LinearOpMode() {
 
     private fun handleIntakeInputs(gamepad: Gamepad, intake: MarkIIntake) {
         when {
-            gamepad.left_trigger > 0.1 -> intake.intake()
+            gamepad.left_trigger > 0.1 -> {
+                _slowFromIntaking = true
+                intake.intake()
+            }
             gamepad.right_trigger > 0.1 -> intake.outtake()
-            else -> intake.stop()
+            else -> {
+                _slowFromIntaking = false
+                intake.stop()
+            }
         }
     }
 
@@ -165,11 +172,11 @@ class MarkITeleop : LinearOpMode() {
                     // Clear stack with horizontal and rise to next stage
                     horizontal.moveToClearStack()
                     vertical.moveToOneBlockUp()
-                    sleep(600)
+                    sleep(550)
 
                     // Retract horizontal all the way in
                     horizontal.moveAllTheWayIn()
-                    sleep(600)
+                    sleep(550)
 
                     // Retract vertical all the way in, and return control to player while doing so
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
