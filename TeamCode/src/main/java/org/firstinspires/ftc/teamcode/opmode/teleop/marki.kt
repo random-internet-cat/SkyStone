@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.opmode.teleop
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.*
+import org.firstinspires.ftc.teamcode.hardware.MarkIHardware
 import org.firstinspires.ftc.teamcode.hardware.foundation_mover.BaseFoundationMover
 import org.firstinspires.ftc.teamcode.hardware.arm.MarkIArm
 import org.firstinspires.ftc.teamcode.hardware.capstone_dropper.MarkICapstoneDropper
 import org.firstinspires.ftc.teamcode.hardware.drive.mecanum.*
+import org.firstinspires.ftc.teamcode.hardware.drive.stop
 import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake
 import org.firstinspires.ftc.teamcode.hardware.provider.makeMarkIHardware
 import org.firstinspires.ftc.teamcode.util.cutoffToZero
@@ -128,7 +130,13 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
-    private fun handleFullOuttakeInputs(gamepad: Gamepad, vertical: MarkIArm.VerticalControl, horizontal: MarkIArm.HorizontalControl, clamp: MarkIArm.Clamp) {
+    private fun handleFullOuttakeInputs(gamepad: Gamepad, hardware: MarkIHardware) {
+        val arm = hardware.arm
+        val vertical = arm.vertical
+        val horizontal = arm.horizontal
+        val clamp = arm.clamp
+        val drive = hardware.drive
+
         when {
 
             // Retract horizontal & vertical
@@ -143,26 +151,28 @@ class MarkITeleop : LinearOpMode() {
             // Un-clamp, clear stack and full retract if horizontal is somewhat out
             gamepad.a -> {
                 if (!_armMotionLastTick
-                        && horizontal.motor.currentPosition >= MarkIArm.HorizontalControl.MAX_ENCODER_VALUE * 0.75
-                        && vertical.canGoOneBlockUp()) {
+                    && horizontal.motor.currentPosition >= MarkIArm.HorizontalControl.MAX_ENCODER_VALUE * 0.75
+                    && vertical.canGoOneBlockUp()) {
 
-                        // Open clamp if closed
-                        if (clamp.servoPosition() == MarkIArm.Clamp.CLOSED_POSITION) {
-                            clamp.open()
-                            sleep(300)
-                        }
+                    drive.stop()
 
-                        // Clear stack with horizontal and rise to next stage
-                        horizontal.moveToClearStack()
-                        vertical.moveToOneBlockUp()
-                        sleep(500)
+                    // Open clamp if closed
+                    if (clamp.servoPosition() == MarkIArm.Clamp.CLOSED_POSITION) {
+                        clamp.open()
+                        sleep(300)
+                    }
 
-                        // Retract horizontal all the way in
-                        horizontal.moveAllTheWayIn()
-                        sleep(600)
+                    // Clear stack with horizontal and rise to next stage
+                    horizontal.moveToClearStack()
+                    vertical.moveToOneBlockUp()
+                    sleep(600)
 
-                        // Retract vertical all the way in, and return control to player while doing so
-                        vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
+                    // Retract horizontal all the way in
+                    horizontal.moveAllTheWayIn()
+                    sleep(600)
+
+                    // Retract vertical all the way in, and return control to player while doing so
+                    vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
 
                 }
             }
@@ -184,10 +194,12 @@ class MarkITeleop : LinearOpMode() {
         }
     }
 
-    private fun handleArmInputs(gamepad: Gamepad, arm: MarkIArm) {
+    private fun handleArmInputs(gamepad: Gamepad, hardware: MarkIHardware) {
+        val arm = hardware.arm
+
         handleArmHorizontalAndClampInputs(gamepad, arm.horizontal, arm.clamp)
         handleArmVerticalInputs(gamepad, arm.vertical)
-        handleFullOuttakeInputs(gamepad, arm.vertical, arm.horizontal, arm.clamp)
+        handleFullOuttakeInputs(gamepad, hardware)
         handleArmClampSpecificInputs(gamepad, arm.clamp)
     }
 
@@ -212,7 +224,7 @@ class MarkITeleop : LinearOpMode() {
             handleDriveInputs(gamepad1, drive, maxDriveRPM = maxDriveRPM.roadrunner(), maxVel = maxVel.roadrunner())
             handleFoundationMoverInputs(gamepad1, foundationMover)
             handleIntakeInputs(gamepad1, intake)
-            handleArmInputs(gamepad2, arm = arm)
+            handleArmInputs(gamepad2, hardware)
             handleCapstoneDropperInputs(gamepad2, capstoneDropper)
 
             telemetry.addData("Arm state", arm.vertical.currentAutomaticState() ?: "Manual")
