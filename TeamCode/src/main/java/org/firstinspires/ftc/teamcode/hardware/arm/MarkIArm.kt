@@ -350,7 +350,7 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
         private fun onePresetUpPosition() : State {
             // Convert current position to a real position, adding 0.1 as a safety measure
             val realPosPreset =
-                    0.4 + (motor.encoderPosition().raw - STAGE0_POSITION.raw).toDouble() / PER_STAGE_TICKS.raw.toDouble()
+                    0.6 + (motor.encoderPosition().raw - STAGE0_POSITION.raw).toDouble() / PER_STAGE_TICKS.raw.toDouble()
             return State.PlaceBlockState(ceil(realPosPreset).toInt() + 1)
         }
 

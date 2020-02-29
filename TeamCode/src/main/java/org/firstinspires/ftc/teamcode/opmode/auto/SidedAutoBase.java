@@ -27,6 +27,7 @@ import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.ofHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.oppositeHeading;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.rr;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.sub;
 
 @Config
@@ -71,11 +72,11 @@ public abstract class SidedAutoBase extends AutoBase {
         return sideColor.sideYSign().scale(raw);
     }
 
-    private double ySidedInches(double y) {
+    protected final double ySidedInches(double y) {
         return sideY(inches(y));
     }
 
-    private Vector2d sidedInchesVector(double x, double y) {
+    protected final Vector2d sidedInchesVector(double x, double y) {
         return inchesVector(x, sideY(y));
     }
 
@@ -110,11 +111,11 @@ public abstract class SidedAutoBase extends AutoBase {
         ReadWriteFile.writeFile(gyroAutoHeadingFile, String.valueOf(drive.getLocalizer().getPoseEstimate().getHeading()));
     }
 
-    private double headingAwayFromHomeWall() {
+    protected final double headingAwayFromHomeWall() {
         return oppositeHeading(headingTowardsHomeWall());
     }
 
-    private double headingTowardsDepotWall() {
+    protected final double headingTowardsDepotWall() {
         return oppositeHeading(headingTowardsFoundationWall());
     }
 
@@ -171,19 +172,13 @@ public abstract class SidedAutoBase extends AutoBase {
         turnToHeading(drive, headingTowardsHomeWall());
     }
 
-    public static double GRAB_FIRST_STONE_Y_POS_IN = 30;
+    public static double GRAB_FIRST_STONE_Y_POS_IN = 29;
 
     private double grabFirstStoneYPos() {
         return ySidedInches(GRAB_FIRST_STONE_Y_POS_IN);
     }
 
-    public static double GRAB_SECOND_STONE_Y_POS_IN = 28;
-
-    private double grabSecondStoneYPos() {
-        return ySidedInches(GRAB_SECOND_STONE_Y_POS_IN);
-    }
-
-    public static double FIRST_STONE_GRAB_OFFSET_IN = 0;
+    protected abstract double grabSecondStoneYPos();
 
     public static double FIRST_STONE_CURVE_OFFSET_IN = 5;
     public static double SECOND_STONE_CURVE_OFFSET_IN = 5;
@@ -194,15 +189,17 @@ public abstract class SidedAutoBase extends AutoBase {
         double curveOffset = inches(FIRST_STONE_CURVE_OFFSET_IN);
 
         return new Pose2d(
-            quarryState.firstXPosition() + Math.cos(headingDiff) * curveOffset,
+            firstStoneGrabXPosition(quarryState) + Math.cos(headingDiff) * curveOffset,
             grabFirstStoneYPos() + Math.sin(headingDiff) * curveOffset,
             heading
         );
     }
 
-    protected Pose2d firstStoneGrabPosition(QuarryState quarryState) {
+    protected abstract double firstStoneGrabXPosition(QuarryState quarryState);
+
+    private Pose2d firstStoneGrabPosition(QuarryState quarryState) {
         return new Pose2d(
-            quarryState.firstXPosition() + inches(FIRST_STONE_GRAB_OFFSET_IN),
+            firstStoneGrabXPosition(quarryState),
             grabFirstStoneYPos(),
             grabFirstStoneHeading()
         );
@@ -239,7 +236,7 @@ public abstract class SidedAutoBase extends AutoBase {
         splineToReversed(drive, releaseSecondStonePosition(quarryState));
     }
 
-    public static double FIRST_STONE_DRIVE_FORWARD_IN = 7;
+    public static double FIRST_STONE_DRIVE_FORWARD_IN = 6;
 
     private void moveToFirstStone(RRMecanumDriveBase drive, QuarryState quarryState, final MarkIIntake intake) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
@@ -269,9 +266,11 @@ public abstract class SidedAutoBase extends AutoBase {
         checkInterrupted();
     }
 
+    protected abstract double secondStoneGrabXPosition(QuarryState quarryState);
+
     private Pose2d secondStoneGrabPosition(QuarryState quarryState) {
         return new Pose2d(
-            quarryState.secondXPosition(),
+            secondStoneGrabXPosition(quarryState),
             grabSecondStoneYPos(),
             grabSecondStoneHeading(quarryState)
         );
@@ -290,7 +289,7 @@ public abstract class SidedAutoBase extends AutoBase {
         double curveOffset = inches(SECOND_STONE_CURVE_OFFSET_IN);
 
         return new Pose2d(
-            quarryState.secondXPosition() + Math.cos(headingDiff) * curveOffset,
+            secondStoneGrabXPosition(quarryState) + Math.cos(headingDiff) * curveOffset,
             grabSecondStoneYPos() + Math.sin(headingDiff) * curveOffset,
             heading
         );
@@ -312,12 +311,7 @@ public abstract class SidedAutoBase extends AutoBase {
                                         .build());
     }
 
-    private Pose2d depositSecondStoneMidpointPosition() {
-        return new Pose2d(
-            skybridgeMiddlePosition(),
-            headingTowardsDepotWall()
-        );
-    }
+    protected abstract Pose2d depositSecondStoneMidpointPosition();
 
     public static double DEPOSIT_SECOND_STONE_X_IN = 38;
     public static double DEPOSIT_SECOND_STONE_Y_IN = 54;
@@ -400,12 +394,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     //protected abstract void collectSecondStone(MarkIHardware hardware, QuarryState quarryState);
 
-    public static double GRAB_FOUNDATION_X_IN = 42.5;
-    public static double GRAB_FOUNDATION_Y_IN = 30.5;
-
-    private Vector2d grabFoundationPosition() {
-        return sidedInchesVector(GRAB_FOUNDATION_X_IN, GRAB_FOUNDATION_Y_IN);
-    }
+    protected abstract Vector2d grabFoundationPosition();
 
     @Override
     protected final void grabFoundation(MarkIHardware hardware) {
@@ -464,7 +453,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double FOUNDATION_TURN_ALIGN_ANGLE = 17.0;
-    public static double FOUNDATION_MOVE_FORWARD_IN = 33.0;
+    public static double FOUNDATION_MOVE_FORWARD_IN = 31.0;
 
     protected abstract double foundationAlignHeading();
 
@@ -492,7 +481,7 @@ public abstract class SidedAutoBase extends AutoBase {
     public static double SKYBRIDGE_MID_X_IN = 0;
     public static double SKYBRIDGE_MID_Y_IN = 45;
 
-    private Vector2d skybridgeMiddlePosition() {
+    protected final Vector2d skybridgeMiddlePosition() {
         return sidedInchesVector(SKYBRIDGE_MID_X_IN, SKYBRIDGE_MID_Y_IN);
     }
 

@@ -16,56 +16,17 @@ import org.firstinspires.ftc.teamcode.hardware.intake.MarkIIntake;
 import org.firstinspires.ftc.teamcode.hardware.provider.MarkIHardwareProvider;
 import org.firstinspires.ftc.teamcode.util.Hardware_mapKt;
 
-import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
-
 @Config
 public abstract class AutoBase extends LinearOpMode {
-    public static double FIRST_STONE_CLOSE_TO_BRIDGES_X_IN = -22;
-    public static double FIRST_STONE_MIDDLE_X_IN = -30;
-    public static double FIRST_STONE_CLOSE_TO_WALL_X_IN = -38;
-
-    public static double SECOND_STONE_CLOSE_TO_BRIDGES_X_IN = -47;
-    public static double SECOND_STONE_MIDDLE_X_IN = -55;
-    public static double SECOND_STONE_CLOSE_TO_WALL_X_IN = -64;
-
     public enum QuarryState {
         CLOSE_TO_BRIDGES {
-            @Override
-            public double firstXPosition() {
-                return inches(FIRST_STONE_CLOSE_TO_BRIDGES_X_IN);
-            }
-
-            @Override
-            public double secondXPosition() {
-                return inches(SECOND_STONE_CLOSE_TO_BRIDGES_X_IN);
-            }
         },
         MIDDLE {
-            @Override
-            public double firstXPosition() {
-                return inches(FIRST_STONE_MIDDLE_X_IN);
-            }
-
-            @Override
-            public double secondXPosition() {
-                return inches(SECOND_STONE_MIDDLE_X_IN);
-            }
         },
         CLOSE_TO_WALL {
-            @Override
-            public double firstXPosition() {
-                return inches(FIRST_STONE_CLOSE_TO_WALL_X_IN);
-            }
-
-            @Override
-            public double secondXPosition() {
-                return inches(SECOND_STONE_CLOSE_TO_WALL_X_IN);
-            }
         },
         ;
 
-        public abstract double firstXPosition();
-        public abstract double secondXPosition();
     }
 
     public enum SkystoneRelativePos {
