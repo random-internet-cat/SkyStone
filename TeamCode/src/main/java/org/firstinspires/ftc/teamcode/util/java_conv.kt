@@ -44,6 +44,9 @@ object RRUnits {
     fun radHeading(rad: Double) = RadiansPoint(rad).roadrunner().raw
 
     @JvmStatic
+    fun formatHeading(raw: Double) = ofHeading(raw).toDegrees().raw.toString() + " deg"
+
+    @JvmStatic
     fun oppositeHeading(rrHeading: Double) = (RRAnglePoint(rrHeading) + Degrees(180)).roadrunner().raw
 
     @JvmStatic

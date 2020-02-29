@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.acmerobotics.roadrunner.path.heading.HeadingInterpolator;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -21,6 +22,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
 import static java.lang.Math.PI;
+import static org.firstinspires.ftc.teamcode.util.RRUnits.formatHeading;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inches;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.inchesVector;
 import static org.firstinspires.ftc.teamcode.util.RRUnits.ofHeading;
@@ -275,7 +277,7 @@ public abstract class SidedAutoBase extends AutoBase {
         );
     }
 
-    private Pose2d secondStoneMidpointPosition() {
+    private Pose2d moveToSecondStoneMidpointPosition() {
         return new Pose2d(
             skybridgeMiddlePosition(),
             headingTowardsDepotWall()
@@ -297,7 +299,7 @@ public abstract class SidedAutoBase extends AutoBase {
     // Now also turns on the intake, saves 3 seconds of intake actuation (can drain battery significantly)
     private void moveToGrabSecondStone(RRMecanumDriveBase drive, final MarkIIntake intake, QuarryState quarryState) {
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                                        .splineTo(secondStoneMidpointPosition())
+                                        .splineTo(moveToSecondStoneMidpointPosition())
                                         .addMarker(3.0 /* seconds */, new Function0<Unit>() {
                                             @Override
                                             public Unit invoke() {
@@ -468,9 +470,12 @@ public abstract class SidedAutoBase extends AutoBase {
 
     @Override
     protected final void moveFoundationToBuildingZoneAndRetractArm(RRMecanumDriveBase drive, final MarkIArm arm) {
+        double alignHeading = foundationAlignHeading();
+
+        telemetry.log().add("Foundation align heading: " + formatHeading(alignHeading));
 
         //Partial turn
-        turnToHeading(drive, foundationAlignHeading());
+        turnToHeading(drive, alignHeading);
 
         //Move forward a bit
         drive.followTrajectorySync(drive.trajectoryBuilder()
@@ -485,14 +490,14 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double SKYBRIDGE_MID_X_IN = 0;
-    public static double SKYBRIDGE_MID_Y_IN = 45.5;
+    public static double SKYBRIDGE_MID_Y_IN = 45;
 
     private Vector2d skybridgeMiddlePosition() {
         return sidedInchesVector(SKYBRIDGE_MID_X_IN, SKYBRIDGE_MID_Y_IN);
     }
 
     public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 44;
+    public static double PARK_Y_IN = 42.5;
 
     private Vector2d parkPosition() {
         return sidedInchesVector(PARK_X_IN, PARK_Y_IN);
