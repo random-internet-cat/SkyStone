@@ -64,7 +64,7 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     public static double GRAB_FOUNDATION_X_IN = 42.5;
-    public static double GRAB_FOUNDATION_Y_IN = 29;
+    public static double GRAB_FOUNDATION_Y_IN = 27;
 
     @Override
     protected Vector2d grabFoundationPosition() {
@@ -79,7 +79,7 @@ public class BlueAuto extends SidedAutoBase {
     }
 
     public static double DEPOSIT_SECOND_STONE_MIDPOINT_X_IN = 0;
-    public static double DEPOSIT_SECOND_STONE_MIDPOINT_Y_IN = 45;
+    public static double DEPOSIT_SECOND_STONE_MIDPOINT_Y_IN = 42;
 
     @Override
     protected Pose2d depositSecondStoneMidpointPosition() {

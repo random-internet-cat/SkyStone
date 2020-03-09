@@ -313,7 +313,7 @@ public abstract class SidedAutoBase extends AutoBase {
 
     protected abstract Pose2d depositSecondStoneMidpointPosition();
 
-    public static double DEPOSIT_SECOND_STONE_X_IN = 38;
+    public static double DEPOSIT_SECOND_STONE_X_IN = 42;
     public static double DEPOSIT_SECOND_STONE_Y_IN = 54;
 
     private Pose2d depositSecondStonePosition() {
@@ -486,7 +486,7 @@ public abstract class SidedAutoBase extends AutoBase {
     }
 
     public static double PARK_X_IN = 0;
-    public static double PARK_Y_IN = 42.5;
+    public static double PARK_Y_IN = 41.5;
 
     private Vector2d parkPosition() {
         return sidedInchesVector(PARK_X_IN, PARK_Y_IN);

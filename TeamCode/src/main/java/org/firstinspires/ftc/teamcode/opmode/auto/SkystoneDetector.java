@@ -60,7 +60,7 @@ class SkystoneDetectorPipeline extends OpenCvPipeline {
         Scalar upper_yellow = new Scalar(35, 255, 255);
 
         Scalar lower_black = new Scalar(0, 0, 0);
-        Scalar upper_black = new Scalar(180, 255, 30);
+        Scalar upper_black = new Scalar(180, 255, 40);
 
         Mat mask = new Mat();
 
