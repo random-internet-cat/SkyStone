@@ -12,7 +12,7 @@ import kotlin.math.ceil
 data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalControl, val clamp: Clamp) {
     data class HorizontalControl(val motor: DcMotorEx) {
         companion object {
-            private const val MOTOR_POWER = 0.8
+            private const val MOTOR_POWER = 0.9
             private const val MIN_ENCODER_VALUE = 10
 
             const val MAX_ENCODER_VALUE = 1260
@@ -151,8 +151,8 @@ data class MarkIArm(val horizontal: HorizontalControl, val vertical: VerticalCon
     @Config("MarkIArm VerticalControl")
     data class VerticalControl(private val motor: DcMotorEx) {
         companion object {
-            private const val MANUAL_MOTOR_POWER = 0.85
-            private const val AUTOMATIC_MOTOR_POWER = 0.95
+            private const val MANUAL_MOTOR_POWER = 0.95
+            private const val AUTOMATIC_MOTOR_POWER = 1.00
 
             @JvmField
             public var _COLLECT_TICKS: Int = 0

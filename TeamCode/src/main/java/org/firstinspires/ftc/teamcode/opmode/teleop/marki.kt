@@ -172,11 +172,11 @@ class MarkITeleop : LinearOpMode() {
                     // Clear stack with horizontal and rise to next stage
                     horizontal.moveToClearStack()
                     vertical.moveToOneBlockUp()
-                    sleep(500)
+                    sleep(450)
 
                     // Retract horizontal all the way in
                     horizontal.moveAllTheWayIn()
-                    sleep(500)
+                    sleep(400)
 
                     // Retract vertical all the way in, and return control to player while doing so
                     vertical.moveToState(MarkIArm.VerticalControl.State.CollectState)
@@ -218,7 +218,7 @@ class MarkITeleop : LinearOpMode() {
         val drivetrain = drive.drivetrain
         val driveConfig = drive.config
         val maxDriveRPM = driveConfig.maxDriveRPM().roadrunner()
-        val maxVel = driveConfig.maxVelocity().roadrunner()
+        val maxVel = driveConfig.maxVelocity().roadrunner() * 1.3
         val intake = hardware.intake
         val capstoneDropper = hardware.capstoneDropper
 

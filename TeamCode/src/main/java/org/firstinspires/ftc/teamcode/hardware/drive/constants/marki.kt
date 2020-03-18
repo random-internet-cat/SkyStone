@@ -42,13 +42,13 @@ object MarkIDriveConstants : MecanumDriveConfig {
         return Inches(_WHEEL_BASE_IN).roadrunner()
     }
 
-    private val TRANSLATIONAL_PID = PIDCoefficients(2.5, 0.0, 0.0)
+    private val TRANSLATIONAL_PID = PIDCoefficients(5.5, 0.0, 0.0)
 
     override fun translationalPID(): PIDCoefficients {
         return TRANSLATIONAL_PID
     }
 
-    private val HEADING_PID = PIDCoefficients(2.5, 0.0, 0.0)
+    private val HEADING_PID = PIDCoefficients(5.5, 0.0, 0.0)
 
     override fun headingPID(): PIDCoefficients {
         return HEADING_PID
